@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  precedent_id: 1
+  consequent_id: 1
+
+two:
+  precedent_id: 1
+  consequent_id: 1
