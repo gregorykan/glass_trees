@@ -16,14 +16,14 @@ ActiveRecord::Schema.define(version: 2018_10_20_041556) do
   enable_extension "plpgsql"
 
   create_table "links", force: :cascade do |t|
-    t.integer "precedent_id"
-    t.integer "consequent_id"
+    t.integer "source_id"
+    t.integer "target_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "nodes", force: :cascade do |t|
-    t.string "type"
+    t.string "node_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
