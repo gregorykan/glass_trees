@@ -6,8 +6,8 @@ class Link < ApplicationRecord
   def prevent_option_from_belonging_to_more_than_one_question
     source_node = Node.find(self.source_id)
     if source_node.node_type == 'option'
-      has_existing_source_nodes = Link.where(source_id: self.source_id).any?
-      if has_existing_source_nodes
+      has_existing_links_to_questions = Link.where(source_id: self.source_id).any?
+      if has_existing_links_to_questions
         errors.add(:base, "An option can't belong to more than one question")
       end
     end
