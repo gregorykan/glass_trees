@@ -148,10 +148,10 @@ const Home = (props) => {
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>glass.trees</h1>
-      <div style={graphContainerStyle}>
-        {
-          !isEmpty(nodes)
-          ?
+      {
+        !isEmpty(nodes)
+        ?
+        <div style={graphContainerStyle}>
           <Graph
             id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
             data={data}
@@ -166,14 +166,14 @@ const Home = (props) => {
             // onMouseOverLink={onMouseOverLink}
             // onMouseOutLink={onMouseOutLink}
           />
-          : <CreateFirstNodeForm
-            nodeFormData={nodeFormData}
-            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-            doCreateFirstNode={doCreateFirstNode}
-            />
-        }
-      </div>
+        </div>
+        : <CreateFirstNodeForm
+          nodeFormData={nodeFormData}
+          doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+          doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+          doCreateFirstNode={doCreateFirstNode}
+          />
+      }
       {
         !isNil(currentNode)
         ? <div style={nodeInfoContainerStyle}>

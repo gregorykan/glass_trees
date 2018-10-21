@@ -63,7 +63,7 @@ const CreateFirstNodeForm = props => {
           value={nodeFormData.description}
           onChange={handleDescriptionChange}
         />
-        <Button style={submitButtonStyle} variant='outlined' type='button' onClick={handleSubmit}>Submit</Button>
+        <Button style={submitButtonStyle} variant='outlined' type='button' onClick={handleSubmit}>Start</Button>
       </form>
     </div>
   )
