@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :nodes
       resources :links
       post '/nodes/create_node', to: 'nodes#create_node'
+      patch '/nodes/:id/resolve', to: 'nodes#resolve_question'
     end
   end
 end

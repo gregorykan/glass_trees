@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter, map } from 'lodash'
+import { omit, concat, isNil, find, filter, map, includes } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -73,6 +73,16 @@ bundle.reducer = (state = initialState, action) => {
       nodeTypeToBeCreated: action.payload
     }
   }
+  if (action.type === 'RESOLVE_NODE_SUCCESS') {
+    const updatedNode = action.payload
+    const updatedOptions = updatedNode.options
+    const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
+    return {
+      ...state,
+      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+    }
+  }
   return baseReducer(state, action)
 }
 
@@ -112,6 +122,25 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
 }
 
+bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
+  dispatch({ type: 'RESOLVE_NODE_START' })
+  apiFetch(`api/v1/nodes/${nodeId}/resolve`, {
+    method: 'PATCH'
+  })
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+      }
+      return response.json()
+    })
+    .then((data) => {
+      dispatch({ type: 'RESOLVE_NODE_SUCCESS', payload: data })
+    })
+    .catch((error) => {
+      dispatch({ type: 'RESOLVE_NODE_ERROR', payload: error })
+    })
+}
+
 bundle.selectNodes = (state) => state.nodes.data
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
@@ -122,7 +151,7 @@ bundle.selectNodesForRendering = createSelector(
         id: rawNode.id,
         label: `(${rawNode.id}) ${rawNode.label}`,
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
-        color: rawNode.node_type === 'question' ? 'red' : 'lightgreen'
+        color: rawNode.node_type === 'question' ? rawNode.resolved ? 'grey' : 'red' : rawNode.resolved ? 'gray' : 'lightgreen'
       }
     })
   }

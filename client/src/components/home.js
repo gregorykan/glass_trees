@@ -57,7 +57,8 @@ const Home = (props) => {
     nodeFormData,
     doCreateNode,
     nodeTypeToBeCreated,
-    doUpdateNodeTypeToBeCreated
+    doUpdateNodeTypeToBeCreated,
+    doResolveNode
   } = props
 
   const mockData = {
@@ -165,13 +166,16 @@ const Home = (props) => {
         !isNil(currentNode)
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
-          <span>type: {currentNode.node_type}</span>
           {renderNodeCreationForm()}
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
           {
             currentNode.node_type === 'question'
-            ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+            ?
+            <div>
+              <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+              { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button> : null}
+            </div>
             : null
           }
         </div>
