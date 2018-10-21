@@ -16,7 +16,8 @@ const Home = (props) => {
     doCreateNode,
     doUpdateNodeTypeToBeCreated,
     nodeTypeToBeCreated,
-    doResolveNode
+    doResolveNode,
+    doUnresolveNode
   } = props
   return (
     <HomeComponent
@@ -32,6 +33,7 @@ const Home = (props) => {
       doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
       nodeTypeToBeCreated={nodeTypeToBeCreated}
       doResolveNode={doResolveNode}
+      doUnresolveNode={doUnresolveNode}
     />
   )
 }
@@ -49,5 +51,6 @@ export default connect(
   'doUpdateNodeTypeToBeCreated',
   'selectNodeTypeToBeCreated',
   'doResolveNode',
+  'doUnresolveNode',
   Home
 )

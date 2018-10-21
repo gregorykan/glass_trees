@@ -58,7 +58,8 @@ const Home = (props) => {
     doCreateNode,
     nodeTypeToBeCreated,
     doUpdateNodeTypeToBeCreated,
-    doResolveNode
+    doResolveNode,
+    doUnresolveNode
   } = props
 
   const mockData = {
@@ -174,7 +175,9 @@ const Home = (props) => {
             ?
             <div>
               <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
-              { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button> : null}
+              { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
+                : <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
+              }
             </div>
             : null
           }

@@ -1,6 +1,6 @@
 module Api::V1
   class NodesController < ApiController
-    before_action :set_node, only: [:show, :update, :destroy, :resolve_question]
+    before_action :set_node, only: [:show, :update, :destroy, :resolve_question, :unresolve_question]
 
     # GET /nodes
     def index
@@ -57,7 +57,18 @@ module Api::V1
       @node.resolved = true
       @node.save!
       @node.options.update_all(resolved: true)
-      # mark all corresponding options as resolved?
+      if @node.errors.empty?
+        render json: @node.to_json( :include => [:options] ), status: :ok
+      else
+        render json: { errors: @node.errors.full_messages },
+               status: :unprocessable_entity
+      end
+    end
+
+    def unresolve_question
+      @node.resolved = false
+      @node.save!
+      @node.options.update_all(resolved: false)
       if @node.errors.empty?
         render json: @node.to_json( :include => [:options] ), status: :ok
       else
