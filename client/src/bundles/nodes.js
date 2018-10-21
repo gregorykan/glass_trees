@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter, map } from 'lodash'
+import { omit, concat, isNil, find, filter, map, includes } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -74,9 +74,13 @@ bundle.reducer = (state = initialState, action) => {
     }
   }
   if (action.type === 'RESOLVE_NODE_SUCCESS') {
+    const updatedNode = action.payload
+    const updatedOptions = updatedNode.options
+    const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload)
+      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
     }
   }
   return baseReducer(state, action)

@@ -56,9 +56,10 @@ module Api::V1
     def resolve_question
       @node.resolved = true
       @node.save!
+      @node.options.update_all(resolved: true)
       # mark all corresponding options as resolved?
       if @node.errors.empty?
-        render json: @node, status: :ok
+        render json: @node.to_json( :include => [:options] ), status: :ok
       else
         render json: { errors: @node.errors.full_messages },
                status: :unprocessable_entity
