@@ -26,16 +26,15 @@ module Api::V1
 
     def create_question
       current_node = Node.find(params[:current_node_id])
-      @node = Node.create!(node_params)
+      @node = Node.create!(create_question_params)
       if params[:question_type] == 'clarifying'
         current_node.precedent_questions << @node
-        # TODO: have to return the new link too
-      end
-      if @node.errors.empty?
-        render json: @node, status: :ok
-      else
-        render json: { errors: @node.errors.full_messages },
-               status: :unprocessable_entity
+        if @node.errors.empty?
+          render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
+        else
+          render json: { errors: @node.errors.full_messages },
+                 status: :unprocessable_entity
+        end
       end
     end
 
@@ -57,6 +56,10 @@ module Api::V1
     end
 
     private
+
+    def create_question_params
+      node_params.except(:current_node_id, :question_type)
+    end
 
     def node_params
       params.permit(:node_type, :label, :description, :current_node_id, :question_type)

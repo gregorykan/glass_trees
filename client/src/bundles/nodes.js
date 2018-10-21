@@ -57,6 +57,13 @@ bundle.reducer = (state = initialState, action) => {
       }
     }
   }
+  if (action.type === 'CREATE_NODE_SUCCESS') {
+    return {
+      ...state,
+      nodeFormData: {},
+      data: concat(state.data, action.payload)
+    }
+  }
   return baseReducer(state, action)
 }
 

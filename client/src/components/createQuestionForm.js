@@ -44,10 +44,11 @@ const CreateQuestionForm = props => {
     const formData = {
       ...nodeFormData,
       current_node_id: currentNodeId,
-      question_type: questionType
+      question_type: questionType,
+      node_type: 'question'
     }
-    // doCreateNode(formData)
     console.log('create node form data', formData)
+    doCreateNode(formData)
   }
 
   return (
