@@ -29,12 +29,14 @@ module Api::V1
       @node = Node.create!(create_question_params)
       if params[:question_type] == 'clarifying'
         current_node.precedent_questions << @node
-        if @node.errors.empty?
-          render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
-        else
-          render json: { errors: @node.errors.full_messages },
-                 status: :unprocessable_entity
-        end
+      else
+        current_node.consequent_questions << @node
+      end
+      if @node.errors.empty?
+        render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
+      else
+        render json: { errors: @node.errors.full_messages },
+               status: :unprocessable_entity
       end
     end
 

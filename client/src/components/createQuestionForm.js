@@ -53,7 +53,6 @@ const CreateQuestionForm = props => {
 
   return (
     <div style={containerStyle}>
-      <h3 style={headerStyle}>Ask a clarifying question</h3>
       <form style={formStyle}>
         <TextField
           label={'Label'}

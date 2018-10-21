@@ -108,12 +108,22 @@ const Home = (props) => {
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
           <span>type: {currentNode.node_type}</span>
+          <h3 style={headerStyle}>Ask a clarifying question</h3>
           <CreateQuestionForm
             currentNodeId={currentNode.id}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             doCreateNode={doCreateNode}
+          />
+          <h3 style={headerStyle}>Ask a follow-up question</h3>
+          <CreateQuestionForm
+            currentNodeId={currentNode.id}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+            questionType='follow-up'
           />
         </div>
         : null
