@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter } from 'lodash'
+import { omit, concat, isNil, find, filter, map } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -35,6 +35,20 @@ bundle.reducer = (state = initialState, action) => {
 }
 
 bundle.selectNodes = (state) => state.nodes.data
+bundle.selectNodesForRendering = createSelector(
+  'selectNodes',
+  (rawNodes) => {
+    if (isNil(rawNodes)) return []
+    return map(rawNodes, (rawNode) => {
+      return {
+        id: rawNode.id,
+        label: 'test',
+        symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
+        color: rawNode.node_type === 'question' ? 'red' : 'lightgreen'
+      }
+    })
+  }
+)
 
 bundle.reactNodesFetch = createSelector(
   'selectNodesShouldUpdate',

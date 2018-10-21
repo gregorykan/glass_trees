@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter } from 'lodash'
+import { omit, concat, isNil, find, filter, map } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -35,6 +35,18 @@ bundle.reducer = (state = initialState, action) => {
 }
 
 bundle.selectLinks = (state) => state.links.data
+bundle.selectLinksForRendering = createSelector(
+  'selectLinks',
+  (rawLinks) => {
+    if (isNil(rawLinks)) return []
+    return map(rawLinks, (rawLink) => {
+      return {
+        source: rawLink.source_id,
+        target: rawLink.target_id
+      }
+    })
+  }
+)
 
 bundle.reactLinksFetch = createSelector(
   'selectLinksShouldUpdate',

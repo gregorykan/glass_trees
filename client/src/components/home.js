@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { Button } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
+import { isEmpty } from 'lodash'
 
 const containerStyle = {
   display: 'flex',
@@ -30,12 +31,19 @@ const navStyle = {
 
 const Home = (props) => {
   const {
-    doUpdateHash
+    doUpdateHash,
+    nodes,
+    links
   } = props
 
-  const data = {
+  const mockData = {
     nodes: [{ id: 'Harry' }, { id: 'Sally' }, { id: 'Alice' }],
     links: [{ source: 'Harry', target: 'Sally' }, { source: 'Harry', target: 'Alice' }]
+  }
+
+  const data = {
+    nodes: nodes,
+    links: links
   }
 
   // the graph configuration, you only need to pass down properties
@@ -45,12 +53,14 @@ const Home = (props) => {
     node: {
       color: 'lightgreen',
       size: 120,
-      highlightStrokeColor: 'blue'
+      highlightStrokeColor: 'blue',
+      labelProperty: 'label'
     },
     link: {
       highlightColor: 'lightblue'
     }
   }
+  if (isEmpty(nodes) || isEmpty(links)) return null
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>glass.trees</h1>
