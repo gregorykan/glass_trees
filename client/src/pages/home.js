@@ -7,13 +7,17 @@ const Home = (props) => {
   const {
     doUpdateHash,
     nodesForRendering,
-    linksForRendering
+    linksForRendering,
+    doSelectNode,
+    currentNode
   } = props
   return (
     <HomeComponent
       doUpdateHash={doUpdateHash}
       nodes={nodesForRendering}
       links={linksForRendering}
+      doSelectNode={doSelectNode}
+      currentNode={currentNode}
     />
   )
 }
@@ -22,5 +26,7 @@ export default connect(
   'doUpdateHash',
   'selectNodesForRendering',
   'selectLinksForRendering',
+  'doSelectNode',
+  'selectCurrentNode',
   Home
 )

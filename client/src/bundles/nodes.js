@@ -18,6 +18,7 @@ const bundle = createAsyncResourceBundle({
 })
 
 const initialState = {
+  currentNodeId: null,
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -31,7 +32,17 @@ const initialState = {
 
 const baseReducer = bundle.reducer
 bundle.reducer = (state = initialState, action) => {
+  if (action.type === 'SELECT_NODE') {
+    return {
+      ...state,
+      currentNodeId: Number(action.payload)
+    }
+  }
   return baseReducer(state, action)
+}
+
+bundle.doSelectNode = (nodeId) => ({ dispatch }) => {
+  dispatch({ type: 'SELECT_NODE', payload: nodeId })
 }
 
 bundle.selectNodes = (state) => state.nodes.data
@@ -47,6 +58,15 @@ bundle.selectNodesForRendering = createSelector(
         color: rawNode.node_type === 'question' ? 'red' : 'lightgreen'
       }
     })
+  }
+)
+bundle.selectCurrentNodeId = (state) => state.nodes.currentNodeId
+bundle.selectCurrentNode = createSelector(
+  'selectCurrentNodeId',
+  'selectNodes',
+  (nodeId, rawNodes) => {
+    if (isNil(rawNodes) || isNil(nodeId)) return null
+    return find(rawNodes, { 'id': nodeId })
   }
 )
 
