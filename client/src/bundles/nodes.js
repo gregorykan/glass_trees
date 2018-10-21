@@ -67,6 +67,13 @@ bundle.reducer = (state = initialState, action) => {
       nodeTypeToBeCreated: null
     }
   }
+  if (action.type === 'CREATE_FIRST_NODE_SUCCESS') {
+    return {
+      ...state,
+      nodeFormData: {},
+      data: concat(state.data, action.payload)
+    }
+  }
   if (action.type === 'UPDATE_NODE_TYPE_TO_BE_CREATED') {
     return {
       ...state,
@@ -129,6 +136,26 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
     .catch((error) => {
       dispatch({ type: 'CREATE_NODE_ERROR', payload: error })
+    })
+}
+
+bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
+  dispatch({ type: 'CREATE_FIRST_NODE_START' })
+  apiFetch('api/v1/nodes', {
+    method: 'POST',
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+      }
+      return response.json()
+    })
+    .then((data) => {
+      dispatch({ type: 'CREATE_FIRST_NODE_SUCCESS', payload: data })
+    })
+    .catch((error) => {
+      dispatch({ type: 'CREATE_FIRST_NODE_ERROR', payload: error })
     })
 }
 

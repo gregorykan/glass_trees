@@ -5,6 +5,7 @@ import { Graph } from 'react-d3-graph'
 import { isEmpty, isNil } from 'lodash'
 
 import CreateNodeForm from './createNodeForm'
+import CreateFirstNodeForm from './createFirstNodeForm'
 
 const containerStyle = {
   display: 'flex',
@@ -59,7 +60,8 @@ const Home = (props) => {
     nodeTypeToBeCreated,
     doUpdateNodeTypeToBeCreated,
     doResolveNode,
-    doUnresolveNode
+    doUnresolveNode,
+    doCreateFirstNode
   } = props
 
   const mockData = {
@@ -143,25 +145,34 @@ const Home = (props) => {
     }
   }
 
-  if (isEmpty(nodes) || isEmpty(links)) return null
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>glass.trees</h1>
       <div style={graphContainerStyle}>
-        <Graph
-          id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-          data={data}
-          config={myConfig}
-          onClickNode={onClickNode}
-          // onRightClickNode={onRightClickNode}
-          // onClickGraph={onClickGraph}
-          // onClickLink={onClickLink}
-          // onRightClickLink={onRightClickLink}
-          // onMouseOverNode={onMouseOverNode}
-          // onMouseOutNode={onMouseOutNode}
-          // onMouseOverLink={onMouseOverLink}
-          // onMouseOutLink={onMouseOutLink}
-        />
+        {
+          !isEmpty(nodes)
+          ?
+          <Graph
+            id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
+            data={data}
+            config={myConfig}
+            onClickNode={onClickNode}
+            // onRightClickNode={onRightClickNode}
+            // onClickGraph={onClickGraph}
+            // onClickLink={onClickLink}
+            // onRightClickLink={onRightClickLink}
+            // onMouseOverNode={onMouseOverNode}
+            // onMouseOutNode={onMouseOutNode}
+            // onMouseOverLink={onMouseOverLink}
+            // onMouseOutLink={onMouseOutLink}
+          />
+          : <CreateFirstNodeForm
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateFirstNode={doCreateFirstNode}
+            />
+        }
       </div>
       {
         !isNil(currentNode)
