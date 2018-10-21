@@ -42,7 +42,7 @@ bundle.selectNodesForRendering = createSelector(
     return map(rawNodes, (rawNode) => {
       return {
         id: rawNode.id,
-        label: 'test',
+        label: `(${rawNode.id}) ${rawNode.label}`,
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
         color: rawNode.node_type === 'question' ? 'red' : 'lightgreen'
       }
