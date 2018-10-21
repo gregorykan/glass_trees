@@ -41,7 +41,10 @@ bundle.selectNodesForRendering = createSelector(
     if (isNil(rawNodes)) return []
     return map(rawNodes, (rawNode) => {
       return {
-        id: rawNode.id
+        id: rawNode.id,
+        label: 'test',
+        symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
+        color: rawNode.node_type === 'question' ? 'red' : 'lightgreen'
       }
     })
   }

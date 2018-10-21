@@ -46,7 +46,6 @@ const Home = (props) => {
     links: links
   }
 
-  console.log('data', data)
   // the graph configuration, you only need to pass down properties
   // that you want to override, otherwise default ones will be used
   const myConfig = {
@@ -54,7 +53,8 @@ const Home = (props) => {
     node: {
       color: 'lightgreen',
       size: 120,
-      highlightStrokeColor: 'blue'
+      highlightStrokeColor: 'blue',
+      labelProperty: 'label'
     },
     link: {
       highlightColor: 'lightblue'
