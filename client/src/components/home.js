@@ -165,7 +165,6 @@ const Home = (props) => {
         !isNil(currentNode)
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
-          <span>type: {currentNode.node_type}</span>
           {renderNodeCreationForm()}
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
