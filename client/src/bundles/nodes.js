@@ -20,6 +20,7 @@ const bundle = createAsyncResourceBundle({
 const initialState = {
   currentNodeId: null,
   nodeFormData: {},
+  nodeTypeToBeCreated: '',
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -64,6 +65,12 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(state.data, action.payload)
     }
   }
+  if (action.type === 'UPDATE_NODE_TYPE_TO_BE_CREATED') {
+    return {
+      ...state,
+      nodeTypeToBeCreated: action.payload
+    }
+  }
   return baseReducer(state, action)
 }
 
@@ -77,6 +84,10 @@ bundle.doUpdateNodeFormDataLabel = (label) => ({ dispatch }) => {
 
 bundle.doUpdateNodeFormDataDescription = (description) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_NODE_FORM_DATA_DESCRIPTION', payload: description })
+}
+
+bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
+  dispatch({ type: 'UPDATE_NODE_TYPE_TO_BE_CREATED', payload: type })
 }
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
@@ -125,6 +136,7 @@ bundle.selectCurrentNode = createSelector(
   }
 )
 bundle.selectNodeFormData = (state) => state.nodes.nodeFormData
+bundle.selectNodeTypeToBeCreated = (state) => state.nodes.nodeTypeToBeCreated
 
 bundle.reactNodesFetch = createSelector(
   'selectNodesShouldUpdate',
