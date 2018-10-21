@@ -2,13 +2,23 @@ import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { Button } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'
+}
+
+const nodeInfoContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderWidth: '1px',
+  borderColor: 'black',
+  borderStyle: 'solid'
 }
 
 const graphContainerStyle = {
@@ -33,7 +43,9 @@ const Home = (props) => {
   const {
     doUpdateHash,
     nodes,
-    links
+    links,
+    doSelectNode,
+    currentNode
   } = props
 
   const mockData = {
@@ -60,6 +72,11 @@ const Home = (props) => {
       highlightColor: 'lightblue'
     }
   }
+
+  const onClickNode = (nodeId) => {
+    doSelectNode(nodeId)
+  }
+
   if (isEmpty(nodes) || isEmpty(links)) return null
   return (
     <div style={containerStyle}>
@@ -69,7 +86,7 @@ const Home = (props) => {
           id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
           data={data}
           config={myConfig}
-          // onClickNode={onClickNode}
+          onClickNode={onClickNode}
           // onRightClickNode={onRightClickNode}
           // onClickGraph={onClickGraph}
           // onClickLink={onClickLink}
@@ -80,6 +97,13 @@ const Home = (props) => {
           // onMouseOutLink={onMouseOutLink}
         />
       </div>
+      {
+        !isNil(currentNode)
+        ? <div style={nodeInfoContainerStyle}>
+          <h3>{currentNode.label}</h3>
+        </div>
+        : null
+      }
     </div>
   )
 }
