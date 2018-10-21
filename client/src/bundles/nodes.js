@@ -34,7 +34,7 @@ bundle.reducer = (state = initialState, action) => {
   return baseReducer(state, action)
 }
 
-// bundle.selectNodes = (state) => state.nodes.data
+bundle.selectNodes = (state) => state.nodes.data
 
 bundle.reactNodesFetch = createSelector(
   'selectNodesShouldUpdate',
