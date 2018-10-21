@@ -29,7 +29,8 @@ const CreateQuestionForm = props => {
     nodeFormData,
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
-    questionType = 'clarifying'
+    questionType = 'clarifying',
+    doUpdateNodeTypeToBeCreated
    } = props
 
   const handleLabelChange = (e) => {
@@ -51,6 +52,10 @@ const CreateQuestionForm = props => {
     doCreateNode(formData)
   }
 
+  const handleCancel = () => {
+    doUpdateNodeTypeToBeCreated()
+  }
+
   return (
     <div style={containerStyle}>
       <form style={formStyle}>
@@ -67,6 +72,7 @@ const CreateQuestionForm = props => {
           onChange={handleDescriptionChange}
         />
         <Button style={submitButtonStyle} variant='outlined' type='button' onClick={handleSubmit}>Submit</Button>
+        <Button style={submitButtonStyle} variant='outlined' type='button' onClick={handleCancel}>Cancel</Button>
       </form>
     </div>
   )

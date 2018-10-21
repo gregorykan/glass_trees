@@ -41,6 +41,10 @@ const navStyle = {
   flexDirection: 'row'
 }
 
+const submitButtonStyle = {
+  marginTop: 20
+}
+
 const Home = (props) => {
   const {
     doUpdateHash,
@@ -51,7 +55,9 @@ const Home = (props) => {
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
     nodeFormData,
-    doCreateNode
+    doCreateNode,
+    nodeTypeToBeCreated,
+    doUpdateNodeTypeToBeCreated
   } = props
 
   const mockData = {
@@ -83,6 +89,42 @@ const Home = (props) => {
     doSelectNode(nodeId)
   }
 
+  const renderNodeCreationForm = () => {
+    if (isNil(nodeTypeToBeCreated)) return null
+    if (nodeTypeToBeCreated === 'clarifyingQuestion') {
+      return (
+        <div>
+          <h3 style={headerStyle}>Ask a clarifying question</h3>
+          <CreateQuestionForm
+            currentNodeId={currentNode.id}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+            doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+          />
+        </div>
+      )
+    } else if (nodeTypeToBeCreated === 'followUpQuestion') {
+      return (
+        <div>
+          <h3 style={headerStyle}>Ask a follow-up question</h3>
+          <CreateQuestionForm
+            currentNodeId={currentNode.id}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+            questionType='follow-up'
+            doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+          />
+        </div>
+      )
+    } else {
+      return null
+    }
+  }
+
   if (isEmpty(nodes) || isEmpty(links)) return null
   return (
     <div style={containerStyle}>
@@ -108,23 +150,9 @@ const Home = (props) => {
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
           <span>type: {currentNode.node_type}</span>
-          <h3 style={headerStyle}>Ask a clarifying question</h3>
-          <CreateQuestionForm
-            currentNodeId={currentNode.id}
-            nodeFormData={nodeFormData}
-            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-            doCreateNode={doCreateNode}
-          />
-          <h3 style={headerStyle}>Ask a follow-up question</h3>
-          <CreateQuestionForm
-            currentNodeId={currentNode.id}
-            nodeFormData={nodeFormData}
-            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-            doCreateNode={doCreateNode}
-            questionType='follow-up'
-          />
+          {renderNodeCreationForm()}
+          <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
+          <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
         </div>
         : null
       }

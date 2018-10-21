@@ -13,7 +13,9 @@ const Home = (props) => {
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
     nodeFormData,
-    doCreateNode
+    doCreateNode,
+    doUpdateNodeTypeToBeCreated,
+    nodeTypeToBeCreated
   } = props
   return (
     <HomeComponent
@@ -26,6 +28,8 @@ const Home = (props) => {
       doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
       nodeFormData={nodeFormData}
       doCreateNode={doCreateNode}
+      doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+      nodeTypeToBeCreated={nodeTypeToBeCreated}
     />
   )
 }
@@ -40,5 +44,7 @@ export default connect(
   'doUpdateNodeFormDataDescription',
   'selectNodeFormData',
   'doCreateNode',
+  'doUpdateNodeTypeToBeCreated',
+  'selectNodeTypeToBeCreated',
   Home
 )
