@@ -9,7 +9,11 @@ const Home = (props) => {
     nodesForRendering,
     linksForRendering,
     doSelectNode,
-    currentNode
+    currentNode,
+    doUpdateNodeFormDataLabel,
+    doUpdateNodeFormDataDescription,
+    nodeFormData,
+    doCreateNode
   } = props
   return (
     <HomeComponent
@@ -18,6 +22,10 @@ const Home = (props) => {
       links={linksForRendering}
       doSelectNode={doSelectNode}
       currentNode={currentNode}
+      doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+      doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+      nodeFormData={nodeFormData}
+      doCreateNode={doCreateNode}
     />
   )
 }
@@ -28,5 +36,9 @@ export default connect(
   'selectLinksForRendering',
   'doSelectNode',
   'selectCurrentNode',
+  'doUpdateNodeFormDataLabel',
+  'doUpdateNodeFormDataDescription',
+  'selectNodeFormData',
+  'doCreateNode',
   Home
 )

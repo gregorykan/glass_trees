@@ -24,6 +24,20 @@ module Api::V1
       end
     end
 
+    def create_question
+      current_node = Node.find(params[:current_node_id])
+      @node = Node.create!(create_question_params)
+      if params[:question_type] == 'clarifying'
+        current_node.precedent_questions << @node
+        if @node.errors.empty?
+          render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
+        else
+          render json: { errors: @node.errors.full_messages },
+                 status: :unprocessable_entity
+        end
+      end
+    end
+
     # PUT /nodes/:id
     def update
       @node.update(node_params)
@@ -43,8 +57,12 @@ module Api::V1
 
     private
 
+    def create_question_params
+      node_params.except(:current_node_id, :question_type)
+    end
+
     def node_params
-      params.permit(:node_type)
+      params.permit(:node_type, :label, :description, :current_node_id, :question_type)
     end
 
     def set_node

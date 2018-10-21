@@ -19,6 +19,7 @@ const bundle = createAsyncResourceBundle({
 
 const initialState = {
   currentNodeId: null,
+  nodeFormData: {},
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -38,11 +39,65 @@ bundle.reducer = (state = initialState, action) => {
       currentNodeId: Number(action.payload)
     }
   }
+  if (action.type === 'UPDATE_NODE_FORM_DATA_LABEL') {
+    return {
+      ...state,
+      nodeFormData: {
+        ...state.nodeFormData,
+        label: action.payload
+      }
+    }
+  }
+  if (action.type === 'UPDATE_NODE_FORM_DATA_DESCRIPTION') {
+    return {
+      ...state,
+      nodeFormData: {
+        ...state.nodeFormData,
+        description: action.payload
+      }
+    }
+  }
+  if (action.type === 'CREATE_NODE_SUCCESS') {
+    return {
+      ...state,
+      nodeFormData: {},
+      data: concat(state.data, action.payload)
+    }
+  }
   return baseReducer(state, action)
 }
 
 bundle.doSelectNode = (nodeId) => ({ dispatch }) => {
   dispatch({ type: 'SELECT_NODE', payload: nodeId })
+}
+
+bundle.doUpdateNodeFormDataLabel = (label) => ({ dispatch }) => {
+  dispatch({ type: 'UPDATE_NODE_FORM_DATA_LABEL', payload: label })
+}
+
+bundle.doUpdateNodeFormDataDescription = (description) => ({ dispatch }) => {
+  dispatch({ type: 'UPDATE_NODE_FORM_DATA_DESCRIPTION', payload: description })
+}
+
+bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
+  dispatch({ type: 'CREATE_NODE_START' })
+  apiFetch('api/v1/nodes/question', {
+    method: 'POST',
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+      }
+      return response.json()
+    })
+    .then((data) => {
+      dispatch({ type: 'CREATE_NODE_SUCCESS', payload: data })
+      dispatch({ actionCreator: 'doUpdateHash', args: [`orders`] })
+    })
+    .catch((error) => {
+      dispatch({ type: 'CREATE_NODE_ERROR', payload: error })
+    })
 }
 
 bundle.selectNodes = (state) => state.nodes.data
@@ -69,6 +124,7 @@ bundle.selectCurrentNode = createSelector(
     return find(rawNodes, { 'id': nodeId })
   }
 )
+bundle.selectNodeFormData = (state) => state.nodes.nodeFormData
 
 bundle.reactNodesFetch = createSelector(
   'selectNodesShouldUpdate',

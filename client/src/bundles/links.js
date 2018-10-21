@@ -31,6 +31,12 @@ const initialState = {
 
 const baseReducer = bundle.reducer
 bundle.reducer = (state = initialState, action) => {
+  if (action.type === 'CREATE_NODE_SUCCESS') {
+    return {
+      ...state,
+      data: concat(state.data, concat(action.payload.source_links, action.payload.target_links))
+    }
+  }
   return baseReducer(state, action)
 }
 
