@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
 import { isEmpty, isNil } from 'lodash'
 
-import CreateQuestionForm from './createQuestionForm'
+import CreateNodeForm from './createNodeForm'
 
 const containerStyle = {
   display: 'flex',
@@ -95,12 +95,13 @@ const Home = (props) => {
       return (
         <div>
           <h3 style={headerStyle}>Ask a clarifying question</h3>
-          <CreateQuestionForm
+          <CreateNodeForm
             currentNodeId={currentNode.id}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             doCreateNode={doCreateNode}
+            nodeCreationType={nodeTypeToBeCreated}
             doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
           />
         </div>
@@ -109,13 +110,28 @@ const Home = (props) => {
       return (
         <div>
           <h3 style={headerStyle}>Ask a follow-up question</h3>
-          <CreateQuestionForm
+          <CreateNodeForm
             currentNodeId={currentNode.id}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             doCreateNode={doCreateNode}
-            questionType='follow-up'
+            nodeCreationType={nodeTypeToBeCreated}
+            doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+          />
+        </div>
+      )
+    } else if (nodeTypeToBeCreated === 'option') {
+      return (
+        <div>
+          <h3 style={headerStyle}>Add an option</h3>
+          <CreateNodeForm
+            currentNodeId={currentNode.id}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+            nodeCreationType={nodeTypeToBeCreated}
             doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
           />
         </div>
@@ -153,6 +169,11 @@ const Home = (props) => {
           {renderNodeCreationForm()}
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
+          {
+            currentNode.node_type === 'question'
+            ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+            : null
+          }
         </div>
         : null
       }

@@ -22,14 +22,14 @@ const submitButtonStyle = {
   marginTop: 20
 }
 
-const CreateQuestionForm = props => {
+const CreateNodeForm = props => {
   const {
     currentNodeId,
     doCreateNode,
     nodeFormData,
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
-    questionType = 'clarifying',
+    nodeCreationType,
     doUpdateNodeTypeToBeCreated
    } = props
 
@@ -42,11 +42,16 @@ const CreateQuestionForm = props => {
   }
 
   const handleSubmit = () => {
+    const nodeCreationTypesToNodeTypes = {
+      'clarifyingQuestion': 'question',
+      'followUpQuestion': 'question',
+      'option': 'option'
+    }
     const formData = {
       ...nodeFormData,
       current_node_id: currentNodeId,
-      question_type: questionType,
-      node_type: 'question'
+      node_creation_type: nodeCreationType,
+      node_type: nodeCreationTypesToNodeTypes[nodeCreationType]
     }
     console.log('create node form data', formData)
     doCreateNode(formData)
@@ -78,4 +83,4 @@ const CreateQuestionForm = props => {
   )
 }
 
-export default CreateQuestionForm
+export default CreateNodeForm

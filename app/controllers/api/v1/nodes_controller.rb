@@ -24,13 +24,15 @@ module Api::V1
       end
     end
 
-    def create_question
+    def create_node
       current_node = Node.find(params[:current_node_id])
-      @node = Node.create!(create_question_params)
-      if params[:question_type] == 'clarifying'
+      @node = Node.create!(create_node_params)
+      if params[:node_creation_type] == 'clarifyingQuestion'
         current_node.precedent_questions << @node
-      else
+      elsif params[:node_creation_type] == 'followUpQuestion'
         current_node.consequent_questions << @node
+      else
+        current_node.options << @node
       end
       if @node.errors.empty?
         render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
@@ -59,12 +61,12 @@ module Api::V1
 
     private
 
-    def create_question_params
-      node_params.except(:current_node_id, :question_type)
+    def create_node_params
+      node_params.except(:current_node_id, :node_creation_type)
     end
 
     def node_params
-      params.permit(:node_type, :label, :description, :current_node_id, :question_type)
+      params.permit(:node_type, :label, :description, :current_node_id, :node_creation_type)
     end
 
     def set_node

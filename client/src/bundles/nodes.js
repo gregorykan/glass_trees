@@ -37,7 +37,8 @@ bundle.reducer = (state = initialState, action) => {
   if (action.type === 'SELECT_NODE') {
     return {
       ...state,
-      currentNodeId: Number(action.payload)
+      currentNodeId: Number(action.payload),
+      nodeTypeToBeCreated: null
     }
   }
   if (action.type === 'UPDATE_NODE_FORM_DATA_LABEL') {
@@ -62,7 +63,8 @@ bundle.reducer = (state = initialState, action) => {
     return {
       ...state,
       nodeFormData: {},
-      data: concat(state.data, action.payload)
+      data: concat(state.data, action.payload),
+      nodeTypeToBeCreated: null
     }
   }
   if (action.type === 'UPDATE_NODE_TYPE_TO_BE_CREATED') {
@@ -92,7 +94,7 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
-  apiFetch('api/v1/nodes/question', {
+  apiFetch('api/v1/nodes/create_node', {
     method: 'POST',
     body: JSON.stringify(formData)
   })
@@ -104,7 +106,6 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
     .then((data) => {
       dispatch({ type: 'CREATE_NODE_SUCCESS', payload: data })
-      dispatch({ actionCreator: 'doUpdateHash', args: [`orders`] })
     })
     .catch((error) => {
       dispatch({ type: 'CREATE_NODE_ERROR', payload: error })

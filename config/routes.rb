@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :nodes
       resources :links
-      post '/nodes/question', to: 'nodes#create_question'
+      post '/nodes/create_node', to: 'nodes#create_node'
     end
   end
 end
