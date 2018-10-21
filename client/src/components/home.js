@@ -4,6 +4,8 @@ import { Button } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
 import { isEmpty, isNil } from 'lodash'
 
+import CreateQuestionForm from './createQuestionForm'
+
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -45,7 +47,11 @@ const Home = (props) => {
     nodes,
     links,
     doSelectNode,
-    currentNode
+    currentNode,
+    doUpdateNodeFormDataLabel,
+    doUpdateNodeFormDataDescription,
+    nodeFormData,
+    doCreateNode
   } = props
 
   const mockData = {
@@ -102,6 +108,13 @@ const Home = (props) => {
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
           <span>type: {currentNode.node_type}</span>
+          <CreateQuestionForm
+            currentNodeId={currentNode.id}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+          />
         </div>
         : null
       }
