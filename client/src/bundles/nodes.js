@@ -83,6 +83,16 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
     }
   }
+  if (action.type === 'UNRESOLVE_NODE_SUCCESS') {
+    const updatedNode = action.payload
+    const updatedOptions = updatedNode.options
+    const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
+    return {
+      ...state,
+      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+    }
+  }
   return baseReducer(state, action)
 }
 
@@ -138,6 +148,25 @@ bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
     })
     .catch((error) => {
       dispatch({ type: 'RESOLVE_NODE_ERROR', payload: error })
+    })
+}
+
+bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
+  dispatch({ type: 'UNRESOLVE_NODE_START' })
+  apiFetch(`api/v1/nodes/${nodeId}/unresolve`, {
+    method: 'PATCH'
+  })
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+      }
+      return response.json()
+    })
+    .then((data) => {
+      dispatch({ type: 'UNRESOLVE_NODE_SUCCESS', payload: data })
+    })
+    .catch((error) => {
+      dispatch({ type: 'UNRESOLVE_NODE_ERROR', payload: error })
     })
 }
 

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :links
       post '/nodes/create_node', to: 'nodes#create_node'
       patch '/nodes/:id/resolve', to: 'nodes#resolve_question'
+      patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
     end
   end
 end
