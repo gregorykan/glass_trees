@@ -15,7 +15,8 @@ const Home = (props) => {
     nodeFormData,
     doCreateNode,
     doUpdateNodeTypeToBeCreated,
-    nodeTypeToBeCreated
+    nodeTypeToBeCreated,
+    doResolveNode
   } = props
   return (
     <HomeComponent
@@ -30,6 +31,7 @@ const Home = (props) => {
       doCreateNode={doCreateNode}
       doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
       nodeTypeToBeCreated={nodeTypeToBeCreated}
+      doResolveNode={doResolveNode}
     />
   )
 }
@@ -46,5 +48,6 @@ export default connect(
   'doCreateNode',
   'doUpdateNodeTypeToBeCreated',
   'selectNodeTypeToBeCreated',
+  'doResolveNode',
   Home
 )

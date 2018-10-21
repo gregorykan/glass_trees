@@ -57,7 +57,8 @@ const Home = (props) => {
     nodeFormData,
     doCreateNode,
     nodeTypeToBeCreated,
-    doUpdateNodeTypeToBeCreated
+    doUpdateNodeTypeToBeCreated,
+    doResolveNode
   } = props
 
   const mockData = {
@@ -170,7 +171,11 @@ const Home = (props) => {
           <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
           {
             currentNode.node_type === 'question'
-            ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+            ?
+            <div>
+              <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+              <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
+            </div>
             : null
           }
         </div>
