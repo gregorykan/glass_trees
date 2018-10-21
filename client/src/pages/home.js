@@ -5,14 +5,22 @@ import HomeComponent from '../components/home'
 
 const Home = (props) => {
   const {
-    doUpdateHash
+    doUpdateHash,
+    nodesForRendering,
+    linksForRendering
   } = props
   return (
-    <HomeComponent doUpdateHash={doUpdateHash} />
+    <HomeComponent
+      doUpdateHash={doUpdateHash}
+      nodes={nodesForRendering}
+      links={linksForRendering}
+    />
   )
 }
 
 export default connect(
   'doUpdateHash',
+  'selectNodesForRendering',
+  'selectLinksForRendering',
   Home
 )

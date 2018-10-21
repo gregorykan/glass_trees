@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { Button } from '@material-ui/core'
 import { Graph } from 'react-d3-graph'
+import { isEmpty } from 'lodash'
 
 const containerStyle = {
   display: 'flex',
@@ -30,14 +31,22 @@ const navStyle = {
 
 const Home = (props) => {
   const {
-    doUpdateHash
+    doUpdateHash,
+    nodes,
+    links
   } = props
 
-  const data = {
+  const mockData = {
     nodes: [{ id: 'Harry' }, { id: 'Sally' }, { id: 'Alice' }],
     links: [{ source: 'Harry', target: 'Sally' }, { source: 'Harry', target: 'Alice' }]
   }
 
+  const data = {
+    nodes: nodes,
+    links: links
+  }
+
+  console.log('data', data)
   // the graph configuration, you only need to pass down properties
   // that you want to override, otherwise default ones will be used
   const myConfig = {
@@ -51,6 +60,7 @@ const Home = (props) => {
       highlightColor: 'lightblue'
     }
   }
+  if (isEmpty(nodes) || isEmpty(links)) return null
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>glass.trees</h1>
