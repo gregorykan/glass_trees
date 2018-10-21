@@ -92,7 +92,7 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
-  apiFetch('api/v1/nodes/question', {
+  apiFetch('api/v1/nodes/create_node', {
     method: 'POST',
     body: JSON.stringify(formData)
   })
