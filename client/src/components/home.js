@@ -101,6 +101,7 @@ const Home = (props) => {
         !isNil(currentNode)
         ? <div style={nodeInfoContainerStyle}>
           <h3>{currentNode.label}</h3>
+          <span>type: {currentNode.node_type}</span>
         </div>
         : null
       }
