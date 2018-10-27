@@ -5,7 +5,7 @@ module InvitableMethods
     # use authenticate_user! in before_action
   end
 
-  def authenticate_user!
+  def authenticate_api_user!
     return if current_api_user
     render json: {
       errors: ['Authorized users only.']

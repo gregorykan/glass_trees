@@ -2,7 +2,7 @@ module Api
   class InvitationsController < Devise::InvitationsController
     include DeviseTokenAuth::Concerns::SetUserByToken
     include InvitableMethods
-    before_action :authenticate_user!, only: :create
+    before_action :authenticate_api_user!, only: :create
     before_action :resource_from_invitation_token, only: [:edit, :update]
 
     def create
