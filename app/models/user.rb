@@ -6,5 +6,5 @@ class User < ActiveRecord::Base
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
-  belongs_to :group
+  belongs_to :group, optional: true
 end
