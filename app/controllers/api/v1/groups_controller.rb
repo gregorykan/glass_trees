@@ -4,20 +4,23 @@ module Api::V1
 
     # GET /groups
     def index
-      @groups = Group.all
-      render :json => @groups
+      @group = Group.where(id: current_user.group_id).first || nil
+      render :json => @group.to_json, status: :ok
     end
 
     # GET /groups/:id
     def show
-      render :json => @group
+      render :json => @group.to_json, status: :ok
     end
 
     # POST /groups
     def create
-      @group = Group.create!(group_params)
+      # @group = Group.create!(group_params)
+      @group = Group.create_and_update_creator(group_params, current_user)
       if @group.errors.empty?
-        render json: @group, status: :ok
+        current_user.group = @group
+        current_user.save!
+        render json: @group.to_json, status: :ok
       else
         render json: { errors: @group.errors.full_messages },
                status: :unprocessable_entity
@@ -28,7 +31,7 @@ module Api::V1
     def update
       @group.update(group_params)
       if @group.errors.empty?
-        render json: @group, status: :ok
+        render json: @group.to_json, status: :ok
       else
         render json: { errors: @group.errors.full_messages },
                status: :unprocessable_entity
@@ -44,7 +47,7 @@ module Api::V1
     private
 
     def group_params
-      params.permit(:group_type)
+      params.permit(:name)
     end
 
     def set_group
