@@ -9,6 +9,7 @@ import accountsBundle from './accounts'
 import invitationsBundle from './invitations'
 import myProfileBundle from './myProfile'
 import notificationsBundle from './notifications'
+import groupsBundle from './groups'
 
 export default composeBundles(
   nodesBundle,
@@ -17,6 +18,7 @@ export default composeBundles(
   invitationsBundle,
   myProfileBundle,
   notificationsBundle,
+  groupsBundle,
   createUrlBundle(),
   debugBundle,
   extraArgs,
