@@ -15,7 +15,7 @@ const bundle = createAsyncResourceBundle({
       uid: credentials.uid,
       expiry: credentials.expiry
     }
-    return apiFetch(`api/v1/users/${currentUserId}`, {
+    return apiFetch(`api/users/${currentUserId}`, {
       headers: sanitizedCredentials
     })
       .then(response => {
@@ -150,7 +150,7 @@ bundle.doUpdateMyProfile = (profileData) => ({ dispatch, apiFetch, getState }) =
     expiry: credentials.expiry
   }
   dispatch({ type: 'UPDATE_MY_PROFILE_START' })
-  apiFetch(`api/v1/users/${credentials.currentUserId}`, {
+  apiFetch(`api/users/${credentials.currentUserId}`, {
     method: 'PATCH',
     body: JSON.stringify(profileData),
     headers: sanitizedCredentials

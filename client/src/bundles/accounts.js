@@ -144,7 +144,7 @@ const actionCreators = {
   },
   doSignIn: (signInData) => ({ dispatch, apiFetch }) => {
     dispatch({ type: 'SIGN_IN_START' })
-    apiFetch('api/v1/auth/sign_in', {
+    apiFetch('api/auth/sign_in', {
       method: 'POST',
       body: JSON.stringify(signInData)
     })
@@ -175,7 +175,7 @@ const actionCreators = {
   },
   doSignUp: (signUpData) => ({ dispatch, apiFetch }) => {
     dispatch({ type: 'SIGN_UP_START' })
-    apiFetch('api/v1/auth', {
+    apiFetch('api/auth', {
       method: 'POST',
       body: JSON.stringify(signUpData)
     })
@@ -215,7 +215,7 @@ const actionCreators = {
       expiry: credentials.expiry
     }
     dispatch({ type: 'SIGN_OUT_START' })
-    apiFetch('api/v1/auth/sign_out', {
+    apiFetch('api/auth/sign_out', {
       method: 'DELETE',
       headers: sanitizedCredentials
     })

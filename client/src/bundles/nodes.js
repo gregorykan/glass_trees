@@ -6,7 +6,7 @@ import ms from 'milliseconds'
 const bundle = createAsyncResourceBundle({
   name: 'nodes',
   getPromise: async ({ apiFetch, getState }) => {
-    return apiFetch(`api/v1/nodes`, {})
+    return apiFetch(`api/nodes`, {})
       .then(response => response.json())
       .catch(err => {
         console.log('err', err)
@@ -121,7 +121,7 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
-  apiFetch('api/v1/nodes/create_node', {
+  apiFetch('api/nodes/create_node', {
     method: 'POST',
     body: JSON.stringify(formData)
   })
@@ -141,7 +141,7 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_FIRST_NODE_START' })
-  apiFetch('api/v1/nodes', {
+  apiFetch('api/nodes', {
     method: 'POST',
     body: JSON.stringify(formData)
   })
@@ -161,7 +161,7 @@ bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'RESOLVE_NODE_START' })
-  apiFetch(`api/v1/nodes/${nodeId}/resolve`, {
+  apiFetch(`api/nodes/${nodeId}/resolve`, {
     method: 'PATCH'
   })
     .then(response => {
@@ -180,7 +180,7 @@ bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'UNRESOLVE_NODE_START' })
-  apiFetch(`api/v1/nodes/${nodeId}/unresolve`, {
+  apiFetch(`api/nodes/${nodeId}/unresolve`, {
     method: 'PATCH'
   })
     .then(response => {

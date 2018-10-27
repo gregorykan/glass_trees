@@ -1,4 +1,4 @@
-module Api::V1
+module Api
   class NodesController < ApiController
     before_action :set_node, only: [:show, :update, :destroy, :resolve_question, :unresolve_question]
 

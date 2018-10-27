@@ -1,4 +1,4 @@
-module Api::V1
+module Api
   class LinksController < ApiController
     before_action :set_link, only: [:show, :update, :destroy]
 

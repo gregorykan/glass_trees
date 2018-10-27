@@ -6,7 +6,7 @@ import ms from 'milliseconds'
 const bundle = createAsyncResourceBundle({
   name: 'links',
   getPromise: async ({ apiFetch, getState }) => {
-    return apiFetch(`api/v1/links`, {})
+    return apiFetch(`api/links`, {})
       .then(response => response.json())
       .catch(err => {
         console.log('err', err)
