@@ -127,7 +127,7 @@ bundle.doCreateWorkspace = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
     .then((data) => {
       dispatch({ type: 'CREATE_WORKSPACE_SUCCESS', payload: data })
-      dispatch({ actionCreator: 'doUpdateHash', args: ['my-workspace'] })
+      dispatch({ actionCreator: 'doUpdateHash', args: ['workspaces'] })
     })
     .catch((error) => {
       dispatch({ type: 'CREATE_WORKSPACE_ERROR', payload: error })

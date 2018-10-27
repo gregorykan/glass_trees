@@ -11,6 +11,7 @@ const Workspaces = (props) => {
   return (
     <WorkspacesList
       workspaces={workspaces}
+      doUpdateHash={doUpdateHash}
     />
   )
 }

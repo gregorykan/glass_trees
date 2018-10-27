@@ -5,7 +5,7 @@ module Api
 
     # GET /workspaces
     def index
-      @workspaces = Workspace.all
+      @workspaces = Workspace.where(group_id: current_api_user.group_id)
       render :json => @workspaces
     end
 
@@ -45,7 +45,7 @@ module Api
     private
 
     def workspace_params
-      params.permit(:workspace_type)
+      params.permit(:name, :group_id)
     end
 
     def set_workspace

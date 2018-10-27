@@ -8,6 +8,7 @@ import CreateInvitation from '../pages/createInvitation'
 import MyGroup from '../pages/myGroup'
 import SignUp from '../pages/signUp'
 import Workspaces from '../pages/workspaces'
+import CreateWorkspace from '../pages/createWorkspace'
 
 const routes = {
   '': {
@@ -44,6 +45,14 @@ const routes = {
   },
   'workspaces': {
     component: Workspaces,
+    protected: true
+  },
+  'workspaces/new': {
+    component: CreateWorkspace,
+    protected: true
+  },
+  'workspaces/:workspaceId': {
+    component: CreateWorkspace,
     protected: true
   },
   '*': {
