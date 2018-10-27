@@ -6,7 +6,7 @@ module InvitableMethods
   end
 
   def authenticate_user!
-    return if current_user
+    return if current_api_v1_user
     render json: {
       errors: ['Authorized users only.']
     }, status: :unauthorized

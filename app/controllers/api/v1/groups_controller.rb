@@ -1,10 +1,11 @@
 module Api::V1
   class GroupsController < ApiController
+    before_action :authenticate_api_v1_user! # GK: NB: i have no idea https://github.com/lynndylanhurley/devise_token_auth/issues/219
     before_action :set_group, only: [:show, :update, :destroy]
 
     # GET /groups
     def index
-      @group = Group.where(id: current_user.group_id).first || nil
+      @group = Group.where(id: current_api_v1_user.group_id).first || nil
       render :json => @group.to_json, status: :ok
     end
 
@@ -16,10 +17,10 @@ module Api::V1
     # POST /groups
     def create
       # @group = Group.create!(group_params)
-      @group = Group.create_and_update_creator(group_params, current_user)
+      @group = Group.create_and_update_creator(group_params, current_api_v1_user)
       if @group.errors.empty?
-        current_user.group = @group
-        current_user.save!
+        current_api_v1_user.group = @group
+        current_api_v1_user.save!
         render json: @group.to_json, status: :ok
       else
         render json: { errors: @group.errors.full_messages },

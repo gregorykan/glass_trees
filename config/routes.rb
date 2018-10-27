@@ -15,4 +15,5 @@ Rails.application.routes.draw do
       patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
     end
   end
+  root 'welcome#hello'
 end

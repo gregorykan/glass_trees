@@ -6,8 +6,8 @@ module Api::V1
     before_action :resource_from_invitation_token, only: [:edit, :update]
 
     def create
-      @user = User.invite!(invite_params, current_user)
-      @user.group_id = current_user.group_id
+      @user = User.invite!(invite_params, current_api_v1_user)
+      @user.group_id = current_api_v1_user.group_id
       @user.save
       if @user.errors.empty?
         render json: { success: ['User invited.'] }, status: :ok
