@@ -104,8 +104,6 @@ GEM
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
-    foreman (0.82.0)
-      thor (~> 0.19.1)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
@@ -274,7 +272,6 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise_invitable (~> 1.7.0)
   devise_token_auth
-  foreman (~> 0.82.0)
   jbuilder (~> 2.5)
   letter_opener
   listen (>= 3.0.5, < 3.2)
