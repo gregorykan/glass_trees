@@ -94,6 +94,9 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    devise_invitable (1.7.5)
+      actionmailer (>= 4.1.0)
+      devise (>= 4.0.0)
     devise_token_auth (1.0.0)
       devise (> 3.5.2, < 4.6)
       rails (>= 4.2.0, < 6)
@@ -263,6 +266,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  devise_invitable (~> 1.7.0)
   devise_token_auth
   foreman (~> 0.82.0)
   jbuilder (~> 2.5)
