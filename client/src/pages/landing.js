@@ -51,6 +51,10 @@ const Landing = (props) => {
 }
 
 export default connect(
+  'selectIsSignedIn',
+  'doSignOut',
+  'selectNotifications',
+  'doRemoveErrorNotification',
   'selectRoute',
   'selectRouteInfo',
   'selectPathname',
