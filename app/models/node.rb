@@ -6,4 +6,6 @@ class Node < ApplicationRecord
   has_many :consequent_questions, -> { where node_type: 'question' }, through: :target_links, source: :target
 
   has_many :options, -> { where node_type: 'option' }, through: :source_links, source: :source
+  
+  belongs_to :workspace, optional: true
 end
