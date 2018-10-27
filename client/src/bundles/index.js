@@ -5,10 +5,20 @@ import extraArgs from './extra-args'
 
 import nodesBundle from './nodes'
 import linksBundle from './links'
+import accountsBundle from './accounts'
+import invitationsBundle from './invitations'
+import myProfileBundle from './myProfile'
+import notificationsBundle from './notifications'
+import groupsBundle from './groups'
 
 export default composeBundles(
   nodesBundle,
   linksBundle,
+  accountsBundle,
+  invitationsBundle,
+  myProfileBundle,
+  notificationsBundle,
+  groupsBundle,
   createUrlBundle(),
   debugBundle,
   extraArgs,

@@ -1,6 +1,12 @@
 import { createRouteBundle } from 'redux-bundler'
 
 import Home from '../pages/home'
+import SignIn from '../pages/signIn'
+import Profile from '../pages/profile'
+import AcceptInvitation from '../pages/acceptInvitation'
+import CreateInvitation from '../pages/createInvitation'
+import MyGroup from '../pages/myGroup'
+import SignUp from '../pages/signUp'
 
 const routes = {
   '': {
@@ -9,6 +15,30 @@ const routes = {
   },
   '/': {
     component: Home,
+    protected: true
+  },
+  'sign-in': {
+    component: SignIn,
+    protected: false
+  },
+  'sign-up': {
+    component: SignUp,
+    protected: false
+  },
+  'my-profile': {
+    component: Profile,
+    protected: true
+  },
+  'accept-invitation': {
+    component: AcceptInvitation,
+    protected: true
+  },
+  'create-invitation': {
+    component: CreateInvitation,
+    protected: true
+  },
+  'my-group': {
+    component: MyGroup,
     protected: true
   },
   '*': {
