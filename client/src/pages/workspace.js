@@ -9,7 +9,8 @@ const Workspace = (props) => {
     doUpdateHash,
     thisWorkspace,
     workspaceNameField,
-    doUpdateWorkspaceNameField
+    doUpdateWorkspaceNameField,
+    doUpdateWorkspace
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -18,6 +19,7 @@ const Workspace = (props) => {
       doUpdateHash={doUpdateHash}
       workspaceNameField={workspaceNameField}
       doUpdateWorkspaceNameField={doUpdateWorkspaceNameField}
+      doUpdateWorkspace={doUpdateWorkspace}
     />
   )
 }
@@ -27,5 +29,6 @@ export default connect(
   'selectThisWorkspace',
   'selectWorkspaceNameField',
   'doUpdateWorkspaceNameField',
+  'doUpdateWorkspace',
   Workspace
 )
