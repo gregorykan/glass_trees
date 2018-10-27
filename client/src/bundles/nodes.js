@@ -110,6 +110,9 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
     }
   }
+  if (action.type === 'SIGN_OUT_SUCCESS') {
+    return initialState
+  }
   return baseReducer(state, action)
 }
 

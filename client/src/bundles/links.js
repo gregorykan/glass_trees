@@ -47,6 +47,9 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(state.data, concat(action.payload.source_links, action.payload.target_links))
     }
   }
+  if (action.type === 'SIGN_OUT_SUCCESS') {
+    return initialState
+  }
   return baseReducer(state, action)
 }
 

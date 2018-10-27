@@ -10,6 +10,7 @@ import invitationsBundle from './invitations'
 import myProfileBundle from './myProfile'
 import notificationsBundle from './notifications'
 import groupsBundle from './groups'
+import workspacesBundle from './workspaces'
 
 export default composeBundles(
   nodesBundle,
@@ -19,6 +20,7 @@ export default composeBundles(
   myProfileBundle,
   notificationsBundle,
   groupsBundle,
+  workspacesBundle,
   createUrlBundle(),
   debugBundle,
   extraArgs,
