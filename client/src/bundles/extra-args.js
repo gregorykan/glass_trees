@@ -16,7 +16,7 @@ export default {
             headers,
             ...omit(config, 'headers')
           }
-          return fetch(`http://localhost:3001/${urlPath}`, mergedConfig)
+          return fetch(`http://localhost:3000/${urlPath}`, mergedConfig)
         }
         return fetchResource()
       }

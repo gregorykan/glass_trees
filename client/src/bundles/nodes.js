@@ -6,7 +6,17 @@ import ms from 'milliseconds'
 const bundle = createAsyncResourceBundle({
   name: 'nodes',
   getPromise: async ({ apiFetch, getState }) => {
-    return apiFetch(`api/v1/nodes`, {})
+    const credentials = getState().accounts.credentials
+    const sanitizedCredentials = {
+      'access-token': credentials.accessToken,
+      'token-type': credentials.tokenType,
+      client: credentials.client,
+      uid: credentials.uid,
+      expiry: credentials.expiry
+    }
+    return apiFetch(`api/nodes`, {
+      headers: sanitizedCredentials
+    })
       .then(response => response.json())
       .catch(err => {
         console.log('err', err)
@@ -121,8 +131,17 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
-  apiFetch('api/v1/nodes/create_node', {
+  const credentials = getState().accounts.credentials
+  const sanitizedCredentials = {
+    'access-token': credentials.accessToken,
+    'token-type': credentials.tokenType,
+    client: credentials.client,
+    uid: credentials.uid,
+    expiry: credentials.expiry
+  }
+  apiFetch('api/nodes/create_node', {
     method: 'POST',
+    headers: sanitizedCredentials,
     body: JSON.stringify(formData)
   })
     .then(response => {
@@ -141,8 +160,17 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_FIRST_NODE_START' })
-  apiFetch('api/v1/nodes', {
+  const credentials = getState().accounts.credentials
+  const sanitizedCredentials = {
+    'access-token': credentials.accessToken,
+    'token-type': credentials.tokenType,
+    client: credentials.client,
+    uid: credentials.uid,
+    expiry: credentials.expiry
+  }
+  apiFetch('api/nodes', {
     method: 'POST',
+    headers: sanitizedCredentials,
     body: JSON.stringify(formData)
   })
     .then(response => {
@@ -161,8 +189,17 @@ bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'RESOLVE_NODE_START' })
-  apiFetch(`api/v1/nodes/${nodeId}/resolve`, {
-    method: 'PATCH'
+  const credentials = getState().accounts.credentials
+  const sanitizedCredentials = {
+    'access-token': credentials.accessToken,
+    'token-type': credentials.tokenType,
+    client: credentials.client,
+    uid: credentials.uid,
+    expiry: credentials.expiry
+  }
+  apiFetch(`api/nodes/${nodeId}/resolve`, {
+    method: 'PATCH',
+    headers: sanitizedCredentials
   })
     .then(response => {
       if (!response.ok) {
@@ -180,8 +217,17 @@ bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
 
 bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'UNRESOLVE_NODE_START' })
-  apiFetch(`api/v1/nodes/${nodeId}/unresolve`, {
-    method: 'PATCH'
+  const credentials = getState().accounts.credentials
+  const sanitizedCredentials = {
+    'access-token': credentials.accessToken,
+    'token-type': credentials.tokenType,
+    client: credentials.client,
+    uid: credentials.uid,
+    expiry: credentials.expiry
+  }
+  apiFetch(`api/nodes/${nodeId}/unresolve`, {
+    method: 'PATCH',
+    headers: sanitizedCredentials
   })
     .then(response => {
       if (!response.ok) {

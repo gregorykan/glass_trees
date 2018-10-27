@@ -14,7 +14,7 @@ const bundle = createAsyncResourceBundle({
       uid: credentials.uid,
       expiry: credentials.expiry
     }
-    return apiFetch(`api/v1/groups`, {
+    return apiFetch(`api/groups`, {
       headers: sanitizedCredentials
     })
       .then(response => response.json())
@@ -114,7 +114,7 @@ bundle.doCreateGroup = (formData) => ({ dispatch, apiFetch, getState }) => {
     expiry: credentials.expiry
   }
   dispatch({ type: 'CREATE_GROUP_START' })
-  apiFetch('api/v1/groups', {
+  apiFetch('api/groups', {
     method: 'POST',
     body: JSON.stringify(formData),
     headers: sanitizedCredentials
@@ -144,7 +144,7 @@ bundle.doUpdateGroup = (formData) => ({ dispatch, apiFetch, getState }) => {
     expiry: credentials.expiry
   }
   dispatch({ type: 'UPDATE_GROUP_START' })
-  apiFetch(`api/v1/groups/${formData.id}`, {
+  apiFetch(`api/groups/${formData.id}`, {
     method: 'PATCH',
     body: JSON.stringify(omit(formData, ['id'])),
     headers: sanitizedCredentials

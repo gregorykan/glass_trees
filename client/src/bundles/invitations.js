@@ -85,7 +85,7 @@ const actionCreators = {
   },
   doAcceptInvitation: (formData) => ({ dispatch, apiFetch, getState }) => {
     dispatch({ type: 'ACCEPT_INVITATION_START' })
-    apiFetch('api/v1/auth/invitation', {
+    apiFetch('api/auth/invitation', {
       method: 'PATCH',
       body: JSON.stringify(formData)
     })
@@ -110,7 +110,7 @@ const actionCreators = {
       expiry: credentials.expiry
     }
     dispatch({ type: 'CREATE_INVITATION_START' })
-    apiFetch('api/v1/auth/invitation', {
+    apiFetch('api/auth/invitation', {
       method: 'POST',
       body: JSON.stringify(formData),
       headers: sanitizedCredentials

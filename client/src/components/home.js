@@ -145,6 +145,7 @@ const Home = (props) => {
     }
   }
 
+  console.log('nodes isEmpty?', isEmpty(nodes))
   return (
     <div style={containerStyle}>
       <h1 style={headerStyle}>glass.trees</h1>
