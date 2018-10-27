@@ -60,7 +60,7 @@ bundle.reducer = (state = initialState, action) => {
     return {
       ...state,
       isCreatingWorkspace: false,
-      data: action.payload,
+      data: concat(filter(state.data, (workspace) => { return workspace.id !== action.payload.id }), action.payload),
       nameField: ''
     }
   }
@@ -80,7 +80,7 @@ bundle.reducer = (state = initialState, action) => {
     return {
       ...state,
       isUpdatingWorkspace: false,
-      data: action.payload
+      data: concat(filter(state.data, (workspace) => { return workspace.id !== action.payload.id }), action.payload)
     }
   }
   if (action.type === 'UPDATE_WORKSPACE_ERROR') {
@@ -97,7 +97,7 @@ bundle.reducer = (state = initialState, action) => {
   return baseReducer(state, action)
 }
 
-bundle.selectWorkspace = state => state.workspaces.data
+bundle.selectWorkspaces = state => state.workspaces.data
 bundle.selectWorkspaceNameField = state => state.workspaces.nameField
 
 bundle.doUpdateWorkspaceNameField = (name) => ({ dispatch }) => {
