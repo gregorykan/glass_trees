@@ -99,6 +99,25 @@ bundle.reducer = (state = initialState, action) => {
 
 bundle.selectWorkspaces = state => state.workspaces.data
 bundle.selectWorkspaceNameField = state => state.workspaces.nameField
+bundle.selectThisWorkspaceId = createSelector(
+  'selectHash',
+  (urlHash) => {
+    const urlHashArray = urlHash.split('/')
+    const path = urlHashArray[0]
+    if (path !== 'workspaces') return null
+    const orderId = urlHashArray[1]
+    return Number(orderId)
+  }
+)
+bundle.selectThisWorkspace = createSelector(
+  'selectThisWorkspaceId',
+  'selectWorkspaces',
+  (workspaceId, workspaces) => {
+    if (isNil(workspaceId) || isNil(workspaces)) return null
+    const workspace = find(workspaces, { 'id': workspaceId })
+    return workspace
+  }
+)
 
 bundle.doUpdateWorkspaceNameField = (name) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_WORKSPACE_NAME_FIELD', payload: name })

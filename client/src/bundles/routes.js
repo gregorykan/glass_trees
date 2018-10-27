@@ -9,6 +9,7 @@ import MyGroup from '../pages/myGroup'
 import SignUp from '../pages/signUp'
 import Workspaces from '../pages/workspaces'
 import CreateWorkspace from '../pages/createWorkspace'
+import Workspace from '../pages/workspace'
 
 const routes = {
   '': {
@@ -52,7 +53,7 @@ const routes = {
     protected: true
   },
   'workspaces/:workspaceId': {
-    component: CreateWorkspace,
+    component: Workspace,
     protected: true
   },
   '*': {
