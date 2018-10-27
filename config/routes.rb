@@ -7,6 +7,8 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :nodes
       resources :links
+      resources :groups
+      resources :users
       post '/nodes/create_node', to: 'nodes#create_node'
       patch '/nodes/:id/resolve', to: 'nodes#resolve_question'
       patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
