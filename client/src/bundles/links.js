@@ -6,7 +6,17 @@ import ms from 'milliseconds'
 const bundle = createAsyncResourceBundle({
   name: 'links',
   getPromise: async ({ apiFetch, getState }) => {
-    return apiFetch(`api/links`, {})
+    const credentials = getState().accounts.credentials
+    const sanitizedCredentials = {
+      'access-token': credentials.accessToken,
+      'token-type': credentials.tokenType,
+      client: credentials.client,
+      uid: credentials.uid,
+      expiry: credentials.expiry
+    }
+    return apiFetch(`api/links`, {
+      headers: sanitizedCredentials
+    })
       .then(response => response.json())
       .catch(err => {
         console.log('err', err)
