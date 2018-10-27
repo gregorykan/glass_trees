@@ -1,7 +1,7 @@
 class Link < ApplicationRecord
   belongs_to :source, foreign_key: :source_id, class_name: "Node"
   belongs_to :target, foreign_key: :target_id, class_name: "Node"
-  belongs_to :workspace, optional: true
+  belongs_to :workspace
   validate :prevent_option_from_belonging_to_more_than_one_question
 
   def prevent_option_from_belonging_to_more_than_one_question
