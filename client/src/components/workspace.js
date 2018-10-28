@@ -47,6 +47,14 @@ class WorkspaceComponent extends React.Component {
     doSelectNode(null)
   }
 
+  scrollToBottom = () => {
+    this.pageBottom.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  scrollToTop = () => {
+    this.pageTop.scrollIntoView({ behavior: 'smooth' })
+  }
+
   render () {
     const {
       doUpdateWorkspace,
@@ -95,6 +103,7 @@ class WorkspaceComponent extends React.Component {
 
     const onClickNode = (nodeId) => {
       doSelectNode(nodeId)
+      setTimeout(this.scrollToBottom, 50)
     }
 
     const handleNameChange = (e) => {
@@ -109,6 +118,11 @@ class WorkspaceComponent extends React.Component {
       return doUpdateWorkspace(formData)
     }
 
+    const cancelSingleNodeView = () => {
+      doSelectNode(null)
+      setTimeout(this.scrollToTop, 50)
+    }
+
     return (
       <div style={containerStyle}>
         <WorkspaceForm
@@ -117,7 +131,7 @@ class WorkspaceComponent extends React.Component {
           nameFieldValue={workspaceNameField}
           workspace={workspace}
         />
-        <div style={graphContainerStyle}>
+        <div style={graphContainerStyle} ref={(el) => { this.pageTop = el }}>
           <Graph
             data={data}
             config={graphConfig}
@@ -143,7 +157,11 @@ class WorkspaceComponent extends React.Component {
             doResolveNode={doResolveNode}
             doUnresolveNode={doUnresolveNode}
             nodeTypeToBeCreated={nodeTypeToBeCreated}
+            cancelSingleNodeView={cancelSingleNodeView}
           />
+        </div>
+        <div style={{ float:"left", clear: "both" }}
+           ref={(el) => { this.pageBottom = el }}>
         </div>
       </div>
     )

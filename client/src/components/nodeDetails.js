@@ -39,7 +39,8 @@ const NodeDetails = (props) => {
     currentUser,
     workspace,
     doResolveNode,
-    doUnresolveNode
+    doUnresolveNode,
+    cancelSingleNodeView
   } = props
 
   if (isNil(currentNode)) return null
@@ -110,6 +111,7 @@ const NodeDetails = (props) => {
       {renderNodeCreationForm()}
       {renderActions()}
       {renderAdditionalActionsForQuestionNode()}
+      <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>Cancel</Button>
     </div>
   )
 }
