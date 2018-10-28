@@ -86,7 +86,7 @@ const NodeDetails = (props) => {
 
   const renderAdditionalActionsForQuestionNode = () => {
     if (!isNil(nodeTypeToBeCreated)) return null
-    if (currentNode.nodeType === 'option') return null
+    if (currentNode.node_type === 'option') return null
     return (
       <div style={containerStyle}>
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
@@ -101,6 +101,7 @@ const NodeDetails = (props) => {
       <div style={containerStyle}>
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
+        <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>Cancel</Button>
       </div>
     )
   }
@@ -109,9 +110,8 @@ const NodeDetails = (props) => {
     <div style={containerStyle}>
       <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
       {renderNodeCreationForm()}
-      {renderActions()}
       {renderAdditionalActionsForQuestionNode()}
-      <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>Cancel</Button>
+      {renderActions()}
     </div>
   )
 }
