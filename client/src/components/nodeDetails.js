@@ -4,6 +4,12 @@ import { isEmpty, isNil } from 'lodash'
 
 import CreateNodeForm from './createNodeForm'
 
+const containerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
 const headerStyle = {
   textAlign: 'center'
 }
@@ -69,7 +75,7 @@ const NodeDetails = (props) => {
   const renderAdditionalActionsForQuestionNode = () => {
     if (currentNode.nodeType === 'option') return null
     return (
-      <div>
+      <div style={containerStyle}>
         <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
         {renderResolveActions()}
       </div>
@@ -77,7 +83,7 @@ const NodeDetails = (props) => {
   }
 
   return (
-    <div>
+    <div style={containerStyle}>
       <h3>{currentNode.label}</h3>
       {renderNodeCreationForm()}
       <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
