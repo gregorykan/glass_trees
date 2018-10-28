@@ -86,7 +86,7 @@ class WorkspaceComponent extends React.Component {
       links: links
     }
 
-    const myConfig = {
+    const graphConfig = {
       nodeHighlightBehavior: true,
       node: {
         color: 'lightgreen',
@@ -96,6 +96,9 @@ class WorkspaceComponent extends React.Component {
       },
       link: {
         highlightColor: 'lightblue'
+      },
+      d3: {
+        gravity: -200
       }
     }
 
@@ -126,7 +129,7 @@ class WorkspaceComponent extends React.Component {
         <div style={graphContainerStyle}>
           <Graph
             data={data}
-            config={myConfig}
+            config={graphConfig}
             onClickNode={onClickNode}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
