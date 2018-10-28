@@ -1,5 +1,5 @@
-module Api
-  class NodesController < ApiController
+# module Api
+  class Api::NodesController < ApiController
     before_action :authenticate_api_user!
     before_action :set_node, only: [:show, :update, :destroy, :resolve_question, :unresolve_question]
 
@@ -99,4 +99,4 @@ module Api
     end
 
   end
-end
+# end

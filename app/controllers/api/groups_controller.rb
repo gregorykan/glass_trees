@@ -1,5 +1,5 @@
-module Api
-  class GroupsController < ApiController
+# module Api
+  class Api::GroupsController < ApiController
     before_action :authenticate_api_user! # GK: NB: i have no idea https://github.com/lynndylanhurley/devise_token_auth/issues/219
     before_action :set_group, only: [:show, :update, :destroy]
 
@@ -56,4 +56,4 @@ module Api
     end
 
   end
-end
+# end

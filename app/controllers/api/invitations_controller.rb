@@ -1,5 +1,5 @@
-module Api
-  class InvitationsController < Devise::InvitationsController
+# module Api
+  class Api::InvitationsController < Devise::InvitationsController
     include DeviseTokenAuth::Concerns::SetUserByToken
     include InvitableMethods
     before_action :authenticate_api_user!, only: :create
@@ -45,4 +45,4 @@ module Api
       params.permit(:password, :password_confirmation, :invitation_token)
     end
   end
-end
+# end

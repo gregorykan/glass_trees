@@ -1,5 +1,5 @@
-module Api
-  class LinksController < ApiController
+# module Api
+  class Api::LinksController < ApiController
     before_action :authenticate_api_user!
     before_action :set_link, only: [:show, :update, :destroy]
 
@@ -53,4 +53,4 @@ module Api
     end
 
   end
-end
+# end
