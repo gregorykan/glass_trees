@@ -1,12 +1,12 @@
 import React from 'react'
 import { Button, TextField } from '@material-ui/core'
-import { Graph } from 'react-d3-graph'
 import { isEmpty, isNil } from 'lodash'
 
+import Graph from './graph'
 import CreateNodeForm from './createNodeForm'
 import CreateFirstNodeForm from './createFirstNodeForm'
-
 import WorkspaceForm from './workspaceForm'
+import NodeDetails from './nodeDetails'
 
 const containerStyle = {
   display: 'flex',
@@ -28,7 +28,7 @@ const headerStyle = {
   textAlign: 'center'
 }
 
-const nodeInfoContainerStyle = {
+const nodeDetailsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -103,64 +103,6 @@ class WorkspaceComponent extends React.Component {
       doSelectNode(nodeId)
     }
 
-    const renderNodeCreationForm = () => {
-      if (isNil(nodeTypeToBeCreated)) return null
-      if (nodeTypeToBeCreated === 'clarifyingQuestion') {
-        return (
-          <div>
-            <h3 style={headerStyle}>Ask a clarifying question</h3>
-            <CreateNodeForm
-              currentNodeId={currentNode.id}
-              nodeFormData={nodeFormData}
-              doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-              doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-              doCreateNode={doCreateNode}
-              nodeCreationType={nodeTypeToBeCreated}
-              doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
-              currentUser={currentUser}
-              workspace={workspace}
-            />
-          </div>
-        )
-      } else if (nodeTypeToBeCreated === 'followUpQuestion') {
-        return (
-          <div>
-            <h3 style={headerStyle}>Ask a follow-up question</h3>
-            <CreateNodeForm
-              currentNodeId={currentNode.id}
-              nodeFormData={nodeFormData}
-              doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-              doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-              doCreateNode={doCreateNode}
-              nodeCreationType={nodeTypeToBeCreated}
-              doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
-              currentUser={currentUser}
-              workspace={workspace}
-            />
-          </div>
-        )
-      } else if (nodeTypeToBeCreated === 'option') {
-        return (
-          <div>
-            <h3 style={headerStyle}>Add an option</h3>
-            <CreateNodeForm
-              currentNodeId={currentNode.id}
-              nodeFormData={nodeFormData}
-              doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-              doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-              doCreateNode={doCreateNode}
-              nodeCreationType={nodeTypeToBeCreated}
-              doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
-              currentUser={currentUser}
-              workspace={workspace}
-            />
-          </div>
-        )
-      } else {
-        return null
-      }
-    }
-
     const handleNameChange = (e) => {
       return doUpdateWorkspaceNameField(e.target.value)
     }
@@ -181,55 +123,34 @@ class WorkspaceComponent extends React.Component {
           handleSubmit={handleSubmit}
           nameFieldValue={workspaceNameField}
         />
-        {
-          !isEmpty(nodes)
-          ?
-          <div style={graphContainerStyle}>
-            <Graph
-              id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-              data={data}
-              config={myConfig}
-              onClickNode={onClickNode}
-              // onRightClickNode={onRightClickNode}
-              // onClickGraph={onClickGraph}
-              // onClickLink={onClickLink}
-              // onRightClickLink={onRightClickLink}
-              // onMouseOverNode={onMouseOverNode}
-              // onMouseOutNode={onMouseOutNode}
-              // onMouseOverLink={onMouseOverLink}
-              // onMouseOutLink={onMouseOutLink}
-            />
-          </div>
-          : <CreateFirstNodeForm
+        <div style={graphContainerStyle}>
+          <Graph
+            data={data}
+            config={myConfig}
+            onClickNode={onClickNode}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             doCreateFirstNode={doCreateFirstNode}
             currentUser={currentUser}
             workspace={workspace}
-            />
-        }
-        {
-          !isNil(currentNode)
-          ? <div style={nodeInfoContainerStyle}>
-            <h3>{currentNode.label}</h3>
-            {renderNodeCreationForm()}
-            <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
-            <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
-            {
-              currentNode.node_type === 'question'
-              ?
-              <div>
-                <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
-                { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
-                  : <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
-                }
-              </div>
-              : null
-            }
-          </div>
-          : null
-        }
+          />
+        </div>
+        <div style={nodeDetailsContainerStyle}>
+          <NodeDetails
+            currentNode={currentNode}
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateNode={doCreateNode}
+            doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+            currentUser={currentUser}
+            workspace={workspace}
+            doResolveNode={doResolveNode}
+            doUnresolveNode={doUnresolveNode}
+            nodeTypeToBeCreated={nodeTypeToBeCreated}
+          />
+        </div>
       </div>
     )
   }
