@@ -36,6 +36,8 @@ const Graph = (props) => {
     )
   }
 
+  console.log('graph data', data)
+
   return (
     <ReactD3Graph
       id='graph-id'

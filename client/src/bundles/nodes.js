@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter, map, includes } from 'lodash'
+import { omit, concat, isNil, find, filter, map, includes, reduce, uniq } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -47,7 +47,7 @@ bundle.reducer = (state = initialState, action) => {
   if (action.type === 'SELECT_NODE') {
     return {
       ...state,
-      currentNodeId: Number(action.payload),
+      currentNodeId: !isNil(action.payload) ? Number(action.payload) : null,
       nodeTypeToBeCreated: null
     }
   }
@@ -247,8 +247,22 @@ bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
 }
 
 bundle.selectNodes = (state) => state.nodes.data
-bundle.selectNodesForRendering = createSelector(
+bundle.selectNodesByCurrentNode = createSelector(
   'selectNodes',
+  'selectLinksByCurrentNodeId',
+  'selectCurrentNodeId',
+  (nodes, relatedLinks, currentNodeId) => {
+    if (isNil(currentNodeId)) return nodes
+    const relatedNodeIds = uniq(reduce(relatedLinks, (sofar, relatedLink) => {
+      return concat(concat(sofar, relatedLink.target_id), relatedLink.source_id)
+    }, []))
+    return filter(nodes, (node) => {
+      return includes(relatedNodeIds, node.id)
+    })
+  }
+)
+bundle.selectNodesForRendering = createSelector(
+  'selectNodesByCurrentNode',
   'selectThisWorkspaceId',
   (rawNodes, workspaceId) => {
     if (isNil(rawNodes) || isNil(workspaceId)) return []

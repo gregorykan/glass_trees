@@ -78,6 +78,9 @@ class WorkspaceComponent extends React.Component {
       currentUser
     } = this.props
 
+    console.log('workspace component nodes', nodes)
+    console.log('workspace component links', links)
+
     const data = {
       nodes: nodes,
       links: links

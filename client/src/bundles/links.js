@@ -55,7 +55,7 @@ bundle.reducer = (state = initialState, action) => {
 
 bundle.selectLinks = (state) => state.links.data
 bundle.selectLinksForRendering = createSelector(
-  'selectLinks',
+  'selectLinksByCurrentNodeId',
   'selectThisWorkspaceId',
   (rawLinks, workspaceId) => {
     if (isNil(rawLinks)) return []
@@ -65,6 +65,16 @@ bundle.selectLinksForRendering = createSelector(
         source: rawLink.source_id,
         target: rawLink.target_id
       }
+    })
+  }
+)
+bundle.selectLinksByCurrentNodeId = createSelector(
+  'selectCurrentNodeId',
+  'selectLinks',
+  (currentNodeId, links) => {
+    if (isNil(currentNodeId)) return links
+    return filter(links, (link) => {
+      return link.source_id === currentNodeId || link.target_id === currentNodeId
     })
   }
 )
