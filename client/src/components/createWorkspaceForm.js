@@ -50,6 +50,7 @@ const CreateWorkspaceForm = (props) => {
         handleNameChange={handleNameChange}
         handleSubmit={handleSubmit}
         nameFieldValue={workspaceNameField}
+        isCreating={true}
       />
     </div>
   )

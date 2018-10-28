@@ -1,48 +1,79 @@
 import React from 'react'
 import { Button, TextField } from '@material-ui/core'
+import { isNil } from 'lodash'
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  marginBottom: 20
 }
 
 const formStyle = {
   display: 'flex',
-  flexDirection: 'column',
-  marginTop: 20,
-  width: 300
-}
-
-const buttonStyle = {
+  flexDirection: 'row',
   marginTop: 20
 }
 
-const headerStyle = {
-  textAlign: 'center'
+const buttonStyle = {
+  marginLeft: 20
+}
+
+const textFieldStyle = {
+  minWidth: 200
+}
+
+const textFieldInputStyle = {
+  fontSize: 30
 }
 
 const WorkspaceForm = (props) => {
   const {
     handleSubmit,
     handleNameChange,
-    nameFieldValue
+    nameFieldValue,
+    isCreating = false,
+    workspace = {}
   } = props
 
-  return (
-    <div style={containerStyle}>
-      <form style={formStyle}>
-        <TextField
-          label={'Name'}
-          type='email'
-          value={nameFieldValue}
-          onChange={handleNameChange}
-        />
+  const workspaceCurrentName = workspace.name
+
+  const hasWorkspaceNameChanged = () => {
+    if (isCreating) return true
+    if (workspaceCurrentName !== nameFieldValue) {
+      return true
+    }
+    return false
+  }
+
+  const renderSaveButton = () => {
+    if (hasWorkspaceNameChanged()) {
+      return (
         <Button
           variant='outlined'
           style={buttonStyle}
           type='button'
           onClick={handleSubmit}
         >Save</Button>
+      )
+    } else {
+      return null
+    }
+  }
+
+  return (
+    <div style={containerStyle}>
+      <form style={formStyle}>
+        <TextField
+          label={isCreating ? 'Name' : null}
+          type='text'
+          value={nameFieldValue}
+          onChange={handleNameChange}
+          style={textFieldStyle}
+          InputProps={{
+            style: textFieldInputStyle
+          }}
+        />
+        {renderSaveButton()}
       </form>
     </div>
   )

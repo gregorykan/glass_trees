@@ -1,31 +1,13 @@
 import React from 'react'
-import { Button, TextField } from '@material-ui/core'
-import { isEmpty, isNil } from 'lodash'
 
 import Graph from './graph'
-import CreateNodeForm from './createNodeForm'
-import CreateFirstNodeForm from './createFirstNodeForm'
 import WorkspaceForm from './workspaceForm'
 import NodeDetails from './nodeDetails'
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'column'
-}
-
-const formStyle = {
-  display: 'flex',
   flexDirection: 'column',
-  marginTop: 20,
-  width: 300
-}
-
-const buttonStyle = {
-  marginTop: 20
-}
-
-const headerStyle = {
-  textAlign: 'center'
+  alignItems: 'center'
 }
 
 const nodeDetailsContainerStyle = {
@@ -35,7 +17,8 @@ const nodeDetailsContainerStyle = {
   alignItems: 'center',
   borderWidth: '1px',
   borderColor: 'black',
-  borderStyle: 'solid'
+  borderStyle: 'solid',
+  margin: 30
 }
 
 const graphContainerStyle = {
@@ -88,6 +71,8 @@ class WorkspaceComponent extends React.Component {
 
     const graphConfig = {
       nodeHighlightBehavior: true,
+      height: 400,
+      width: window.innerWidth - 40,
       node: {
         color: 'lightgreen',
         size: 120,
@@ -120,11 +105,11 @@ class WorkspaceComponent extends React.Component {
 
     return (
       <div style={containerStyle}>
-        <h1 style={headerStyle}>{workspace.name}</h1>
         <WorkspaceForm
           handleNameChange={handleNameChange}
           handleSubmit={handleSubmit}
           nameFieldValue={workspaceNameField}
+          workspace={workspace}
         />
         <div style={graphContainerStyle}>
           <Graph
