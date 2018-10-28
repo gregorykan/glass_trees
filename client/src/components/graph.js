@@ -4,6 +4,10 @@ import { isNil, isEmpty } from 'lodash'
 
 import CreateFirstNodeForm from './createFirstNodeForm'
 
+const containerStyle = {
+  margin: 20
+}
+
 const Graph = (props) => {
   const {
     data,
@@ -19,14 +23,16 @@ const Graph = (props) => {
 
   if (isNil(data) || isEmpty(data.nodes)) {
     return (
-      <CreateFirstNodeForm
-        nodeFormData={nodeFormData}
-        doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-        doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-        doCreateFirstNode={doCreateFirstNode}
-        currentUser={currentUser}
-        workspace={workspace}
-      />
+      <div style={containerStyle}>
+        <CreateFirstNodeForm
+          nodeFormData={nodeFormData}
+          doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+          doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+          doCreateFirstNode={doCreateFirstNode}
+          currentUser={currentUser}
+          workspace={workspace}
+        />
+      </div>
     )
   }
 

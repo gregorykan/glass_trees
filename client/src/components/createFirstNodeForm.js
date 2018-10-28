@@ -53,7 +53,7 @@ const CreateFirstNodeForm = props => {
 
   return (
     <div style={containerStyle}>
-      <h3 style={headerStyle}>What's your problem?</h3>
+      <h3 style={headerStyle}>What's your question?</h3>
       <form style={formStyle}>
         <TextField
           label={'Label'}
