@@ -41,6 +41,12 @@ class WorkspaceComponent extends React.Component {
     doUpdateWorkspaceNameField(workspace.name)
   }
 
+  componentWillUnmount () {
+    const { doUpdateWorkspaceNameField, doSelectNode } = this.props
+    doUpdateWorkspaceNameField(null)
+    doSelectNode(null)
+  }
+
   render () {
     const {
       doUpdateWorkspace,
