@@ -71,6 +71,8 @@ class WorkspaceComponent extends React.Component {
 
     const graphConfig = {
       nodeHighlightBehavior: true,
+      height: 400,
+      width: window.innerWidth - 40,
       node: {
         color: 'lightgreen',
         size: 120,
