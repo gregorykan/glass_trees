@@ -31,7 +31,7 @@ const WorkspacesList = (props) => {
         <CardActionArea onClick={() => { doUpdateHash(`workspaces/${workspace.id}`) }}>
           <CardContent>
             <Typography variant='headline'>
-              {`Workspace ${workspace.id}`}
+              {workspace.name}
             </Typography>
           </CardContent>
         </CardActionArea>

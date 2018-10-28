@@ -10,7 +10,8 @@ import NodeDetails from './nodeDetails'
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  alignItems: 'center'
 }
 
 const formStyle = {
@@ -120,7 +121,6 @@ class WorkspaceComponent extends React.Component {
 
     return (
       <div style={containerStyle}>
-        <h1 style={headerStyle}>{workspace.name}</h1>
         <WorkspaceForm
           handleNameChange={handleNameChange}
           handleSubmit={handleSubmit}

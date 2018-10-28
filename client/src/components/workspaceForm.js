@@ -3,22 +3,26 @@ import { Button, TextField } from '@material-ui/core'
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
+  marginBottom: 20
 }
 
 const formStyle = {
   display: 'flex',
-  flexDirection: 'column',
-  marginTop: 20,
-  width: 300
-}
-
-const buttonStyle = {
+  flexDirection: 'row',
   marginTop: 20
 }
 
-const headerStyle = {
-  textAlign: 'center'
+const buttonStyle = {
+  marginLeft: 20
+}
+
+const textFieldStyle = {
+  minWidth: 200
+}
+
+const textFieldInputStyle = {
+  fontSize: 30
 }
 
 const WorkspaceForm = (props) => {
@@ -32,10 +36,13 @@ const WorkspaceForm = (props) => {
     <div style={containerStyle}>
       <form style={formStyle}>
         <TextField
-          label={'Name'}
-          type='email'
+          type='text'
           value={nameFieldValue}
           onChange={handleNameChange}
+          style={textFieldStyle}
+          InputProps={{
+            style: textFieldInputStyle
+          }}
         />
         <Button
           variant='outlined'
