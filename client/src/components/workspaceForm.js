@@ -31,14 +31,15 @@ const WorkspaceForm = (props) => {
     handleSubmit,
     handleNameChange,
     nameFieldValue,
+    isCreating = false,
     workspace = {}
   } = props
 
   const workspaceCurrentName = workspace.name
 
   const hasWorkspaceNameChanged = () => {
-    if (isNil(workspace.name)) return false
-    if (workspace.name !== nameFieldValue) {
+    if (isCreating) return true
+    if (workspaceCurrentName !== nameFieldValue) {
       return true
     }
     return false
@@ -63,6 +64,7 @@ const WorkspaceForm = (props) => {
     <div style={containerStyle}>
       <form style={formStyle}>
         <TextField
+          label={isCreating ? 'Name' : null}
           type='text'
           value={nameFieldValue}
           onChange={handleNameChange}
