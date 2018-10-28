@@ -54,23 +54,25 @@ const NodeDetails = (props) => {
     )
   }
 
+  const renderAdditionalActionsForQuestionNode = () => {
+    if (currentNode.nodeType === 'option') return null
+    return (
+      <div>
+        <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+        { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
+          : <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
+        }
+      </div>
+    )
+  }
+
   return (
     <div>
       <h3>{currentNode.label}</h3>
       {renderNodeCreationForm()}
       <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
       <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
-      {
-        currentNode.node_type === 'question'
-        ?
-        <div>
-          <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
-          { !currentNode.resolved ? <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
-            : <Button style={submitButtonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
-          }
-        </div>
-        : null
-      }
+      {renderAdditionalActionsForQuestionNode()}
     </div>
   )
 }
