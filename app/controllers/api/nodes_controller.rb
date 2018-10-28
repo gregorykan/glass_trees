@@ -91,7 +91,7 @@
     end
 
     def node_params
-      params.permit(:node_type, :label, :description, :current_node_id, :node_creation_type)
+      params.permit(:node_type, :label, :description, :current_node_id, :node_creation_type, :workspace_id, :user_id)
     end
 
     def set_node
