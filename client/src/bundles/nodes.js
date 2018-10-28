@@ -249,9 +249,11 @@ bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
 bundle.selectNodes = (state) => state.nodes.data
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
-  (rawNodes) => {
-    if (isNil(rawNodes)) return []
-    return map(rawNodes, (rawNode) => {
+  'selectThisWorkspaceId',
+  (rawNodes, workspaceId) => {
+    if (isNil(rawNodes) || isNil(workspaceId)) return []
+    const nodesToRender = filter(rawNodes, (rawNode) => { return rawNode.workspace_id === workspaceId })
+    return map(nodesToRender, (rawNode) => {
       return {
         id: rawNode.id,
         label: `(${rawNode.id}) ${rawNode.label}`,

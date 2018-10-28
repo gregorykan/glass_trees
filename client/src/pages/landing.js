@@ -16,6 +16,10 @@ const navStyle = {
   flexDirection: 'row'
 }
 
+const headerStyle = {
+  textAlign: 'center'
+}
+
 const Landing = (props) => {
   const { isSignedIn, doSignOut, notifications, doRemoveErrorNotification, route, routeInfo, doUpdateHash } = props
   const isAcceptingInvitation = routeInfo.pattern === 'accept-invitation'
@@ -35,6 +39,7 @@ const Landing = (props) => {
         {
           isSignedIn
           ? <div style={containerStyle}>
+              <h1 style={headerStyle}>glass.trees</h1>
               <div style={navStyle}>
                 <Button onClick={() => { doUpdateHash('#') }}>Home</Button>
                 <Button onClick={() => { doUpdateHash('my-profile') }}>My Profile</Button>

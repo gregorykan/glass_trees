@@ -56,9 +56,11 @@ bundle.reducer = (state = initialState, action) => {
 bundle.selectLinks = (state) => state.links.data
 bundle.selectLinksForRendering = createSelector(
   'selectLinks',
-  (rawLinks) => {
+  'selectThisWorkspaceId',
+  (rawLinks, workspaceId) => {
     if (isNil(rawLinks)) return []
-    return map(rawLinks, (rawLink) => {
+    const linksToRender = filter(rawLinks, (rawLink) => { return rawLink.workspace_id === workspaceId })
+    return map(linksToRender, (rawLink) => {
       return {
         source: rawLink.source_id,
         target: rawLink.target_id
