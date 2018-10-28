@@ -1,10 +1,6 @@
 import React from 'react'
-import { Button, TextField } from '@material-ui/core'
-import { isEmpty, isNil } from 'lodash'
 
 import Graph from './graph'
-import CreateNodeForm from './createNodeForm'
-import CreateFirstNodeForm from './createFirstNodeForm'
 import WorkspaceForm from './workspaceForm'
 import NodeDetails from './nodeDetails'
 
@@ -14,21 +10,6 @@ const containerStyle = {
   alignItems: 'center'
 }
 
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  marginTop: 20,
-  width: 300
-}
-
-const buttonStyle = {
-  marginTop: 20
-}
-
-const headerStyle = {
-  textAlign: 'center'
-}
-
 const nodeDetailsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
@@ -36,7 +17,8 @@ const nodeDetailsContainerStyle = {
   alignItems: 'center',
   borderWidth: '1px',
   borderColor: 'black',
-  borderStyle: 'solid'
+  borderStyle: 'solid',
+  margin: 30
 }
 
 const graphContainerStyle = {
