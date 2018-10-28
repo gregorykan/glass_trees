@@ -38,7 +38,7 @@ const NodeDetails = (props) => {
     }
     return (
       <div>
-        <h3 style={headerStyle}>{nodeTypeToBeCreatedToHeaderText[nodeTypeToBeCreated]}></h3>
+        <h3 style={headerStyle}>{nodeTypeToBeCreatedToHeaderText[nodeTypeToBeCreated]}</h3>
         <CreateNodeForm
           currentNodeId={currentNode.id}
           nodeFormData={nodeFormData}
