@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, TextField } from '@material-ui/core'
+import { isNil } from 'lodash'
 
 const containerStyle = {
   display: 'flex',
@@ -29,8 +30,34 @@ const WorkspaceForm = (props) => {
   const {
     handleSubmit,
     handleNameChange,
-    nameFieldValue
+    nameFieldValue,
+    workspace = {}
   } = props
+
+  const workspaceCurrentName = workspace.name
+
+  const hasWorkspaceNameChanged = () => {
+    if (isNil(workspace.name)) return false
+    if (workspace.name !== nameFieldValue) {
+      return true
+    }
+    return false
+  }
+
+  const renderSaveButton = () => {
+    if (hasWorkspaceNameChanged()) {
+      return (
+        <Button
+          variant='outlined'
+          style={buttonStyle}
+          type='button'
+          onClick={handleSubmit}
+        >Save</Button>
+      )
+    } else {
+      return null
+    }
+  }
 
   return (
     <div style={containerStyle}>
@@ -44,12 +71,7 @@ const WorkspaceForm = (props) => {
             style: textFieldInputStyle
           }}
         />
-        <Button
-          variant='outlined'
-          style={buttonStyle}
-          type='button'
-          onClick={handleSubmit}
-        >Save</Button>
+        {renderSaveButton()}
       </form>
     </div>
   )

@@ -125,6 +125,7 @@ class WorkspaceComponent extends React.Component {
           handleNameChange={handleNameChange}
           handleSubmit={handleSubmit}
           nameFieldValue={workspaceNameField}
+          workspace={workspace}
         />
         <div style={graphContainerStyle}>
           <Graph
