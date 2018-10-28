@@ -30,7 +30,9 @@ const CreateNodeForm = props => {
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
     nodeCreationType,
-    doUpdateNodeTypeToBeCreated
+    doUpdateNodeTypeToBeCreated,
+    workspace,
+    currentUser
    } = props
 
   const handleLabelChange = (e) => {
@@ -51,7 +53,9 @@ const CreateNodeForm = props => {
       ...nodeFormData,
       current_node_id: currentNodeId,
       node_creation_type: nodeCreationType,
-      node_type: nodeCreationTypesToNodeTypes[nodeCreationType]
+      node_type: nodeCreationTypesToNodeTypes[nodeCreationType],
+      workspace_id: workspace.id,
+      user_id: currentUser.id
     }
     console.log('create node form data', formData)
     doCreateNode(formData)

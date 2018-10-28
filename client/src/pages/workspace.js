@@ -10,7 +10,21 @@ const Workspace = (props) => {
     thisWorkspace,
     workspaceNameField,
     doUpdateWorkspaceNameField,
-    doUpdateWorkspace
+    doUpdateWorkspace,
+    nodesForRendering,
+    linksForRendering,
+    doSelectNode,
+    currentNode,
+    doUpdateNodeFormDataLabel,
+    doUpdateNodeFormDataDescription,
+    nodeFormData,
+    doCreateNode,
+    doUpdateNodeTypeToBeCreated,
+    nodeTypeToBeCreated,
+    doResolveNode,
+    doUnresolveNode,
+    doCreateFirstNode,
+    currentUser
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -20,6 +34,20 @@ const Workspace = (props) => {
       workspaceNameField={workspaceNameField}
       doUpdateWorkspaceNameField={doUpdateWorkspaceNameField}
       doUpdateWorkspace={doUpdateWorkspace}
+      nodes={nodesForRendering}
+      links={linksForRendering}
+      doSelectNode={doSelectNode}
+      currentNode={currentNode}
+      doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+      doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+      nodeFormData={nodeFormData}
+      doCreateNode={doCreateNode}
+      doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+      nodeTypeToBeCreated={nodeTypeToBeCreated}
+      doResolveNode={doResolveNode}
+      doUnresolveNode={doUnresolveNode}
+      doCreateFirstNode={doCreateFirstNode}
+      currentUser={currentUser}
     />
   )
 }
@@ -30,5 +58,19 @@ export default connect(
   'selectWorkspaceNameField',
   'doUpdateWorkspaceNameField',
   'doUpdateWorkspace',
+  'selectNodesForRendering',
+  'selectLinksForRendering',
+  'doSelectNode',
+  'selectCurrentNode',
+  'doUpdateNodeFormDataLabel',
+  'doUpdateNodeFormDataDescription',
+  'selectNodeFormData',
+  'doCreateNode',
+  'doUpdateNodeTypeToBeCreated',
+  'selectNodeTypeToBeCreated',
+  'doResolveNode',
+  'doUnresolveNode',
+  'doCreateFirstNode',
+  'selectCurrentUser',
   Workspace
 )

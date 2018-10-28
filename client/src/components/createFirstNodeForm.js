@@ -27,7 +27,9 @@ const CreateFirstNodeForm = props => {
     doCreateFirstNode,
     nodeFormData,
     doUpdateNodeFormDataLabel,
-    doUpdateNodeFormDataDescription
+    doUpdateNodeFormDataDescription,
+    workspace,
+    currentUser
    } = props
 
   const handleLabelChange = (e) => {
@@ -41,7 +43,9 @@ const CreateFirstNodeForm = props => {
   const handleSubmit = () => {
     const formData = {
       ...nodeFormData,
-      node_type: 'question'
+      node_type: 'question',
+      workspace_id: workspace.id,
+      user_id: currentUser.id
     }
     console.log('create node form data', formData)
     doCreateFirstNode(formData)
