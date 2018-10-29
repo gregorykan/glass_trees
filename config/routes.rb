@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     post '/nodes/create_node', to: 'nodes#create_node'
     patch '/nodes/:id/resolve', to: 'nodes#resolve_question'
     patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
+    post '/noves/:id/vote', to: 'nodes#vote'
   end
   root 'welcome#hello'
 end

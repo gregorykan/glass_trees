@@ -1,6 +1,6 @@
 class Api::NodesController < ApiController
   before_action :authenticate_api_user!
-  before_action :set_node, only: [:show, :update, :destroy, :resolve_question, :unresolve_question]
+  before_action :set_node, only: [:show, :update, :destroy, :resolve_question, :unresolve_question, :vote]
 
   # GET /nodes
   def index
@@ -82,6 +82,19 @@ class Api::NodesController < ApiController
     end
   end
 
+  def vote
+    existing_vote = @node.votes(user_id: params[:user_id], is_upvote: params[:is_upvote]).first
+    if existing_vote.present?
+      existing_vote.destroy!
+      render json: @node.to_json( :include => [:upvotes, :downvotes] )
+      return
+    end
+    vote = Vote.new(create_vote_params)
+    vote.node_id = @node.id
+    @node.votes << vote
+    render json: @node.to_json( :include => [:upvotes, :downvotes] )
+  end
+
   # DELETE /nodes/:id
   def destroy
     @node.destroy
@@ -90,12 +103,16 @@ class Api::NodesController < ApiController
 
   private
 
+  def create_vote_params
+    node_params.except(:node_type, :label, :description, :node_creation_type, :workspace_id, :current_node_id)
+  end
+
   def create_node_params
-    node_params.except(:current_node_id, :node_creation_type)
+    node_params.except(:current_node_id, :node_creation_type, :is_upvote)
   end
 
   def node_params
-    params.permit(:node_type, :label, :description, :current_node_id, :node_creation_type, :workspace_id, :user_id)
+    params.permit(:node_type, :label, :description, :current_node_id, :node_creation_type, :workspace_id, :user_id, :is_upvote)
   end
 
   def set_node
