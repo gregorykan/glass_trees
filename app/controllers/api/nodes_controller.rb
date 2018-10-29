@@ -54,6 +54,10 @@ class Api::NodesController < ApiController
   end
 
   def resolve_question
+    if current_api_user.id != @node.user_id
+      render json: { errors: ["Only the node's creator can resolve it."]}, status: :forbidden
+      return
+    end
     @node.resolved = true
     @node.save!
     @node.options.update_all(resolved: true)

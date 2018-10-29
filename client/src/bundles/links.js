@@ -71,8 +71,9 @@ bundle.selectLinksForRendering = createSelector(
 
 bundle.reactLinksFetch = createSelector(
   'selectLinksShouldUpdate',
-  (shouldUpdate) => {
-    if (shouldUpdate) {
+  'selectIsSignedIn',
+  (shouldUpdate, isSignedIn) => {
+    if (shouldUpdate && isSignedIn) {
       return { actionCreator: 'doFetchLinks' }
     }
     return false

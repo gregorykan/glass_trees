@@ -77,10 +77,12 @@ const NodeDetails = (props) => {
       return (
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
       )
-    } else {
+    } else if (currentUser.id === currentNode.user_id) {
       return (
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
       )
+    } else {
+      return null
     }
   }
 

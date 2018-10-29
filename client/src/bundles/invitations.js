@@ -120,7 +120,7 @@ const actionCreators = {
           return Promise.reject(new Error(`${response.status} ${response.statusText}`))
         }
         dispatch({ type: 'CREATE_INVITATION_SUCCESS', payload: 'Success! Invitation sent.' })
-        dispatch({ actionCreator: 'doUpdateHash', args: ['#'] })
+        dispatch({ actionCreator: 'doUpdateHash', args: ['my-group'] })
       })
       .catch((error) => {
         dispatch({ type: 'CREATE_INVITATION_ERROR', payload: error })
