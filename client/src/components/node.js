@@ -2,6 +2,9 @@ import React from 'react'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import RoomIcon from '@material-ui/icons/Room'
 
+// https://material-ui.com/style/icons/
+// https://material.io/tools/icons
+
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
