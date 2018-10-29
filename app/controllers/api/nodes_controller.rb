@@ -83,12 +83,20 @@ class Api::NodesController < ApiController
   end
 
   def vote
-    existing_vote = @node.votes.where(user_id: params[:user_id], is_upvote: params[:is_upvote]).first
-    if existing_vote.present?
+    existing_vote = @node.votes.where(user_id: params[:user_id]).first
+    # user has already voted the same way, so destroy vote to 'undo'
+    if (existing_vote.present?) && (existing_vote.is_upvote == params[:is_upvote])
       existing_vote.destroy!
       render json: @node.to_json( :include => [:upvotes, :downvotes] )
       return
     end
+
+    # user has already voted but in the opposite way, so destroy existing vote and create a new one
+    if (existing_vote.present?) && (existing_vote.is_upvote != params[:is_upvote])
+      existing_vote.destroy!
+    end
+
+    # user has not previously voted for this node
     vote = Vote.new(create_vote_params)
     vote.node_id = @node.id
     @node.votes << vote
