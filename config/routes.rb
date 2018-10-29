@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :groups
     resources :users
     resources :workspaces
+    resources :votes
     post '/nodes/create_node', to: 'nodes#create_node'
     patch '/nodes/:id/resolve', to: 'nodes#resolve_question'
     patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
