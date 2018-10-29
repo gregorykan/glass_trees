@@ -4,9 +4,9 @@ class Api::NodesController < ApiController
 
   # GET /nodes
   def index
-    byebug
     @nodes = Node.where(workspace_id: Workspace.where(group_id: current_api_user.group))
-    render :json => @nodes
+    # GK: TODO: request for votes separately because this is a lot of queries to the db
+    render :json => @nodes.to_json( :include => [:upvotes, :downvotes] ), status: :ok
   end
 
   # GET /nodes/:id
