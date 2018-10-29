@@ -101,7 +101,7 @@ class WorkspaceComponent extends React.Component {
       }
     }
 
-    const onClickNode = (nodeId) => {
+    const handleNodeClick = (nodeId) => {
       doSelectNode(nodeId)
       setTimeout(this.scrollToBottom, 50)
     }
@@ -135,7 +135,7 @@ class WorkspaceComponent extends React.Component {
           <Graph
             data={data}
             config={graphConfig}
-            onClickNode={onClickNode}
+            handleNodeClick={handleNodeClick}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}

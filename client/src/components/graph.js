@@ -8,42 +8,55 @@ const containerStyle = {
   margin: 20
 }
 
-const Graph = (props) => {
-  const {
-    data,
-    config,
-    onClickNode,
-    nodeFormData,
-    doUpdateNodeFormDataLabel,
-    doUpdateNodeFormDataDescription,
-    doCreateFirstNode,
-    currentUser,
-    workspace
-  } = props
-
-  if (isNil(data) || isEmpty(data.nodes)) {
-    return (
-      <div style={containerStyle}>
-        <CreateFirstNodeForm
-          nodeFormData={nodeFormData}
-          doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-          doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-          doCreateFirstNode={doCreateFirstNode}
-          currentUser={currentUser}
-          workspace={workspace}
-        />
-      </div>
-    )
+class Graph extends React.Component {
+  constructor(props) {
+    super(props);
+    this.graph = React.createRef();
   }
 
-  return (
-    <ReactD3Graph
-      id='graph-id'
-      data={data}
-      config={config}
-      onClickNode={onClickNode}
-    />
-  )
+  clickAndHighlightNode = (nodeId) => {
+    this.props.handleNodeClick(nodeId)
+    this.graph.current._setNodeHighlightedValue(nodeId)
+  }
+
+  render () {
+    const {
+      data,
+      config,
+      handleNodeClick,
+      nodeFormData,
+      doUpdateNodeFormDataLabel,
+      doUpdateNodeFormDataDescription,
+      doCreateFirstNode,
+      currentUser,
+      workspace
+    } = this.props
+
+    if (isNil(data) || isEmpty(data.nodes)) {
+      return (
+        <div style={containerStyle}>
+          <CreateFirstNodeForm
+            nodeFormData={nodeFormData}
+            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+            doCreateFirstNode={doCreateFirstNode}
+            currentUser={currentUser}
+            workspace={workspace}
+          />
+        </div>
+      )
+    }
+
+    return (
+      <ReactD3Graph
+        id='graph-id'
+        data={data}
+        config={config}
+        ref={this.graph}
+        onClickNode={this.clickAndHighlightNode}
+      />
+    )
+  }
 }
 
 export default Graph
