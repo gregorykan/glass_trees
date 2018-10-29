@@ -1,11 +1,4 @@
 import React from 'react'
-import { connect } from 'redux-bundler-react'
-import { Button } from '@material-ui/core'
-import { Graph } from 'react-d3-graph'
-import { isEmpty, isNil } from 'lodash'
-
-import CreateNodeForm from './createNodeForm'
-import CreateFirstNodeForm from './createFirstNodeForm'
 
 const containerStyle = {
   display: 'flex',

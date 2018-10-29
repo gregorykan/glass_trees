@@ -3,6 +3,7 @@ import React from 'react'
 import Graph from './graph'
 import WorkspaceForm from './workspaceForm'
 import NodeDetails from './nodeDetails'
+import Node from './node'
 
 const containerStyle = {
   display: 'flex',
@@ -89,10 +90,13 @@ class WorkspaceComponent extends React.Component {
       height: 400,
       width: window.innerWidth - 40,
       node: {
+        fontSize: 17,
+        highlightFontSize: 17,
         color: 'lightgreen',
-        size: 120,
+        size: 700,
         highlightStrokeColor: 'blue',
-        labelProperty: 'label'
+        labelProperty: 'label',
+        viewGenerator: (node) => <Node node={node}/>
       },
       link: {
         highlightColor: 'lightblue'
