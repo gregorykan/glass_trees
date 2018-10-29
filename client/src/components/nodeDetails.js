@@ -27,6 +27,10 @@ const createNodeContainerStyle = {
   margin: 20
 }
 
+const currentVotesStyle = {
+  marginBottom: 20
+}
+
 const NodeDetails = (props) => {
   const {
     currentNode,
@@ -111,6 +115,7 @@ const NodeDetails = (props) => {
   return (
     <div style={containerStyle}>
       <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
+      <span style={currentVotesStyle}>score: {currentNode.upvotes.length - currentNode.downvotes.length}</span>
       {renderNodeCreationForm()}
       {renderAdditionalActionsForQuestionNode()}
       {renderActions()}
