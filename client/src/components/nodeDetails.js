@@ -27,6 +27,10 @@ const createNodeContainerStyle = {
   margin: 20
 }
 
+const currentVotesStyle = {
+  marginBottom: 20
+}
+
 const NodeDetails = (props) => {
   const {
     currentNode,
@@ -40,7 +44,8 @@ const NodeDetails = (props) => {
     workspace,
     doResolveNode,
     doUnresolveNode,
-    cancelSingleNodeView
+    cancelSingleNodeView,
+    doVoteForNode
   } = props
 
   if (isNil(currentNode)) return null
@@ -108,9 +113,21 @@ const NodeDetails = (props) => {
     )
   }
 
+  const handleVote = (isUpvote) => {
+    const formData = {
+      node_id: currentNode.id,
+      is_upvote: isUpvote,
+      user_id: currentUser.id
+    }
+    doVoteForNode(formData)
+  }
+
   return (
     <div style={containerStyle}>
       <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
+      <span style={currentVotesStyle}>score: {currentNode.upvotes.length - currentNode.downvotes.length}</span>
+      <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { handleVote(true) }}>UPVOTE</Button>
+      <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { handleVote(false) }}>DOWNVOTE</Button>
       {renderNodeCreationForm()}
       {renderAdditionalActionsForQuestionNode()}
       {renderActions()}

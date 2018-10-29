@@ -8,4 +8,5 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   belongs_to :group, optional: true
   has_many :nodes
+  has_many :votes
 end

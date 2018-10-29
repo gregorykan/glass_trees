@@ -24,7 +24,8 @@ const Workspace = (props) => {
     doResolveNode,
     doUnresolveNode,
     doCreateFirstNode,
-    currentUser
+    currentUser,
+    doVoteForNode
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -48,6 +49,7 @@ const Workspace = (props) => {
       doUnresolveNode={doUnresolveNode}
       doCreateFirstNode={doCreateFirstNode}
       currentUser={currentUser}
+      doVoteForNode={doVoteForNode}
     />
   )
 }
@@ -72,5 +74,6 @@ export default connect(
   'doUnresolveNode',
   'doCreateFirstNode',
   'selectCurrentUser',
+  'doVoteForNode',
   Workspace
 )
