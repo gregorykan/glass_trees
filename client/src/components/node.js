@@ -1,11 +1,12 @@
 import React from 'react'
-import ThreeSixtyIcon from '@material-ui/icons/ThreeSixty';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport'
+import RoomIcon from '@material-ui/icons/Room'
 
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'center'
 }
 
 const headerStyle = {
@@ -13,16 +14,30 @@ const headerStyle = {
 }
 
 const iconStyle = {
-  height: 100
+  fontSize: 60,
+  color: 'green'
+}
+
+const optionIconStyle = {
+  fontSize: 40,
+  color: 'orange'
 }
 
 const Node = (props) => {
   const {
-    doUpdateHash
+    doUpdateHash,
+    node
   } = props
+
+  const isQuestion = node.nodeType === 'question'
+
   return (
     <div style={containerStyle}>
-      <ThreeSixtyIcon style={iconStyle} />
+      {
+        isQuestion
+        ? <ContactSupportIcon style={iconStyle} color='black' />
+        : <RoomIcon style={optionIconStyle} color='black' />
+      }
     </div>
   )
 }
