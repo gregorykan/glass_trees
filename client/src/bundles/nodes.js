@@ -277,8 +277,9 @@ bundle.selectNodeTypeToBeCreated = (state) => state.nodes.nodeTypeToBeCreated
 
 bundle.reactNodesFetch = createSelector(
   'selectNodesShouldUpdate',
-  (shouldUpdate) => {
-    if (shouldUpdate) {
+  'selectIsSignedIn',
+  (shouldUpdate, isSignedIn) => {
+    if (shouldUpdate && isSignedIn) {
       return { actionCreator: 'doFetchNodes' }
     }
     return false
