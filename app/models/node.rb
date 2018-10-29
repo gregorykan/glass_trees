@@ -9,4 +9,14 @@ class Node < ApplicationRecord
 
   belongs_to :workspace
   belongs_to :user
+
+  has_many :votes
+
+  def upvotes
+    self.votes.where(is_upvote: true)
+  end
+
+  def downvotes
+    self.votes.where(is_upvote: false)
+  end
 end

@@ -4,7 +4,8 @@ class Api::NodesController < ApiController
 
   # GET /nodes
   def index
-    @nodes = Node.all
+    byebug
+    @nodes = Node.where(workspace_id: Workspace.where(group_id: current_api_user.group))
     render :json => @nodes
   end
 

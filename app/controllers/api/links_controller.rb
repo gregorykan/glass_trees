@@ -4,7 +4,7 @@ class Api::LinksController < ApiController
 
   # GET /links
   def index
-    @links = Link.all
+    @links = Link.where(workspace_id: Workspace.where(group_id: current_api_user.group))
     render :json => @links
   end
 
