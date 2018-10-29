@@ -83,7 +83,7 @@ class Api::NodesController < ApiController
   end
 
   def vote
-    existing_vote = @node.votes(user_id: params[:user_id], is_upvote: params[:is_upvote]).first
+    existing_vote = @node.votes.where(user_id: params[:user_id], is_upvote: params[:is_upvote]).first
     if existing_vote.present?
       existing_vote.destroy!
       render json: @node.to_json( :include => [:upvotes, :downvotes] )

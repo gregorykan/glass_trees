@@ -110,6 +110,12 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
     }
   }
+  if (action.type === 'VOTE_NODE_SUCCESS') {
+    return {
+      ...state,
+      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload)
+    }
+  }
   if (action.type === 'SIGN_OUT_SUCCESS') {
     return initialState
   }
@@ -243,6 +249,35 @@ bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
     })
     .catch((error) => {
       dispatch({ type: 'UNRESOLVE_NODE_ERROR', payload: error })
+    })
+}
+
+bundle.doVoteForNode = (formData) => ({ dispatch, apiFetch, getState }) => {
+  dispatch({ type: 'VOTE_NODE_START' })
+  const credentials = getState().accounts.credentials
+  const sanitizedCredentials = {
+    'access-token': credentials.accessToken,
+    'token-type': credentials.tokenType,
+    client: credentials.client,
+    uid: credentials.uid,
+    expiry: credentials.expiry
+  }
+  apiFetch(`api/nodes/${formData.node_id}/vote`, {
+    method: 'POST',
+    headers: sanitizedCredentials,
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+      }
+      return response.json()
+    })
+    .then((data) => {
+      dispatch({ type: 'VOTE_NODE_SUCCESS', payload: data })
+    })
+    .catch((error) => {
+      dispatch({ type: 'VOTE_NODE_ERROR', payload: error })
     })
 }
 

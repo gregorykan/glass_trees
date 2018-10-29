@@ -75,7 +75,8 @@ class WorkspaceComponent extends React.Component {
       doResolveNode,
       doUnresolveNode,
       doCreateFirstNode,
-      currentUser
+      currentUser,
+      doVoteForNode
     } = this.props
 
     const data = {
@@ -158,6 +159,7 @@ class WorkspaceComponent extends React.Component {
             doUnresolveNode={doUnresolveNode}
             nodeTypeToBeCreated={nodeTypeToBeCreated}
             cancelSingleNodeView={cancelSingleNodeView}
+            doVoteForNode={doVoteForNode}
           />
         </div>
         <div style={{ float:"left", clear: "both" }}
