@@ -16,7 +16,7 @@ class Graph extends React.Component {
 
   clickAndHighlightNode = (nodeId) => {
     this.props.handleNodeClick(nodeId)
-    this.graph.current._setNodeHighlightedValue(nodeId)
+    this.graph.current.onMouseOverNode(16)
   }
 
   render () {
