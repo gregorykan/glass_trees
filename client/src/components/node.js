@@ -24,10 +24,7 @@ const Node = (props) => {
 
   const isQuestion = node.nodeType === 'question'
   const isResolved = node.resolved
-  // const iconStyleWithResolved = {
-  //   ...iconStyle,
-  //   color: isResolved ? 'grey' : 'green'
-  // }
+
   const iconStyle = {
     fontSize: 60,
     color: isResolved ? 'gray' : 'green'
