@@ -19,7 +19,8 @@ const nodeDetailsContainerStyle = {
   borderWidth: '1px',
   borderColor: 'black',
   borderStyle: 'solid',
-  margin: 30
+  margin: 30,
+  width: 70 / 100 * Number(window.innerWidth)
 }
 
 const graphContainerStyle = {
@@ -88,7 +89,7 @@ class WorkspaceComponent extends React.Component {
     const graphConfig = {
       nodeHighlightBehavior: true,
       height: 400,
-      width: window.innerWidth - 40,
+      width: 70 / 100 * Number(window.innerWidth),
       node: {
         fontSize: 17,
         highlightFontSize: 17,
