@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, TextField } from '@material-ui/core'
 import { isEmpty, isNil } from 'lodash'
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
 
 import CreateNodeForm from './createNodeForm'
 
@@ -29,6 +31,18 @@ const createNodeContainerStyle = {
 
 const currentVotesStyle = {
   marginBottom: 20
+}
+
+const votesContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const headerContainerStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center'
 }
 
 const NodeDetails = (props) => {
@@ -122,12 +136,28 @@ const NodeDetails = (props) => {
     doVoteForNode(formData)
   }
 
+  const score = currentNode.upvotes.length - currentNode.downvotes.length
+
+  const calculateColourByScore = () => {
+    return score >= 0 ? 'red' : 'blue'
+  }
+
+  const scoreTextStyle = {
+    color: calculateColourByScore()
+  }
+
   return (
     <div style={containerStyle}>
-      <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
-      <span style={currentVotesStyle}>score: {currentNode.upvotes.length - currentNode.downvotes.length}</span>
-      <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { handleVote(true) }}>UPVOTE</Button>
-      <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { handleVote(false) }}>DOWNVOTE</Button>
+      <div style={headerContainerStyle}>
+        <div style={votesContainerStyle}>
+          <ArrowDropUpIcon style={{ fontSize: 40 }} onClick={() => { handleVote(true) }} />
+          <div style={scoreTextStyle}>
+            {score}
+          </div>
+          <ArrowDropDownIcon style={{ fontSize: 40 }} onClick={() => { handleVote(false) }} />
+        </div>
+        <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
+      </div>
       {renderNodeCreationForm()}
       {renderAdditionalActionsForQuestionNode()}
       {renderActions()}
