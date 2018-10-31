@@ -98,7 +98,8 @@ class WorkspaceComponent extends React.Component {
         viewGenerator: (node) => <Node node={node}/>
       },
       link: {
-        highlightColor: 'lightblue'
+        highlightColor: 'lightblue',
+        color: 'grey'
       },
       d3: {
         gravity: -200
