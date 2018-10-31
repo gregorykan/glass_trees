@@ -11,14 +11,14 @@ class Api::NodesController < ApiController
 
   # GET /nodes/:id
   def show
-    render :json => @node
+    render :json => @node.to_json( :include => [:upvotes, :downvotes] )
   end
 
   # POST /nodes
   def create
     @node = Node.create!(node_params)
     if @node.errors.empty?
-      render json: @node, status: :ok
+      render json: @node.to_json( :include => [:upvotes, :downvotes] ), status: :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -36,7 +36,7 @@ class Api::NodesController < ApiController
       current_node.options << @node
     end
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:source_links, :target_links] ), status: :ok
+      render json: @node.to_json( :include => [:source_links, :target_links, :upvotes, :downvotes] ), status: :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -47,7 +47,7 @@ class Api::NodesController < ApiController
   def update
     @node.update(node_params)
     if @node.errors.empty?
-      render json: @node, status: :ok
+      render json: @node.to_json( :include => [:upvotes, :downvotes] ), status: :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -63,7 +63,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: true)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:options] ), status: :ok
+      render json: @node.to_json( :include => [:options, :upvotes, :downvotes] ), status: :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -75,7 +75,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: false)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:options] ), status: :ok
+      render json: @node.to_json( :include => [:options, :upvotes, :downvotes] ), status: :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity

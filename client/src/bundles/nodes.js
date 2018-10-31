@@ -294,7 +294,8 @@ bundle.selectNodesForRendering = createSelector(
         label: `(${rawNode.id}) ${rawNode.label}`,
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
         color: rawNode.node_type === 'question' ? rawNode.resolved ? 'grey' : 'red' : rawNode.resolved ? 'gray' : 'lightgreen',
-        nodeType: rawNode.node_type
+        nodeType: rawNode.node_type,
+        resolved: rawNode.resolved
       }
     })
   }
