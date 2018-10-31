@@ -92,9 +92,7 @@ class WorkspaceComponent extends React.Component {
       node: {
         fontSize: 17,
         highlightFontSize: 17,
-        color: 'lightgreen',
         size: 700,
-        highlightStrokeColor: 'blue',
         labelProperty: 'label',
         viewGenerator: (node) => <Node node={node}/>
       },
