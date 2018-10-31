@@ -16,16 +16,6 @@ const headerStyle = {
   textAlign: 'center'
 }
 
-const iconStyle = {
-  fontSize: 60,
-  color: 'green'
-}
-
-const optionIconStyle = {
-  fontSize: 40,
-  color: 'orange'
-}
-
 const Node = (props) => {
   const {
     doUpdateHash,
@@ -33,13 +23,27 @@ const Node = (props) => {
   } = props
 
   const isQuestion = node.nodeType === 'question'
+  const isResolved = node.resolved
+  // const iconStyleWithResolved = {
+  //   ...iconStyle,
+  //   color: isResolved ? 'grey' : 'green'
+  // }
+  const iconStyle = {
+    fontSize: 60,
+    color: isResolved ? 'gray' : 'green'
+  }
+
+  const optionIconStyle = {
+    fontSize: 40,
+    color: isResolved ? 'gray' : 'orange'
+  }
 
   return (
     <div style={containerStyle}>
       {
         isQuestion
-        ? <ContactSupportIcon style={iconStyle} color='black' />
-        : <RoomIcon style={optionIconStyle} color='black' />
+        ? <ContactSupportIcon style={iconStyle} />
+        : <RoomIcon style={optionIconStyle} />
       }
     </div>
   )
