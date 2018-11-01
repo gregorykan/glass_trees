@@ -68,6 +68,16 @@ bundle.selectLinksForRendering = createSelector(
     })
   }
 )
+bundle.selectLinksByCurrentNodeId = createSelector(
+  'selectCurrentNodeId',
+  'selectLinks',
+  (currentNodeId, links) => {
+    if (isNil(currentNodeId)) return links
+    return filter(links, (link) => {
+      return link.source_id === currentNodeId || link.target_id === currentNodeId
+    })
+  }
+)
 
 bundle.reactLinksFetch = createSelector(
   'selectLinksShouldUpdate',

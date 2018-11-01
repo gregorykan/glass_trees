@@ -25,7 +25,10 @@ const Workspace = (props) => {
     doUnresolveNode,
     doCreateFirstNode,
     currentUser,
-    doVoteForNode
+    doVoteForNode,
+    clarifyingQuestionNodesForCurrentNode,
+    followUpQuestionNodesForCurrentNode,
+    optionNodesForCurrentNode
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -50,6 +53,9 @@ const Workspace = (props) => {
       doCreateFirstNode={doCreateFirstNode}
       currentUser={currentUser}
       doVoteForNode={doVoteForNode}
+      clarifyingQuestionNodesForCurrentNode={clarifyingQuestionNodesForCurrentNode}
+      followUpQuestionNodesForCurrentNode={followUpQuestionNodesForCurrentNode}
+      optionNodesForCurrentNode={optionNodesForCurrentNode}
     />
   )
 }
@@ -75,5 +81,8 @@ export default connect(
   'doCreateFirstNode',
   'selectCurrentUser',
   'doVoteForNode',
+  'selectClarifyingQuestionNodesForCurrentNode',
+  'selectFollowUpQuestionNodesForCurrentNode',
+  'selectOptionNodesForCurrentNode',
   Workspace
 )

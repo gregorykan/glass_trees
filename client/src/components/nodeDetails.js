@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, TextField } from '@material-ui/core'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, map } from 'lodash'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
 
@@ -45,6 +45,46 @@ const headerContainerStyle = {
   alignItems: 'center'
 }
 
+const actionsContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  flex: 1
+}
+
+const nodeDetailsContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  flex: 1
+}
+
+const optionsContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const clarifyingQuestionsContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const followUpQuestionsContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const bodyContainerStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignSelf: 'stretch',
+  flex: 1
+}
+
 const NodeDetails = (props) => {
   const {
     currentNode,
@@ -59,7 +99,11 @@ const NodeDetails = (props) => {
     doResolveNode,
     doUnresolveNode,
     cancelSingleNodeView,
-    doVoteForNode
+    doVoteForNode,
+    clarifyingQuestionNodesForCurrentNode,
+    followUpQuestionNodesForCurrentNode,
+    optionNodesForCurrentNode,
+    doSelectNode
   } = props
 
   if (isNil(currentNode)) return null
@@ -136,6 +180,65 @@ const NodeDetails = (props) => {
     doVoteForNode(formData)
   }
 
+  const renderOptions = () => {
+    if (isEmpty(optionNodesForCurrentNode)) return null
+    return (
+      <div style={optionsContainerStyle}>
+        <h4>Options</h4>
+        { renderOptionsList() }
+      </div>
+    )
+  }
+
+  const renderOptionsList = () => {
+    return map(optionNodesForCurrentNode, (option) => {
+      return (
+        <div onClick={() => { doSelectNode(option.id) }}>{option.label}</div>
+      )
+    })
+  }
+
+  const renderClarifyingQuestions = () => {
+    if (isEmpty(clarifyingQuestionNodesForCurrentNode)) return null
+    return (
+      <div style={clarifyingQuestionsContainerStyle}>
+        <h4>Clarifying Questions</h4>
+        { renderClarifyingQuestionsList() }
+      </div>
+    )
+  }
+
+  const renderClarifyingQuestionsList = () => {
+    return map(clarifyingQuestionNodesForCurrentNode, (clarifyingQuestion) => {
+      return (
+        <div onClick={() => { doSelectNode(clarifyingQuestion.id) }}>{clarifyingQuestion.label}</div>
+      )
+    })
+  }
+
+  const renderFollowUpQuestions = () => {
+    if (isEmpty(followUpQuestionNodesForCurrentNode)) return null
+    return (
+      <div style={followUpQuestionsContainerStyle}>
+        {
+          currentNode.node_type === 'option'
+          ? <h4>Source Question</h4>
+          : <h4>Follow-up Questions</h4>
+        }
+
+        { renderFollowUpQuestionsList() }
+      </div>
+    )
+  }
+
+  const renderFollowUpQuestionsList = () => {
+    return map(followUpQuestionNodesForCurrentNode, (followUpQuestion) => {
+      return (
+        <div onClick={() => { doSelectNode(followUpQuestion.id) }}>{followUpQuestion.label}</div>
+      )
+    })
+  }
+
   const score = currentNode.upvotes.length - currentNode.downvotes.length
 
   const calculateColourByScore = () => {
@@ -158,9 +261,18 @@ const NodeDetails = (props) => {
         </div>
         <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
       </div>
-      {renderNodeCreationForm()}
-      {renderAdditionalActionsForQuestionNode()}
-      {renderActions()}
+      <div style={bodyContainerStyle}>
+        <div style={actionsContainerStyle}>
+          {renderNodeCreationForm()}
+          {renderAdditionalActionsForQuestionNode()}
+          {renderActions()}
+        </div>
+        <div style={nodeDetailsContainerStyle}>
+          { renderOptions() }
+          { renderClarifyingQuestions() }
+          { renderFollowUpQuestions() }
+        </div>
+      </div>
     </div>
   )
 }
