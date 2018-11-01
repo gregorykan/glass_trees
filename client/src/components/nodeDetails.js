@@ -49,7 +49,6 @@ const actionsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  backgroundColor: 'skyblue',
   flex: 1
 }
 
@@ -58,7 +57,6 @@ const nodeDetailsContainerStyle = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'flex-start',
-  backgroundColor: 'orange',
   flex: 1
 }
 
