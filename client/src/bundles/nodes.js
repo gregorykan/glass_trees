@@ -313,7 +313,8 @@ bundle.selectNodesForRendering = createSelector(
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
         nodeType: rawNode.node_type,
         resolved: rawNode.resolved,
-        isHighlighted: includes(nodeIdsToHighlight, rawNode.id)
+        isHighlighted: includes(nodeIdsToHighlight, rawNode.id),
+        fontColor: currentNode ? currentNode.id === rawNode.id ? 'red' : null : null
       }
     })
   }
