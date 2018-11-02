@@ -1,6 +1,6 @@
 import React from 'react'
 import { Graph as ReactD3Graph } from 'react-d3-graph'
-import { isNil, isEmpty } from 'lodash'
+import { isNil, isEmpty, debounce } from 'lodash'
 
 import CreateFirstNodeForm from './createFirstNodeForm'
 
@@ -48,8 +48,17 @@ class Graph extends React.Component {
       doUpdateNodeFormDataDescription,
       doCreateFirstNode,
       currentUser,
-      workspace
+      workspace,
+      doSetNodeToHighlight
     } = this.props
+
+    const handleOnMouseOverNode = (nodeId) => {
+      doSetNodeToHighlight(nodeId)
+    }
+
+    const handleOnMouseOutNode = () => {
+      doSetNodeToHighlight(null)
+    }
 
     if (isNil(data) || isEmpty(data.nodes)) {
       return (
@@ -74,6 +83,8 @@ class Graph extends React.Component {
           config={this.state.config}
           onClickNode={onClickNode}
           ref={this.graph}
+          // onMouseOverNode={debounce(handleOnMouseOverNode, 100)}
+          // onMouseOutNode={debounce(handleOnMouseOutNode, 100)}
         />
         <button onClick={this.reset}>reset</button>
       </div>

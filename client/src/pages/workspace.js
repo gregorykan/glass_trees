@@ -28,7 +28,9 @@ const Workspace = (props) => {
     doVoteForNode,
     clarifyingQuestionNodesForCurrentNode,
     followUpQuestionNodesForCurrentNode,
-    optionNodesForCurrentNode
+    optionNodesForCurrentNode,
+    doSetNodeToHighlight,
+    nodeToHighlight
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -56,6 +58,8 @@ const Workspace = (props) => {
       clarifyingQuestionNodesForCurrentNode={clarifyingQuestionNodesForCurrentNode}
       followUpQuestionNodesForCurrentNode={followUpQuestionNodesForCurrentNode}
       optionNodesForCurrentNode={optionNodesForCurrentNode}
+      doSetNodeToHighlight={doSetNodeToHighlight}
+      nodeToHighlight={nodeToHighlight}
     />
   )
 }
@@ -84,5 +88,7 @@ export default connect(
   'selectClarifyingQuestionNodesForCurrentNode',
   'selectFollowUpQuestionNodesForCurrentNode',
   'selectOptionNodesForCurrentNode',
+  'doSetNodeToHighlight',
+  'selectNodeToHighlight',
   Workspace
 )

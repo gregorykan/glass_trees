@@ -81,7 +81,9 @@ class WorkspaceComponent extends React.Component {
       doVoteForNode,
       clarifyingQuestionNodesForCurrentNode,
       followUpQuestionNodesForCurrentNode,
-      optionNodesForCurrentNode
+      optionNodesForCurrentNode,
+      doSetNodeToHighlight,
+      nodeToHighlight
     } = this.props
 
     const data = {
@@ -99,7 +101,7 @@ class WorkspaceComponent extends React.Component {
         highlightFontSize: 17,
         size: 700,
         labelProperty: 'label',
-        viewGenerator: (node) => <Node node={node}/>
+        viewGenerator: (node) => <Node node={node} />
       },
       link: {
         highlightColor: 'lightblue',
@@ -152,6 +154,7 @@ class WorkspaceComponent extends React.Component {
             doCreateFirstNode={doCreateFirstNode}
             currentUser={currentUser}
             workspace={workspace}
+            doSetNodeToHighlight={doSetNodeToHighlight}
           />
         </div>
         <div style={nodeDetailsContainerStyle}>
