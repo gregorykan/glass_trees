@@ -246,11 +246,12 @@ const NodeDetails = (props) => {
   const score = currentNode.upvotes.length - currentNode.downvotes.length
 
   const calculateColourByScore = () => {
-    return score >= 0 ? 'red' : 'blue'
+    return score >= 0 ? 'green' : 'red'
   }
 
   const scoreTextStyle = {
-    color: calculateColourByScore()
+    color: calculateColourByScore(),
+    fontWeight: 'bold'
   }
 
   return (
