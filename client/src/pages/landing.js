@@ -9,7 +9,8 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
+  fontFamily: 'Arial'
 }
 
 const navStyle = {

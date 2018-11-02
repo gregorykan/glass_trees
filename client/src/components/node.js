@@ -31,7 +31,7 @@ const Node = (props) => {
   }
 
   const optionIconStyle = {
-    fontSize: 40,
+    fontSize: 50,
     color: isResolved ? 'gray' : 'purple'
   }
 

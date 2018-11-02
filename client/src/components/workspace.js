@@ -90,6 +90,7 @@ class WorkspaceComponent extends React.Component {
     }
 
     const graphConfig = {
+      staticGraph: true,
       nodeHighlightBehavior: true,
       height: 400,
       width: 70 / 100 * Number(window.innerWidth),
