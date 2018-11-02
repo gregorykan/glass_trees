@@ -19,7 +19,7 @@ const buttonStyle = {
 }
 
 const textFieldStyle = {
-  minWidth: 200
+  minWidth: window.innerWidth / 2
 }
 
 const textFieldInputStyle = {
