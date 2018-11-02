@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter, map, includes, uniq, reduce } from 'lodash'
+import { omit, concat, isNil, find, filter, map, includes, uniq, reduce, compact } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -299,9 +299,13 @@ bundle.selectNodesForRendering = createSelector(
   'selectThisWorkspaceId',
   'selectNodeToHighlight',
   'selectCurrentNode',
-  (rawNodes, workspaceId, nodeIdToHiglight, currentNode) => {
+  'selectNodesByCurrentNode',
+  (rawNodes, workspaceId, nodeIdToHiglight, currentNode, relatedNodes) => {
     if (isNil(rawNodes) || isNil(workspaceId)) return []
     const nodesToRender = filter(rawNodes, (rawNode) => { return rawNode.workspace_id === workspaceId })
+    const nodesToHighlight = compact(concat([currentNode], relatedNodes))
+    console.log('nodesToHighlight', nodesToHighlight)
+    const nodeIdsToHighlight = map(nodesToHighlight, (node) => node.id)
     return map(nodesToRender, (rawNode) => {
       return {
         id: rawNode.id,
@@ -309,7 +313,7 @@ bundle.selectNodesForRendering = createSelector(
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
         nodeType: rawNode.node_type,
         resolved: rawNode.resolved,
-        isHighlighted: nodeIdToHiglight === rawNode.id || currentNode ? rawNode.id === currentNode.id : null
+        isHighlighted: includes(nodeIdsToHighlight, rawNode.id)
       }
     })
   }
