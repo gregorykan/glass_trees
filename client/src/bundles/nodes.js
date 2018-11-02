@@ -1,6 +1,6 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import cuid from 'cuid'
-import { omit, concat, isNil, find, filter, map, includes, uniq, reduce } from 'lodash'
+import { omit, concat, isNil, find, filter, map, includes, uniq, reduce, compact } from 'lodash'
 import ms from 'milliseconds'
 
 const bundle = createAsyncResourceBundle({
@@ -29,6 +29,7 @@ const bundle = createAsyncResourceBundle({
 
 const initialState = {
   currentNodeId: null,
+  nodeToHighlight: null,
   nodeFormData: {},
   nodeTypeToBeCreated: '',
   // needed by createAsyncResourceBundle
@@ -49,6 +50,12 @@ bundle.reducer = (state = initialState, action) => {
       ...state,
       currentNodeId: Number(action.payload),
       nodeTypeToBeCreated: null
+    }
+  }
+  if (action.type === 'SET_NODE_TO_HIGHLIGHT') {
+    return {
+      ...state,
+      nodeToHighlight: action.payload ? Number(action.payload) : null
     }
   }
   if (action.type === 'UPDATE_NODE_FORM_DATA_LABEL') {
@@ -124,6 +131,10 @@ bundle.reducer = (state = initialState, action) => {
 
 bundle.doSelectNode = (nodeId) => ({ dispatch }) => {
   dispatch({ type: 'SELECT_NODE', payload: nodeId })
+}
+
+bundle.doSetNodeToHighlight = (nodeId) => ({ dispatch }) => {
+  dispatch({ type: 'SET_NODE_TO_HIGHLIGHT', payload: nodeId })
 }
 
 bundle.doUpdateNodeFormDataLabel = (label) => ({ dispatch }) => {
@@ -282,20 +293,27 @@ bundle.doVoteForNode = (formData) => ({ dispatch, apiFetch, getState }) => {
 }
 
 bundle.selectNodes = (state) => state.nodes.data
+bundle.selectNodeToHighlight = (state) => state.nodes.nodeToHighlight
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
   'selectThisWorkspaceId',
-  (rawNodes, workspaceId) => {
+  'selectNodeToHighlight',
+  'selectCurrentNode',
+  'selectNodesByCurrentNode',
+  (rawNodes, workspaceId, nodeIdToHiglight, currentNode, relatedNodes) => {
     if (isNil(rawNodes) || isNil(workspaceId)) return []
     const nodesToRender = filter(rawNodes, (rawNode) => { return rawNode.workspace_id === workspaceId })
+    const nodesToHighlight = compact(concat([currentNode], relatedNodes))
+    const nodeIdsToHighlight = map(nodesToHighlight, (node) => node.id)
     return map(nodesToRender, (rawNode) => {
       return {
         id: rawNode.id,
         label: rawNode.label,
         symbolType: rawNode.node_type === 'question' ? 'diamond' : 'circle',
-        color: rawNode.node_type === 'question' ? rawNode.resolved ? 'grey' : 'red' : rawNode.resolved ? 'gray' : 'lightgreen',
         nodeType: rawNode.node_type,
-        resolved: rawNode.resolved
+        resolved: rawNode.resolved,
+        isHighlighted: includes(nodeIdsToHighlight, rawNode.id),
+        fontColor: currentNode ? currentNode.id === rawNode.id ? 'red' : null : null
       }
     })
   }

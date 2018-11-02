@@ -26,7 +26,6 @@ const MyGroup = ({
     )
   } else {
     if (isNil(group)) return null
-    console.log('edit group', groupNameField)
     return (
       <EditGroupForm
         doUpdateGroup={doUpdateGroup}

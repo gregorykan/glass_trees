@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'redux-bundler-react'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import RoomIcon from '@material-ui/icons/Room'
 
@@ -19,7 +20,7 @@ const headerStyle = {
 const Node = (props) => {
   const {
     doUpdateHash,
-    node
+    node,
   } = props
 
   const isQuestion = node.nodeType === 'question'
@@ -27,12 +28,12 @@ const Node = (props) => {
 
   const iconStyle = {
     fontSize: 60,
-    color: isResolved ? 'gray' : 'green'
+    color: node.isHighlighted ? 'orange' : isResolved ? 'gray' : 'green'
   }
 
   const optionIconStyle = {
     fontSize: 50,
-    color: isResolved ? 'gray' : 'purple'
+    color: node.isHighlighted ? 'orange' : isResolved ? 'gray' : 'purple'
   }
 
   return (
@@ -46,4 +47,6 @@ const Node = (props) => {
   )
 }
 
-export default Node
+export default connect(
+  Node
+)
