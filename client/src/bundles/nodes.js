@@ -304,7 +304,6 @@ bundle.selectNodesForRendering = createSelector(
     if (isNil(rawNodes) || isNil(workspaceId)) return []
     const nodesToRender = filter(rawNodes, (rawNode) => { return rawNode.workspace_id === workspaceId })
     const nodesToHighlight = compact(concat([currentNode], relatedNodes))
-    console.log('nodesToHighlight', nodesToHighlight)
     const nodeIdsToHighlight = map(nodesToHighlight, (node) => node.id)
     return map(nodesToRender, (rawNode) => {
       return {

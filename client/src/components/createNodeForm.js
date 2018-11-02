@@ -57,7 +57,6 @@ const CreateNodeForm = props => {
       workspace_id: workspace.id,
       user_id: currentUser.id
     }
-    console.log('create node form data', formData)
     doCreateNode(formData)
   }
 

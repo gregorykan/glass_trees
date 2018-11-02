@@ -23,8 +23,6 @@ const Node = (props) => {
     node,
   } = props
 
-  if (node.isHighlighted) console.log('node isHighlighted', node.isHighlighted)
-
   const isQuestion = node.nodeType === 'question'
   const isResolved = node.resolved
 
