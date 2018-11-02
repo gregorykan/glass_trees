@@ -57,10 +57,11 @@ bundle.reducer = (state = initialState, action) => {
     }
   }
   if (action.type === 'CREATE_WORKSPACE_SUCCESS') {
+    const newWorkspace = action.payload.workspace
     return {
       ...state,
       isCreatingWorkspace: false,
-      data: concat(filter(state.data, (workspace) => { return workspace.id !== action.payload.id }), action.payload),
+      data: concat(filter(state.data, (workspace) => { return workspace.id !== newWorkspace.id }), newWorkspace),
       nameField: ''
     }
   }

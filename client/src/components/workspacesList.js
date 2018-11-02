@@ -44,7 +44,7 @@ const WorkspacesList = (props) => {
   }
   return (
     <div style={containerStyle}>
-      <h1>Workspaces</h1>
+      <h1 style={textStyle}>Workspaces</h1>
       <Button variant='outlined' onClick={() => { doUpdateHash('workspaces/new') }}>Start a New Workspace</Button>
       {renderWorkspaces(workspaces)}
     </div>

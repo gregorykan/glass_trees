@@ -16,8 +16,9 @@ class Api::WorkspacesController < ApiController
   # POST /workspaces
   def create
     @workspace = Workspace.create!(workspace_params)
+    first_node = Node.create!(workspace_id: @workspace.id, label: @workspace.name, user_id: current_api_user.id)
     if @workspace.errors.empty?
-      render json: @workspace, status: :ok
+      render json: { workspace: @workspace, node: first_node}, status: :ok
     else
       render json: { errors: @workspace.errors.full_messages },
              status: :unprocessable_entity

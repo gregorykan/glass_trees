@@ -64,7 +64,7 @@ const WorkspaceForm = (props) => {
     <div style={containerStyle}>
       <form style={formStyle}>
         <TextField
-          label={isCreating ? 'Name' : null}
+          label={isCreating ? 'Question?' : null}
           type='text'
           value={nameFieldValue}
           onChange={handleNameChange}
