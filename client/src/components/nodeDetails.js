@@ -151,11 +151,14 @@ const NodeDetails = (props) => {
 
   const renderAdditionalActionsForQuestionNode = () => {
     if (!isNil(nodeTypeToBeCreated)) return null
-    if (currentNode.resolved) return null
     if (currentNode.node_type === 'option') return null
     return (
       <div style={containerStyle}>
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+        {
+          !currentNode.resolved
+            ? <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+            : null
+        }
         {renderResolveActions()}
       </div>
     )
