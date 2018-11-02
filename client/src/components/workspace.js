@@ -105,7 +105,8 @@ class WorkspaceComponent extends React.Component {
         color: 'grey'
       },
       d3: {
-        gravity: -200
+        gravity: -650,
+        linkLength: 150
       }
     }
 

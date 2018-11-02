@@ -151,6 +151,7 @@ const NodeDetails = (props) => {
 
   const renderAdditionalActionsForQuestionNode = () => {
     if (!isNil(nodeTypeToBeCreated)) return null
+    if (currentNode.resolved) return null
     if (currentNode.node_type === 'option') return null
     return (
       <div style={containerStyle}>
