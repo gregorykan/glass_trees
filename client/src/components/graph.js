@@ -1,6 +1,6 @@
 import React from 'react'
 import { Graph as ReactD3Graph } from 'react-d3-graph'
-import { isNil, isEmpty, debounce } from 'lodash'
+import { isNil, isEmpty, debounce, omit } from 'lodash'
 
 import Node from './node'
 
@@ -44,7 +44,7 @@ class Graph extends React.Component {
     this.setState({
       config: {
         ...this.state.config,
-        staticGraph: !this.state.config.staticGraph
+        staticGraph: false
       }
     })
   }
@@ -55,14 +55,26 @@ class Graph extends React.Component {
       onClickNode
     } = this.props
 
+    // GK: NB: this is another 100% hack that i'm quite proud of..
+    // setting d3 gravity was causing the app to perform really badly CPU-wise
+    // i realised that i only needed d3 gravity to set the initial nodes
+    // and after that it can be turned off, preserving the drag and drop functionality.
+    // i tried making staticGraph true again but it didn't allow me to move nodes
+    const handleOnClickNode = (nodeId) => {
+      this.setState({
+        config: omit(this.state.config, 'd3')
+      })
+      onClickNode(nodeId)
+    }
+
     if (isNil(data) || isEmpty(data.nodes)) return null
 
     return (
       <ReactD3Graph
         id='graph-id'
         data={data}
-        config={graphConfig}
-        onClickNode={onClickNode}
+        config={this.state.config}
+        onClickNode={handleOnClickNode}
       />
     )
   }
