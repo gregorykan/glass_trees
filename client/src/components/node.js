@@ -47,6 +47,4 @@ const Node = (props) => {
   )
 }
 
-export default connect(
-  Node
-)
+export default Node
