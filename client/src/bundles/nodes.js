@@ -298,7 +298,19 @@ bundle.doVoteForNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
 }
 
-bundle.selectNodes = (state) => state.nodes.data
+bundle.selectRawNodes = (state) => state.nodes.data
+bundle.selectNodes = createSelector(
+  'selectRawNodes',
+  (nodes) => {
+    return map(nodes, (node) => {
+      return {
+        ...node,
+        upvotes: filter(node.votes, (vote) => { return vote.is_upvote }),
+        downvotes: filter(node.votes, (vote) => { return !vote.is_upvote })
+      }
+    })
+  }
+)
 bundle.selectNodeToHighlight = (state) => state.nodes.nodeToHighlight
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
