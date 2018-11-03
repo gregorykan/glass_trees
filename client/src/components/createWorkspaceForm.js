@@ -45,7 +45,7 @@ const CreateWorkspaceForm = (props) => {
 
   return (
     <div style={containerStyle}>
-      <h1 style={headerStyle}>Create Workspace</h1>
+      <h1 style={headerStyle}>What's your question?</h1>
       <WorkspaceForm
         handleNameChange={handleNameChange}
         handleSubmit={handleSubmit}

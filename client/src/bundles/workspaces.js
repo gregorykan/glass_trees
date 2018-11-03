@@ -57,10 +57,11 @@ bundle.reducer = (state = initialState, action) => {
     }
   }
   if (action.type === 'CREATE_WORKSPACE_SUCCESS') {
+    const newWorkspace = action.payload.workspace
     return {
       ...state,
       isCreatingWorkspace: false,
-      data: concat(filter(state.data, (workspace) => { return workspace.id !== action.payload.id }), action.payload),
+      data: concat(filter(state.data, (workspace) => { return workspace.id !== newWorkspace.id }), newWorkspace),
       nameField: ''
     }
   }
@@ -146,7 +147,7 @@ bundle.doCreateWorkspace = (formData) => ({ dispatch, apiFetch, getState }) => {
     })
     .then((data) => {
       dispatch({ type: 'CREATE_WORKSPACE_SUCCESS', payload: data })
-      dispatch({ actionCreator: 'doUpdateHash', args: ['workspaces'] })
+      dispatch({ actionCreator: 'doUpdateHash', args: [`workspaces/${data.workspace.id}`] })
     })
     .catch((error) => {
       dispatch({ type: 'CREATE_WORKSPACE_ERROR', payload: error })

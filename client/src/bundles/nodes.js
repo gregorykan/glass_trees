@@ -123,6 +123,12 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload)
     }
   }
+  if (action.type === 'CREATE_WORKSPACE_SUCCESS') {
+    return {
+      ...state,
+      data: concat(state.data, [action.payload.node])
+    }
+  }
   if (action.type === 'SIGN_OUT_SUCCESS') {
     return initialState
   }
