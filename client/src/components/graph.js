@@ -2,16 +2,39 @@ import React from 'react'
 import { Graph as ReactD3Graph } from 'react-d3-graph'
 import { isNil, isEmpty, debounce } from 'lodash'
 
+import Node from './node'
+
 const containerStyle = {
   margin: 20
+}
+
+const graphConfig = {
+  staticGraph: true,
+  nodeHighlightBehavior: true,
+  height: 400,
+  width: 70 / 100 * Number(window.innerWidth),
+  node: {
+    fontSize: 17,
+    highlightFontSize: 17,
+    size: 700,
+    labelProperty: 'label',
+    viewGenerator: (node) => <Node node={node} />
+  },
+  link: {
+    highlightColor: 'lightblue',
+    color: 'grey'
+  },
+  d3: {
+    gravity: -650,
+    linkLength: 150
+  }
 }
 
 class Graph extends React.Component {
   constructor(props) {
     super(props)
-    this.graph = React.createRef()
     this.state = {
-      config: props.config
+      config: graphConfig
     }
   }
 
@@ -26,53 +49,21 @@ class Graph extends React.Component {
     })
   }
 
-  // GK: TODO: this is just to facilitate my experiment with playing with staticGraph to achieve what i want
-  reset = () => {
-    this.setState({
-      config: {
-        ...this.state.config,
-        staticGraph: !this.state.config.staticGraph
-      }
-    })
-  }
-
   render () {
     const {
       data,
-      config,
-      onClickNode,
-      nodeFormData,
-      doUpdateNodeFormDataLabel,
-      doUpdateNodeFormDataDescription,
-      doCreateFirstNode,
-      currentUser,
-      workspace,
-      doSetNodeToHighlight
+      onClickNode
     } = this.props
 
     if (isNil(data) || isEmpty(data.nodes)) return null
 
-    const handleOnMouseOverNode = (nodeId) => {
-      doSetNodeToHighlight(nodeId)
-    }
-
-    const handleOnMouseOutNode = () => {
-      doSetNodeToHighlight(null)
-    }
-
     return (
-      <div>
-        <ReactD3Graph
-          id='graph-id'
-          data={data}
-          config={this.state.config}
-          onClickNode={onClickNode}
-          ref={this.graph}
-          // onMouseOverNode={debounce(handleOnMouseOverNode, 100)}
-          // onMouseOutNode={debounce(handleOnMouseOutNode, 100)}
-        />
-        <button onClick={this.reset}>reset</button>
-      </div>
+      <ReactD3Graph
+        id='graph-id'
+        data={data}
+        config={graphConfig}
+        onClickNode={onClickNode}
+      />
     )
   }
 }
