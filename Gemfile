@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.1'
 
+gem 'active_model_serializers', '~> 0.10.0'
 gem 'devise_invitable', '~> 1.7.0'
 gem 'activeadmin'
 gem 'devise_token_auth'
