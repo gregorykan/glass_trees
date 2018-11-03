@@ -9,7 +9,6 @@ const containerStyle = {
 class Graph extends React.Component {
   constructor(props) {
     super(props)
-    this.graph = React.createRef()
     this.state = {
       config: props.config
     }
@@ -35,15 +34,12 @@ class Graph extends React.Component {
     if (isNil(data) || isEmpty(data.nodes)) return null
 
     return (
-      <div>
-        <ReactD3Graph
-          id='graph-id'
-          data={data}
-          config={this.state.config}
-          onClickNode={onClickNode}
-          ref={this.graph}
-        />
-      </div>
+      <ReactD3Graph
+        id='graph-id'
+        data={data}
+        config={this.state.config}
+        onClickNode={onClickNode}
+      />
     )
   }
 }
