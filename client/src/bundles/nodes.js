@@ -94,7 +94,8 @@ bundle.reducer = (state = initialState, action) => {
   if (action.type === 'UPDATE_NODE_TYPE_TO_BE_CREATED') {
     return {
       ...state,
-      nodeTypeToBeCreated: action.payload
+      nodeTypeToBeCreated: action.payload,
+      nodeFormData: {}
     }
   }
   if (action.type === 'RESOLVE_NODE_SUCCESS') {
