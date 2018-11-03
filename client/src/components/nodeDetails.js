@@ -197,7 +197,7 @@ const NodeDetails = (props) => {
   const renderOptionsList = () => {
     return map(optionNodesForCurrentNode, (option) => {
       return (
-        <div onClick={() => { doSelectNode(option.id) }}>{option.label}</div>
+        <div key={option.id} onClick={() => { doSelectNode(option.id) }}>{option.label}</div>
       )
     })
   }
@@ -215,7 +215,7 @@ const NodeDetails = (props) => {
   const renderClarifyingQuestionsList = () => {
     return map(clarifyingQuestionNodesForCurrentNode, (clarifyingQuestion) => {
       return (
-        <div onClick={() => { doSelectNode(clarifyingQuestion.id) }}>{clarifyingQuestion.label}</div>
+        <div key={clarifyingQuestion.id} onClick={() => { doSelectNode(clarifyingQuestion.id) }}>{clarifyingQuestion.label}</div>
       )
     })
   }
@@ -238,7 +238,7 @@ const NodeDetails = (props) => {
   const renderFollowUpQuestionsList = () => {
     return map(followUpQuestionNodesForCurrentNode, (followUpQuestion) => {
       return (
-        <div onClick={() => { doSelectNode(followUpQuestion.id) }}>{followUpQuestion.label}</div>
+        <div key={followUpQuestion.id} onClick={() => { doSelectNode(followUpQuestion.id) }}>{followUpQuestion.label}</div>
       )
     })
   }

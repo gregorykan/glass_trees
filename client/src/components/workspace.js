@@ -3,7 +3,6 @@ import React from 'react'
 import Graph from './graph'
 import WorkspaceForm from './workspaceForm'
 import NodeDetails from './nodeDetails'
-import Node from './node'
 
 const containerStyle = {
   display: 'flex',
@@ -91,28 +90,6 @@ class WorkspaceComponent extends React.Component {
       links: links
     }
 
-    const graphConfig = {
-      staticGraph: true,
-      nodeHighlightBehavior: true,
-      height: 400,
-      width: 70 / 100 * Number(window.innerWidth),
-      node: {
-        fontSize: 17,
-        highlightFontSize: 17,
-        size: 700,
-        labelProperty: 'label',
-        viewGenerator: (node) => <Node node={node} />
-      },
-      link: {
-        highlightColor: 'lightblue',
-        color: 'grey'
-      },
-      d3: {
-        gravity: -650,
-        linkLength: 150
-      }
-    }
-
     const onClickNode = (nodeId) => {
       doSelectNode(nodeId)
       setTimeout(this.scrollToBottom, 50)
@@ -146,7 +123,6 @@ class WorkspaceComponent extends React.Component {
         <div style={graphContainerStyle} ref={(el) => { this.pageTop = el }}>
           <Graph
             data={data}
-            config={graphConfig}
             onClickNode={onClickNode}
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}

@@ -2,15 +2,39 @@ import React from 'react'
 import { Graph as ReactD3Graph } from 'react-d3-graph'
 import { isNil, isEmpty, debounce } from 'lodash'
 
+import Node from './node'
+
 const containerStyle = {
   margin: 20
+}
+
+const graphConfig = {
+  staticGraph: true,
+  nodeHighlightBehavior: true,
+  height: 400,
+  width: 70 / 100 * Number(window.innerWidth),
+  node: {
+    fontSize: 17,
+    highlightFontSize: 17,
+    size: 700,
+    labelProperty: 'label',
+    viewGenerator: (node) => <Node node={node} />
+  },
+  link: {
+    highlightColor: 'lightblue',
+    color: 'grey'
+  },
+  d3: {
+    gravity: -650,
+    linkLength: 150
+  }
 }
 
 class Graph extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      config: props.config
+      config: graphConfig
     }
   }
 
@@ -37,7 +61,7 @@ class Graph extends React.Component {
       <ReactD3Graph
         id='graph-id'
         data={data}
-        config={this.state.config}
+        config={graphConfig}
         onClickNode={onClickNode}
       />
     )
