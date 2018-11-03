@@ -26,39 +26,13 @@ class Graph extends React.Component {
     })
   }
 
-  // GK: TODO: this is just to facilitate my experiment with playing with staticGraph to achieve what i want
-  reset = () => {
-    this.setState({
-      config: {
-        ...this.state.config,
-        staticGraph: !this.state.config.staticGraph
-      }
-    })
-  }
-
   render () {
     const {
       data,
-      config,
-      onClickNode,
-      nodeFormData,
-      doUpdateNodeFormDataLabel,
-      doUpdateNodeFormDataDescription,
-      doCreateFirstNode,
-      currentUser,
-      workspace,
-      doSetNodeToHighlight
+      onClickNode
     } = this.props
 
     if (isNil(data) || isEmpty(data.nodes)) return null
-
-    const handleOnMouseOverNode = (nodeId) => {
-      doSetNodeToHighlight(nodeId)
-    }
-
-    const handleOnMouseOutNode = () => {
-      doSetNodeToHighlight(null)
-    }
 
     return (
       <div>
@@ -68,10 +42,7 @@ class Graph extends React.Component {
           config={this.state.config}
           onClickNode={onClickNode}
           ref={this.graph}
-          // onMouseOverNode={debounce(handleOnMouseOverNode, 100)}
-          // onMouseOutNode={debounce(handleOnMouseOutNode, 100)}
         />
-        <button onClick={this.reset}>reset</button>
       </div>
     )
   }

@@ -1,7 +1,0 @@
-{
-  "name": "glass_trees",
-  "private": true,
-  "dependencies": {
-    "@material-ui/icons": "^3.0.1"
-  }
-}
