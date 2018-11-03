@@ -6,19 +6,19 @@ class Api::NodesController < ApiController
   def index
     @nodes = Node.where(workspace_id: Workspace.where(group_id: current_api_user.group))
     # GK: TODO: request for votes separately because this is a lot of queries to the db
-    render :json => @nodes.to_json( :include => [:upvotes, :downvotes] ), status: :ok
+    render :json => @nodes
   end
 
   # GET /nodes/:id
   def show
-    render :json => @node.to_json( :include => [:upvotes, :downvotes] )
+    render :json => @node
   end
 
   # POST /nodes
   def create
     @node = Node.create!(node_params)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:upvotes, :downvotes] ), status: :ok
+      render json: @node
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -36,7 +36,7 @@ class Api::NodesController < ApiController
       current_node.options << @node
     end
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:source_links, :target_links, :upvotes, :downvotes] ), status: :ok
+      render json: @node, serializer: NodeWithLinksSerializer
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -47,7 +47,7 @@ class Api::NodesController < ApiController
   def update
     @node.update(node_params)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:upvotes, :downvotes] ), status: :ok
+      render json: @node
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -63,7 +63,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: true)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:options, :upvotes, :downvotes] ), status: :ok
+      render json: @node
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -75,7 +75,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: false)
     if @node.errors.empty?
-      render json: @node.to_json( :include => [:options, :upvotes, :downvotes] ), status: :ok
+      render json: @node
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -87,7 +87,7 @@ class Api::NodesController < ApiController
     # user has already voted the same way, so destroy vote to 'undo'
     if (existing_vote.present?) && (existing_vote.is_upvote == params[:is_upvote])
       existing_vote.destroy!
-      render json: @node.to_json( :include => [:upvotes, :downvotes] )
+      render json: @node
       return
     end
 
@@ -100,7 +100,7 @@ class Api::NodesController < ApiController
     vote = Vote.new(create_vote_params)
     vote.node_id = @node.id
     @node.votes << vote
-    render json: @node.to_json( :include => [:upvotes, :downvotes] )
+    render json: @node
   end
 
   # DELETE /nodes/:id
