@@ -13,10 +13,10 @@ class Node < ApplicationRecord
   has_many :votes
 
   def upvotes
-    self.votes.where(is_upvote: true)
+    self.votes.to_a.select { |v| v.is_upvote }
   end
 
   def downvotes
-    self.votes.where(is_upvote: false)
+    self.votes.to_a.select { |v| !v.is_upvote }
   end
 end
