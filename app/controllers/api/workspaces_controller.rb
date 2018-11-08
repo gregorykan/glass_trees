@@ -16,7 +16,7 @@ class Api::WorkspacesController < ApiController
   # POST /workspaces
   def create
     @workspace = Workspace.create!(workspace_params)
-    first_node = Node.includes(:upvotes, :downvotes).create!(workspace_id: @workspace.id, label: @workspace.name, user_id: current_api_user.id)
+    first_node = Node.includes(:upvotes, :downvotes).create!(workspace_id: @workspace.id, label: @workspace.name, node_type: "question", user_id: current_api_user.id)
     if @workspace.errors.empty?
       render json: { workspace: @workspace, node: NodeSerializer.new(first_node) }, status: :ok
     else
