@@ -13,11 +13,6 @@ const containerStyle = {
 const nodeDetailsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: '1px',
-  borderColor: 'black',
-  borderStyle: 'solid',
   margin: 30,
   width: 70 / 100 * Number(window.innerWidth)
 }

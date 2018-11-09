@@ -3,8 +3,18 @@ import { Button, TextField } from '@material-ui/core'
 import { isEmpty, isNil, map } from 'lodash'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import CreateNodeForm from './createNodeForm'
+
+const outerContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderWidth: '1px',
+  borderColor: 'black',
+  borderStyle: 'solid'
+}
 
 const containerStyle = {
   display: 'flex',
@@ -39,10 +49,18 @@ const votesContainerStyle = {
   alignItems: 'center'
 }
 
+const cancelButtonContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
 const headerContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  alignSelf: 'stretch'
 }
 
 const actionsContainerStyle = {
@@ -161,7 +179,6 @@ const NodeDetails = (props) => {
     return (
       <div style={containerStyle}>
         <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('question') }}>QUERY</Button>
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>Cancel</Button>
       </div>
     )
   }
@@ -223,8 +240,9 @@ const NodeDetails = (props) => {
   }
 
   return (
-    <div style={containerStyle}>
+    <div style={outerContainerStyle}>
       <div style={headerContainerStyle}>
+        <div style={containerStyle} />
         <div style={votesContainerStyle}>
           <ArrowDropUpIcon style={{ fontSize: 40 }} onClick={() => { handleVote(true) }} />
           <div style={scoreTextStyle}>
@@ -233,6 +251,11 @@ const NodeDetails = (props) => {
           <ArrowDropDownIcon style={{ fontSize: 40 }} onClick={() => { handleVote(false) }} />
         </div>
         <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
+        <div style={cancelButtonContainerStyle}>
+          <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>
+            <ClearIcon style={{ fontSize: 28 }} />
+          </Button>
+        </div>
       </div>
       <div style={bodyContainerStyle}>
         <div style={actionsContainerStyle}>
