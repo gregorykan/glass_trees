@@ -3,8 +3,18 @@ import { Button, TextField } from '@material-ui/core'
 import { isEmpty, isNil, map } from 'lodash'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import CreateNodeForm from './createNodeForm'
+
+const outerContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  borderWidth: '1px',
+  borderColor: 'black',
+  borderStyle: 'solid'
+}
 
 const containerStyle = {
   display: 'flex',
@@ -39,10 +49,18 @@ const votesContainerStyle = {
   alignItems: 'center'
 }
 
+const cancelButtonContainerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
 const headerContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  alignSelf: 'stretch'
 }
 
 const actionsContainerStyle = {
@@ -66,13 +84,7 @@ const optionsContainerStyle = {
   alignItems: 'center'
 }
 
-const clarifyingQuestionsContainerStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-}
-
-const followUpQuestionsContainerStyle = {
+const questionsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center'
@@ -100,8 +112,7 @@ const NodeDetails = (props) => {
     doUnresolveNode,
     cancelSingleNodeView,
     doVoteForNode,
-    clarifyingQuestionNodesForCurrentNode,
-    followUpQuestionNodesForCurrentNode,
+    questionNodesForCurrentNode,
     optionNodesForCurrentNode,
     doSelectNode
   } = props
@@ -111,8 +122,7 @@ const NodeDetails = (props) => {
   const renderNodeCreationForm = () => {
     if (isNil(nodeTypeToBeCreated)) return null
     const nodeTypeToBeCreatedToHeaderText = {
-      'clarifyingQuestion': 'Ask a clarifying question',
-      'followUpQuestion': 'Ask a follow-up question',
+      'question': 'Ask a question',
       'option': 'Add an option'
     }
     return (
@@ -125,7 +135,7 @@ const NodeDetails = (props) => {
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             doCreateNode={doCreateNode}
-            nodeCreationType={nodeTypeToBeCreated}
+            nodeType={nodeTypeToBeCreated}
             doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
             currentUser={currentUser}
             workspace={workspace}
@@ -138,11 +148,11 @@ const NodeDetails = (props) => {
   const renderResolveActions = () => {
     if (currentNode.resolved) {
       return (
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>Mark as unresolved</Button>
+        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUnresolveNode(currentNode.id) }}>REOPEN</Button>
       )
     } else if (currentUser.id === currentNode.user_id) {
       return (
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>Mark as resolved</Button>
+        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>RESOLVE</Button>
       )
     } else {
       return null
@@ -156,7 +166,7 @@ const NodeDetails = (props) => {
       <div style={containerStyle}>
         {
           !currentNode.resolved
-            ? <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>Add an option</Button>
+            ? <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('option') }}>RESPOND</Button>
             : null
         }
         {renderResolveActions()}
@@ -168,9 +178,7 @@ const NodeDetails = (props) => {
     if (!isNil(nodeTypeToBeCreated)) return null
     return (
       <div style={containerStyle}>
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('clarifyingQuestion') }}>Ask a clarifying question</Button>
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('followUpQuestion') }}>Ask a follow-up question</Button>
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>Cancel</Button>
+        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('question') }}>QUERY</Button>
       </div>
     )
   }
@@ -202,43 +210,20 @@ const NodeDetails = (props) => {
     })
   }
 
-  const renderClarifyingQuestions = () => {
-    if (isEmpty(clarifyingQuestionNodesForCurrentNode)) return null
+  const renderQuestions = () => {
+    if (isEmpty(questionNodesForCurrentNode)) return null
     return (
-      <div style={clarifyingQuestionsContainerStyle}>
-        <h4>Clarifying Questions</h4>
-        { renderClarifyingQuestionsList() }
+      <div style={questionsContainerStyle}>
+        <h4>Questions</h4>
+        { renderQuestionsList() }
       </div>
     )
   }
 
-  const renderClarifyingQuestionsList = () => {
-    return map(clarifyingQuestionNodesForCurrentNode, (clarifyingQuestion) => {
+  const renderQuestionsList = () => {
+    return map(questionNodesForCurrentNode, (question) => {
       return (
-        <div key={clarifyingQuestion.id} onClick={() => { doSelectNode(clarifyingQuestion.id) }}>{clarifyingQuestion.label}</div>
-      )
-    })
-  }
-
-  const renderFollowUpQuestions = () => {
-    if (isEmpty(followUpQuestionNodesForCurrentNode)) return null
-    return (
-      <div style={followUpQuestionsContainerStyle}>
-        {
-          currentNode.node_type === 'option'
-          ? <h4>Source Question</h4>
-          : <h4>Follow-up Questions</h4>
-        }
-
-        { renderFollowUpQuestionsList() }
-      </div>
-    )
-  }
-
-  const renderFollowUpQuestionsList = () => {
-    return map(followUpQuestionNodesForCurrentNode, (followUpQuestion) => {
-      return (
-        <div key={followUpQuestion.id} onClick={() => { doSelectNode(followUpQuestion.id) }}>{followUpQuestion.label}</div>
+        <div key={question.id} onClick={() => { doSelectNode(question.id) }}>{question.label}</div>
       )
     })
   }
@@ -255,8 +240,9 @@ const NodeDetails = (props) => {
   }
 
   return (
-    <div style={containerStyle}>
+    <div style={outerContainerStyle}>
       <div style={headerContainerStyle}>
+        <div style={containerStyle} />
         <div style={votesContainerStyle}>
           <ArrowDropUpIcon style={{ fontSize: 40 }} onClick={() => { handleVote(true) }} />
           <div style={scoreTextStyle}>
@@ -265,6 +251,11 @@ const NodeDetails = (props) => {
           <ArrowDropDownIcon style={{ fontSize: 40 }} onClick={() => { handleVote(false) }} />
         </div>
         <h3 style={nodeDetailsHeaderStyle}>{currentNode.label}</h3>
+        <div style={cancelButtonContainerStyle}>
+          <Button style={buttonStyle} variant='outlined' type='button' onClick={cancelSingleNodeView}>
+            <ClearIcon style={{ fontSize: 28 }} />
+          </Button>
+        </div>
       </div>
       <div style={bodyContainerStyle}>
         <div style={actionsContainerStyle}>
@@ -274,8 +265,7 @@ const NodeDetails = (props) => {
         </div>
         <div style={nodeDetailsContainerStyle}>
           { renderOptions() }
-          { renderClarifyingQuestions() }
-          { renderFollowUpQuestions() }
+          { renderQuestions() }
         </div>
       </div>
     </div>

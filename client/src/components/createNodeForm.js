@@ -29,7 +29,7 @@ const CreateNodeForm = props => {
     nodeFormData,
     doUpdateNodeFormDataLabel,
     doUpdateNodeFormDataDescription,
-    nodeCreationType,
+    nodeType,
     doUpdateNodeTypeToBeCreated,
     workspace,
     currentUser
@@ -44,16 +44,10 @@ const CreateNodeForm = props => {
   }
 
   const handleSubmit = () => {
-    const nodeCreationTypesToNodeTypes = {
-      'clarifyingQuestion': 'question',
-      'followUpQuestion': 'question',
-      'option': 'option'
-    }
     const formData = {
       ...nodeFormData,
       current_node_id: currentNodeId,
-      node_creation_type: nodeCreationType,
-      node_type: nodeCreationTypesToNodeTypes[nodeCreationType],
+      node_type: nodeType,
       workspace_id: workspace.id,
       user_id: currentUser.id
     }

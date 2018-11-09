@@ -350,72 +350,87 @@ bundle.selectNodesByCurrentNode = createSelector(
   }
 )
 
-bundle.selectSourceNodesForCurrentNode = createSelector(
-  'selectNodes',
-  'selectLinksByCurrentNodeId',
+bundle.selectQuestionNodesForCurrentNode = createSelector(
+  'selectNodesByCurrentNode',
   'selectCurrentNodeId',
-  (nodes, relatedLinks, currentNodeId) => {
-    if (isNil(currentNodeId)) return []
-    const linksWhereCurrentNodeIsTarget = filter(relatedLinks, (link) => {
-      return link.target_id === currentNodeId
-    })
-    const sourceNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsTarget, (link) => {
-      return link.source_id
-    })
-    return filter(nodes, (node) => {
-      return includes(sourceNodeIdsForCurrentNode, node.id)
-    })
-  }
-)
-bundle.selectClarifyingQuestionNodesForCurrentNode = createSelector(
-  'selectSourceNodesForCurrentNode',
-  (sourceNodesForCurrentNode) => {
-    if (isNil(sourceNodesForCurrentNode)) return []
-    const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
-      return node.node_type !== 'option'
-    })
-    return sourceNodesThatAreQuestions
+  (nodes, currentNodeId) => {
+    return filter(nodes, node => { return node.node_type === 'question' && node.id !== currentNodeId })
   }
 )
 
 bundle.selectOptionNodesForCurrentNode = createSelector(
-  'selectSourceNodesForCurrentNode',
-  (sourceNodesForCurrentNode) => {
-    if (isNil(sourceNodesForCurrentNode)) return []
-    const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
-      return node.node_type === 'option'
-    })
-    return sourceNodesThatAreQuestions
+  'selectNodesByCurrentNode',
+  (nodes) => {
+    return filter(nodes, node => { return node.node_type === 'option' })
   }
 )
-bundle.selectTargetNodesForCurrentNode = createSelector(
-  'selectNodes',
-  'selectLinksByCurrentNodeId',
-  'selectCurrentNodeId',
-  (nodes, relatedLinks, currentNodeId) => {
-    if (isNil(currentNodeId)) return []
-    const linksWhereCurrentNodeIsSource = filter(relatedLinks, (link) => {
-      return link.source_id === currentNodeId
-    })
-    const targetNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsSource, (link) => {
-      return link.target_id
-    })
-    return filter(nodes, (node) => {
-      return includes(targetNodeIdsForCurrentNode, node.id)
-    })
-  }
-)
-
-bundle.selectFollowUpQuestionNodesForCurrentNode = createSelector(
-  'selectTargetNodesForCurrentNode',
-  (targetNodesForCurrentNode) => {
-    if (isNil(targetNodesForCurrentNode)) return []
-    const targetNodesThatAreQuestions = filter(targetNodesForCurrentNode, (node) => {
-      return node.node_type !== 'option'
-    })
-    return targetNodesThatAreQuestions
-  }
-)
+//
+// bundle.selectSourceNodesForCurrentNode = createSelector(
+//   'selectNodes',
+//   'selectLinksByCurrentNodeId',
+//   'selectCurrentNodeId',
+//   (nodes, relatedLinks, currentNodeId) => {
+//     if (isNil(currentNodeId)) return []
+//     const linksWhereCurrentNodeIsTarget = filter(relatedLinks, (link) => {
+//       return link.target_id === currentNodeId
+//     })
+//     const sourceNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsTarget, (link) => {
+//       return link.source_id
+//     })
+//     return filter(nodes, (node) => {
+//       return includes(sourceNodeIdsForCurrentNode, node.id)
+//     })
+//   }
+// )
+// bundle.selectClarifyingQuestionNodesForCurrentNode = createSelector(
+//   'selectSourceNodesForCurrentNode',
+//   (sourceNodesForCurrentNode) => {
+//     if (isNil(sourceNodesForCurrentNode)) return []
+//     const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
+//       return node.node_type !== 'option'
+//     })
+//     return sourceNodesThatAreQuestions
+//   }
+// )
+//
+// bundle.selectOptionNodesForCurrentNode = createSelector(
+//   'selectSourceNodesForCurrentNode',
+//   (sourceNodesForCurrentNode) => {
+//     if (isNil(sourceNodesForCurrentNode)) return []
+//     const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
+//       return node.node_type === 'option'
+//     })
+//     return sourceNodesThatAreQuestions
+//   }
+// )
+// bundle.selectTargetNodesForCurrentNode = createSelector(
+//   'selectNodes',
+//   'selectLinksByCurrentNodeId',
+//   'selectCurrentNodeId',
+//   (nodes, relatedLinks, currentNodeId) => {
+//     if (isNil(currentNodeId)) return []
+//     const linksWhereCurrentNodeIsSource = filter(relatedLinks, (link) => {
+//       return link.source_id === currentNodeId
+//     })
+//     const targetNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsSource, (link) => {
+//       return link.target_id
+//     })
+//     return filter(nodes, (node) => {
+//       return includes(targetNodeIdsForCurrentNode, node.id)
+//     })
+//   }
+// )
+//
+// bundle.selectFollowUpQuestionNodesForCurrentNode = createSelector(
+//   'selectTargetNodesForCurrentNode',
+//   (targetNodesForCurrentNode) => {
+//     if (isNil(targetNodesForCurrentNode)) return []
+//     const targetNodesThatAreQuestions = filter(targetNodesForCurrentNode, (node) => {
+//       return node.node_type !== 'option'
+//     })
+//     return targetNodesThatAreQuestions
+//   }
+// )
 
 bundle.selectNodeFormData = (state) => state.nodes.nodeFormData
 bundle.selectNodeTypeToBeCreated = (state) => state.nodes.nodeTypeToBeCreated

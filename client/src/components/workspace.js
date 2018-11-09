@@ -13,11 +13,6 @@ const containerStyle = {
 const nodeDetailsContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: '1px',
-  borderColor: 'black',
-  borderStyle: 'solid',
   margin: 30,
   width: 70 / 100 * Number(window.innerWidth)
 }
@@ -78,8 +73,7 @@ class WorkspaceComponent extends React.Component {
       doCreateFirstNode,
       currentUser,
       doVoteForNode,
-      clarifyingQuestionNodesForCurrentNode,
-      followUpQuestionNodesForCurrentNode,
+      questionNodesForCurrentNode,
       optionNodesForCurrentNode,
       doSetNodeToHighlight,
       nodeToHighlight
@@ -148,8 +142,7 @@ class WorkspaceComponent extends React.Component {
             nodeTypeToBeCreated={nodeTypeToBeCreated}
             cancelSingleNodeView={cancelSingleNodeView}
             doVoteForNode={doVoteForNode}
-            clarifyingQuestionNodesForCurrentNode={clarifyingQuestionNodesForCurrentNode}
-            followUpQuestionNodesForCurrentNode={followUpQuestionNodesForCurrentNode}
+            questionNodesForCurrentNode={questionNodesForCurrentNode}
             optionNodesForCurrentNode={optionNodesForCurrentNode}
             doSelectNode={doSelectNode}
           />

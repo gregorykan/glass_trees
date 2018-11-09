@@ -26,8 +26,7 @@ const Workspace = (props) => {
     doCreateFirstNode,
     currentUser,
     doVoteForNode,
-    clarifyingQuestionNodesForCurrentNode,
-    followUpQuestionNodesForCurrentNode,
+    questionNodesForCurrentNode,
     optionNodesForCurrentNode,
     doSetNodeToHighlight,
     nodeToHighlight
@@ -55,8 +54,7 @@ const Workspace = (props) => {
       doCreateFirstNode={doCreateFirstNode}
       currentUser={currentUser}
       doVoteForNode={doVoteForNode}
-      clarifyingQuestionNodesForCurrentNode={clarifyingQuestionNodesForCurrentNode}
-      followUpQuestionNodesForCurrentNode={followUpQuestionNodesForCurrentNode}
+      questionNodesForCurrentNode={questionNodesForCurrentNode}
       optionNodesForCurrentNode={optionNodesForCurrentNode}
       doSetNodeToHighlight={doSetNodeToHighlight}
       nodeToHighlight={nodeToHighlight}
@@ -85,8 +83,7 @@ export default connect(
   'doCreateFirstNode',
   'selectCurrentUser',
   'doVoteForNode',
-  'selectClarifyingQuestionNodesForCurrentNode',
-  'selectFollowUpQuestionNodesForCurrentNode',
+  'selectQuestionNodesForCurrentNode',
   'selectOptionNodesForCurrentNode',
   'doSetNodeToHighlight',
   'selectNodeToHighlight',
