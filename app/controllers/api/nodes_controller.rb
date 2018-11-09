@@ -61,7 +61,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: true)
     if @node.errors.empty?
-      render json: @node
+      render json: @node, serializer: NodeWithOptionsSerializer
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -73,7 +73,7 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: false)
     if @node.errors.empty?
-      render json: @node
+      render json: @node, serializer: NodeWithOptionsSerializer
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
