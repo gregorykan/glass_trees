@@ -102,6 +102,7 @@ bundle.reducer = (state = initialState, action) => {
     const updatedNode = action.payload
     const updatedOptions = updatedNode.options
     const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    // GK: TODO: breaks cus nodes aren't coming back with options
     const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,

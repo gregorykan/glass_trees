@@ -59,11 +59,17 @@ class Graph extends React.Component {
     // setting d3 gravity was causing the app to perform really badly CPU-wise
     // i realised that i only needed d3 gravity to set the initial nodes
     // and after that it can be turned off, preserving the drag and drop functionality.
-    // i tried making staticGraph true again but it didn't allow me to move nodes
+    // i tried making staticGraph true again but it didn't allow me to move nodes.
+
+    // but whenever you add a new node or change antyhing to do with the links,
+    // this component re-renders. if d3 has been 'turned off' via the config here,
+    // the graph will re-render without d3 force stuff
     const handleOnClickNode = (nodeId) => {
-      this.setState({
-        config: omit(this.state.config, 'd3')
-      })
+      // if (!isNil(this.state.config.d3)) {
+      //   this.setState({
+      //     config: omit(this.state.config, 'd3')
+      //   })
+      // }
       onClickNode(nodeId)
     }
 
