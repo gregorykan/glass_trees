@@ -78,8 +78,7 @@ class WorkspaceComponent extends React.Component {
       doCreateFirstNode,
       currentUser,
       doVoteForNode,
-      clarifyingQuestionNodesForCurrentNode,
-      followUpQuestionNodesForCurrentNode,
+      questionNodesForCurrentNode,
       optionNodesForCurrentNode,
       doSetNodeToHighlight,
       nodeToHighlight
@@ -148,8 +147,7 @@ class WorkspaceComponent extends React.Component {
             nodeTypeToBeCreated={nodeTypeToBeCreated}
             cancelSingleNodeView={cancelSingleNodeView}
             doVoteForNode={doVoteForNode}
-            clarifyingQuestionNodesForCurrentNode={clarifyingQuestionNodesForCurrentNode}
-            followUpQuestionNodesForCurrentNode={followUpQuestionNodesForCurrentNode}
+            questionNodesForCurrentNode={questionNodesForCurrentNode}
             optionNodesForCurrentNode={optionNodesForCurrentNode}
             doSelectNode={doSelectNode}
           />
