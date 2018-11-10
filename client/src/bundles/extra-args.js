@@ -16,7 +16,7 @@ export default {
             headers,
             ...omit(config, 'headers')
           }
-          return fetch(`http://localhost:3000/${urlPath}`, mergedConfig)
+          return fetch(`${process.env.REACT_APP_API_ROOT}${urlPath}`, mergedConfig)
         }
         return fetchResource()
       }
