@@ -190,35 +190,6 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     // })
 }
 
-bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {
-  dispatch({ type: 'CREATE_FIRST_NODE_START' })
-  const credentials = getState().accounts.credentials
-  const sanitizedCredentials = {
-    'access-token': credentials.accessToken,
-    'token-type': credentials.tokenType,
-    client: credentials.client,
-    uid: credentials.uid,
-    expiry: credentials.expiry
-  }
-  apiFetch('api/nodes', {
-    method: 'POST',
-    headers: sanitizedCredentials,
-    body: JSON.stringify(formData)
-  })
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
-      }
-      return response.json()
-    })
-    .then((data) => {
-      dispatch({ type: 'CREATE_FIRST_NODE_SUCCESS', payload: data })
-    })
-    .catch((error) => {
-      dispatch({ type: 'CREATE_FIRST_NODE_ERROR', payload: error })
-    })
-}
-
 bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'RESOLVE_NODE_START' })
   const credentials = getState().accounts.credentials
