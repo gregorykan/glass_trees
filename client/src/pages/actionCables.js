@@ -11,7 +11,7 @@ const ActionCables = ({
  }) => {
   const handleReceivedNodeData = response => {
     const { node } = response
-    if (!isEmpty(node.links)) {
+    if (!isEmpty(node.target_links || !isEmpty(node.source_links))) {
       doCreateNodeSuccess(response.node)
     }
     if (!isEmpty(node.options)) {
