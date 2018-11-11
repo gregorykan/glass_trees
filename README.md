@@ -35,7 +35,7 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
   - for ludics fans, this means there is no `daimon` move: 'winning' means no one vetoes your resolution
   - upvoting and downvoting are simply there to provide additional information on the other agents' preferences
   
-## limits
+## issues and limits
 
 - it looks kinda crappy
 - graph struggles to recompute nodes' positions
@@ -45,6 +45,8 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
 ## TODOs and upcoming features
 
 - emoji reactions to provide more shades of sentiment and feeling
+- avatars, usernames
+- nodes editable by respective author
 - some way of letting the author summarize a resolution
 - each user can have many groups
 - my own implementation of d3
