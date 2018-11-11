@@ -70,7 +70,6 @@ class WorkspaceComponent extends React.Component {
       doUpdateNodeTypeToBeCreated,
       doResolveNode,
       doUnresolveNode,
-      doCreateFirstNode,
       currentUser,
       doVoteForNode,
       questionNodesForCurrentNode,
@@ -121,7 +120,6 @@ class WorkspaceComponent extends React.Component {
             nodeFormData={nodeFormData}
             doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-            doCreateFirstNode={doCreateFirstNode}
             currentUser={currentUser}
             workspace={workspace}
             doSetNodeToHighlight={doSetNodeToHighlight}

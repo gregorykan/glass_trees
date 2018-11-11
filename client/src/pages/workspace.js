@@ -23,7 +23,6 @@ const Workspace = (props) => {
     nodeTypeToBeCreated,
     doResolveNode,
     doUnresolveNode,
-    doCreateFirstNode,
     currentUser,
     doVoteForNode,
     questionNodesForCurrentNode,
@@ -51,7 +50,6 @@ const Workspace = (props) => {
       nodeTypeToBeCreated={nodeTypeToBeCreated}
       doResolveNode={doResolveNode}
       doUnresolveNode={doUnresolveNode}
-      doCreateFirstNode={doCreateFirstNode}
       currentUser={currentUser}
       doVoteForNode={doVoteForNode}
       questionNodesForCurrentNode={questionNodesForCurrentNode}
@@ -80,7 +78,6 @@ export default connect(
   'selectNodeTypeToBeCreated',
   'doResolveNode',
   'doUnresolveNode',
-  'doCreateFirstNode',
   'selectCurrentUser',
   'doVoteForNode',
   'selectQuestionNodesForCurrentNode',
