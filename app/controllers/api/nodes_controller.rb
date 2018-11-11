@@ -28,7 +28,9 @@ class Api::NodesController < ApiController
   def create_node
     current_node = Node.find(params[:current_node_id])
     @node = Node.create!(create_node_params)
-    if params[:node_type] == 'question'
+    if params[:node_type] == 'question' && current_node.node_type == 'option'
+      current_node.precedent_questions << @node
+    elsif params[:node_type] == 'question' && current_node.node_type == 'question'
       current_node.consequent_questions << @node
     else
       current_node.options << @node
