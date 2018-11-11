@@ -1,12 +1,25 @@
 import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { ActionCable } from 'react-actioncable-provider'
+import { isEmpty } from 'lodash'
 
 const ActionCables = ({
-  doCreateNodeSuccess
+  doCreateNodeSuccess,
+  doResolveNodeSuccess,
+  doUnresolveNodeSuccess,
+  doVoteForNodeSuccess
  }) => {
   const handleReceivedNodeData = response => {
-    doCreateNodeSuccess(response.node)
+    const { node } = response
+    if (!isEmpty(node.links)) {
+      doCreateNodeSuccess(response.node)
+    }
+    if (!isEmpty(node.options)) {
+      doResolveNodeSuccess(response.node)
+    }
+    if (!isEmpty(node.votes)) {
+      doVoteForNodeSuccess(response.node)
+    }
   }
   return (
     <div>
@@ -20,5 +33,8 @@ const ActionCables = ({
 
 export default connect(
   'doCreateNodeSuccess',
+  'doResolveNodeSuccess',
+  'doUnresolveNodeSuccess',
+  'doVoteForNodeSuccess',
   ActionCables
 )

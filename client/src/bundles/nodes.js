@@ -156,10 +156,6 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_NODE_TYPE_TO_BE_CREATED', payload: type })
 }
 
-bundle.doCreateNodeSuccess = (node) => ({ dispatch }) => {
-  dispatch({ type: 'CREATE_NODE_SUCCESS', payload: node })
-}
-
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
   const credentials = getState().accounts.credentials
@@ -190,6 +186,10 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     // })
 }
 
+bundle.doCreateNodeSuccess = (node) => ({ dispatch }) => {
+  dispatch({ type: 'CREATE_NODE_SUCCESS', payload: node })
+}
+
 bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'RESOLVE_NODE_START' })
   const credentials = getState().accounts.credentials
@@ -204,18 +204,22 @@ bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
     method: 'PATCH',
     headers: sanitizedCredentials
   })
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
-      }
-      return response.json()
-    })
-    .then((data) => {
-      dispatch({ type: 'RESOLVE_NODE_SUCCESS', payload: data })
-    })
-    .catch((error) => {
-      dispatch({ type: 'RESOLVE_NODE_ERROR', payload: error })
-    })
+    // .then(response => {
+    //   if (!response.ok) {
+    //     return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+    //   }
+    //   return response.json()
+    // })
+    // .then((data) => {
+    //   dispatch({ type: 'RESOLVE_NODE_SUCCESS', payload: data })
+    // })
+    // .catch((error) => {
+    //   dispatch({ type: 'RESOLVE_NODE_ERROR', payload: error })
+    // })
+}
+
+bundle.doResolveNodeSuccess = (node) => ({ dispatch }) => {
+  dispatch({ type: 'RESOLVE_NODE_SUCCESS', payload: node })
 }
 
 bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
@@ -232,18 +236,22 @@ bundle.doUnresolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
     method: 'PATCH',
     headers: sanitizedCredentials
   })
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
-      }
-      return response.json()
-    })
-    .then((data) => {
-      dispatch({ type: 'UNRESOLVE_NODE_SUCCESS', payload: data })
-    })
-    .catch((error) => {
-      dispatch({ type: 'UNRESOLVE_NODE_ERROR', payload: error })
-    })
+    // .then(response => {
+    //   if (!response.ok) {
+    //     return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+    //   }
+    //   return response.json()
+    // })
+    // .then((data) => {
+    //   dispatch({ type: 'UNRESOLVE_NODE_SUCCESS', payload: data })
+    // })
+    // .catch((error) => {
+    //   dispatch({ type: 'UNRESOLVE_NODE_ERROR', payload: error })
+    // })
+}
+
+bundle.doUnresolveNodeSuccess = (node) => ({ dispatch }) => {
+  dispatch({ type: 'UNRESOLVE_NODE_SUCCESS', payload: node })
 }
 
 bundle.doVoteForNode = (formData) => ({ dispatch, apiFetch, getState }) => {
@@ -261,18 +269,22 @@ bundle.doVoteForNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     headers: sanitizedCredentials,
     body: JSON.stringify(formData)
   })
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
-      }
-      return response.json()
-    })
-    .then((data) => {
-      dispatch({ type: 'VOTE_NODE_SUCCESS', payload: data })
-    })
-    .catch((error) => {
-      dispatch({ type: 'VOTE_NODE_ERROR', payload: error })
-    })
+    // .then(response => {
+    //   if (!response.ok) {
+    //     return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+    //   }
+    //   return response.json()
+    // })
+    // .then((data) => {
+    //   dispatch({ type: 'VOTE_NODE_SUCCESS', payload: data })
+    // })
+    // .catch((error) => {
+    //   dispatch({ type: 'VOTE_NODE_ERROR', payload: error })
+    // })
+}
+
+bundle.doVoteForNodeSuccess = (node) => ({ dispatch }) => {
+  dispatch({ type: 'VOTE_NODE_SUCCESS', payload: node })
 }
 
 bundle.selectNodes = (state) => state.nodes.data
