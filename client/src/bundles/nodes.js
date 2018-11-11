@@ -102,7 +102,6 @@ bundle.reducer = (state = initialState, action) => {
     const updatedNode = action.payload
     const updatedOptions = updatedNode.options
     const allUpdatedNodes = concat([updatedNode], updatedOptions)
-    // GK: TODO: breaks cus nodes aren't coming back with options
     const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
@@ -176,6 +175,7 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     headers: sanitizedCredentials,
     body: JSON.stringify(formData)
   })
+    // GK: NB: response is now being handled through ActionCable - see ActionCables mounted on Landing page
     // .then(response => {
     //   if (!response.ok) {
     //     return Promise.reject(new Error(`${response.status} ${response.statusText}`))
