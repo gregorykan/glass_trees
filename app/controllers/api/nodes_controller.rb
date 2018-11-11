@@ -52,7 +52,12 @@ class Api::NodesController < ApiController
   def update
     @node.update(node_params)
     if @node.errors.empty?
-      render json: @node
+      # render json: @node
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        NodeWithOptionsSerializer.new(@node)
+      ).serializable_hash
+      ActionCable.server.broadcast 'nodes_channel', serialized_data
+      head :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -68,7 +73,12 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: true)
     if @node.errors.empty?
-      render json: @node, serializer: NodeWithOptionsSerializer
+      # render json: @node, serializer: NodeWithOptionsSerializer
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        NodeWithOptionsSerializer.new(@node)
+      ).serializable_hash
+      ActionCable.server.broadcast 'nodes_channel', serialized_data
+      head :ok
     else
       render json: { errors: @node.errors.full_messages },
              status: :unprocessable_entity
@@ -80,10 +90,15 @@ class Api::NodesController < ApiController
     @node.save!
     @node.options.update_all(resolved: false)
     if @node.errors.empty?
-      render json: @node, serializer: NodeWithOptionsSerializer
-    else
-      render json: { errors: @node.errors.full_messages },
-             status: :unprocessable_entity
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        NodeWithOptionsSerializer.new(@node)
+      ).serializable_hash
+      ActionCable.server.broadcast 'nodes_channel', serialized_data
+      head :ok
+      # render json: @node, serializer: NodeWithOptionsSerializer
+    # else
+    #   render json: { errors: @node.errors.full_messages },
+    #          status: :unprocessable_entity
     end
   end
 
@@ -92,7 +107,12 @@ class Api::NodesController < ApiController
     # user has already voted the same way, so destroy vote to 'undo'
     if (existing_vote.present?) && (existing_vote.is_upvote == params[:is_upvote])
       existing_vote.destroy!
-      render json: @node
+      # render json: @node
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        NodeSerializer.new(@node)
+      ).serializable_hash
+      ActionCable.server.broadcast 'nodes_channel', serialized_data
+      head :ok
       return
     end
 
@@ -105,7 +125,12 @@ class Api::NodesController < ApiController
     vote = Vote.new(create_vote_params)
     vote.node_id = @node.id
     @node.votes << vote
-    render json: @node
+    # render json: @node
+    serialized_data = ActiveModelSerializers::Adapter::Json.new(
+      NodeSerializer.new(@node)
+    ).serializable_hash
+    ActionCable.server.broadcast 'nodes_channel', serialized_data
+    head :ok
   end
 
   # DELETE /nodes/:id
