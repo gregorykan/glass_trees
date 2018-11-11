@@ -157,6 +157,10 @@ bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_NODE_TYPE_TO_BE_CREATED', payload: type })
 }
 
+bundle.doCreateNodeSuccess = (node) => ({ dispatch }) => {
+  dispatch({ type: 'CREATE_NODE_SUCCESS', payload: node })
+}
+
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
   dispatch({ type: 'CREATE_NODE_START' })
   const credentials = getState().accounts.credentials
@@ -172,18 +176,18 @@ bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
     headers: sanitizedCredentials,
     body: JSON.stringify(formData)
   })
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(new Error(`${response.status} ${response.statusText}`))
-      }
-      return response.json()
-    })
-    .then((data) => {
-      dispatch({ type: 'CREATE_NODE_SUCCESS', payload: data })
-    })
-    .catch((error) => {
-      dispatch({ type: 'CREATE_NODE_ERROR', payload: error })
-    })
+    // .then(response => {
+    //   if (!response.ok) {
+    //     return Promise.reject(new Error(`${response.status} ${response.statusText}`))
+    //   }
+    //   return response.json()
+    // })
+    // .then((data) => {
+    //   dispatch({ type: 'CREATE_NODE_SUCCESS', payload: data })
+    // })
+    // .catch((error) => {
+    //   dispatch({ type: 'CREATE_NODE_ERROR', payload: error })
+    // })
 }
 
 bundle.doCreateFirstNode = (formData) => ({ dispatch, apiFetch, getState }) => {

@@ -34,12 +34,30 @@ class Api::NodesController < ApiController
       current_node.options << @node
     end
     if @node.errors.empty?
-      render json: @node, serializer: NodeWithLinksSerializer
-    else
-      render json: { errors: @node.errors.full_messages },
-             status: :unprocessable_entity
+        serialized_data = ActiveModelSerializers::Adapter::Json.new(
+          NodeWithLinksSerializer.new(@node)
+        ).serializable_hash
+        ActionCable.server.broadcast 'nodes_channel', serialized_data
+        head :ok
     end
+    # if @node.errors.empty?
+    #   render json: @node, serializer: NodeWithLinksSerializer
+    # else
+    #   render json: { errors: @node.errors.full_messages },
+    #          status: :unprocessable_entity
+    # end
   end
+
+#   def create
+#   conversation = Conversation.new(conversation_params)
+#   if conversation.save
+#     serialized_data = ActiveModelSerializers::Adapter::Json.new(
+#       ConversationSerializer.new(conversation)
+#     ).serializable_hash
+#     ActionCable.server.broadcast 'conversations_channel', serialized_data
+#     head :ok
+#   end
+# end
 
   # PUT /nodes/:id
   def update

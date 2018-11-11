@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { Button } from '@material-ui/core'
+import { ActionCable } from 'react-actioncable-provider'
 
 import NotificationCard from '../components/notificationCard'
 import SignIn from './signIn'
@@ -22,10 +23,19 @@ const headerStyle = {
 }
 
 const Landing = (props) => {
-  const { isSignedIn, doSignOut, notifications, doRemoveErrorNotification, route, routeInfo, doUpdateHash } = props
+  const { isSignedIn, doSignOut, notifications, doRemoveErrorNotification, route, routeInfo, doUpdateHash, doCreateNodeSuccess } = props
   const isAcceptingInvitation = routeInfo.pattern === 'accept-invitation'
   const isSigningUp = routeInfo.pattern === 'sign-up'
   const Page = route.component
+
+  const handleReceivedConversation = response => {
+    console.log('response', response)
+    doCreateNodeSuccess(response.node)
+    // const { conversation } = response;
+    // this.setState({
+    //   conversations: [...this.state.conversations, conversation]
+    // });
+  }
   if (isAcceptingInvitation || isSigningUp) {
     return (
       <div style={containerStyle}>
@@ -36,6 +46,10 @@ const Landing = (props) => {
   } else {
     return (
       <div style={containerStyle}>
+        <ActionCable
+          channel={{ channel: 'NodesChannel' }}
+          onReceived={handleReceivedConversation}
+        />
         <NotificationCard notifications={notifications} doRemoveErrorNotification={doRemoveErrorNotification} />
         {
           isSignedIn
@@ -66,5 +80,6 @@ export default connect(
   'selectRouteInfo',
   'selectPathname',
   'doUpdateHash',
+  'doCreateNodeSuccess',
   Landing
 )
