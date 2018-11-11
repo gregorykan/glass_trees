@@ -2,6 +2,8 @@
 
 a multi-agent, asynchronous, concurrent, realtime interaction game
 
+![](./docs/images/glass_trees_screenshot.png)
+
 ## theoretical premises and conflations (confabulations?)
 
 - interaction as computation as coordination as game as dialogue
@@ -34,14 +36,14 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
 - there is NO AUTOMATION of resolution - this is entirely up to the author, and can be vetoed by any other agent
   - for ludics fans, this means there is no `daimon` move: 'winning' means no one vetoes your resolution
   - upvoting and downvoting are simply there to provide additional information on the other agents' preferences
-  
+
 ## issues and limits
 
 - it looks kinda crappy
 - graph struggles to recompute nodes' positions
 - can be laggy because of the poor performance of the graph rendering
 - no proper way to field an outcome for each resolution
-  
+
 ## TODOs and upcoming features
 
 - emoji reactions to provide more shades of sentiment and feeling
