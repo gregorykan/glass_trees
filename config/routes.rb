@@ -16,5 +16,6 @@ Rails.application.routes.draw do
     patch '/nodes/:id/unresolve', to: 'nodes#unresolve_question'
     post '/nodes/:id/vote', to: 'nodes#vote'
   end
+  mount ActionCable.server => '/cable'
   root 'welcome#hello'
 end

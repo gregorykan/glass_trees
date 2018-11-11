@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { Button } from '@material-ui/core'
 
+import ActionCables from './actionCables'
 import NotificationCard from '../components/notificationCard'
 import SignIn from './signIn'
 
@@ -26,6 +27,7 @@ const Landing = (props) => {
   const isAcceptingInvitation = routeInfo.pattern === 'accept-invitation'
   const isSigningUp = routeInfo.pattern === 'sign-up'
   const Page = route.component
+
   if (isAcceptingInvitation || isSigningUp) {
     return (
       <div style={containerStyle}>
@@ -36,6 +38,7 @@ const Landing = (props) => {
   } else {
     return (
       <div style={containerStyle}>
+        <ActionCables />
         <NotificationCard notifications={notifications} doRemoveErrorNotification={doRemoveErrorNotification} />
         {
           isSignedIn

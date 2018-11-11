@@ -4,6 +4,7 @@ import { Provider } from 'redux-bundler-react'
 import { ThemeProvider } from 'react-fela'
 import { isNil } from 'lodash'
 import { isPast } from 'date-fns'
+import { ActionCableProvider } from 'react-actioncable-provider'
 
 import FelaProvider from './hocs/felaProvider'
 import theme from './theme'
@@ -23,13 +24,15 @@ const initialState = {
 document.addEventListener('DOMContentLoaded', () => {
   const rootNode = document.getElementById('root')
   ReactDOM.render(
-    <Provider store={getStore(initialState)}>
-      <ThemeProvider theme={theme}>
-        <FelaProvider>
-          <Landing />
-        </FelaProvider>
-      </ThemeProvider>
-    </Provider>,
+    <ActionCableProvider url={process.env.REACT_APP_API_WS_ROOT}>
+      <Provider store={getStore(initialState)}>
+        <ThemeProvider theme={theme}>
+          <FelaProvider>
+            <Landing />
+          </FelaProvider>
+        </ThemeProvider>
+      </Provider>
+    </ActionCableProvider>,
     rootNode
   )
 })
