@@ -1,24 +1,50 @@
-# README
+# glass.trees
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+a multi-agent, asynchronous, concurrent, realtime interaction game
 
-Things you may want to cover:
+## theoretical premises and conflations (confabulations?)
 
-* Ruby version
+- interaction as computation as coordination as game as dialogue
+- interaction game as proceeding via ATTACKING (questioning) and DEFENDING (answering)
+  - proofs and counterproofs
+  - inherently dialogical
+- interaction as the decomposition and recomposition of possibilities
+  - decomposition as the generation of new questions and answers from those existing
+  - recomposition as resolution of questions (reduction, normalization, abstraction?) and their corresponding answers
 
-* System dependencies
+## theoretical inspirations (poorly co-opted, half-digested spirits)
 
-* Configuration
+- reza negarestani: intelligence and spirit
+- jonathan ginzburg: the interactive stance
+- alain lecomte: figures of dialogue: a view from ludics
 
-* Database creation
+## rules
 
-* Database initialization
+- each workspace must begin with a question
+- agent can either QUERY or RESPOND to a question
+- QUERY means asking a question of the question
+- RESPOND means providing a possible answer ("option") to the question
+- agent can also QUERY any option
+- agent can UPVOTE or DOWNVOTE any query or option
+- RESOLVE means that the author of the question is satisfied with the information at hand
+- anyone can UN-RESOLVE or REOPEN a resolved question
 
-* How to run the test suite
+## notes
 
-* Services (job queues, cache servers, search engines, etc.)
+- there is NO AUTOMATION of resolution - this is entirely up to the author, and can be vetoed by any other agent
+  - for ludics fans, this means there is no `daimon` move: 'winning' means no one vetoes your resolution
+  - upvoting and downvoting are simply there to provide additional information on the other agents' preferences
+  
+## limits
 
-* Deployment instructions
+- it looks kinda crappy
+- graph struggles to recompute nodes' positions
+- can be laggy because of the poor performance of the graph rendering
+- no proper way to field an outcome for each resolution
+  
+## TODOs and upcoming features
 
-* ...
+- emoji reactions to provide more shades of sentiment and feeling
+- some way of letting the author summarize a resolution
+- each user can have many groups
+- my own implementation of d3
