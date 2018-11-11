@@ -50,3 +50,4 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
 - some way of letting the author summarize a resolution
 - each user can have many groups
 - my own implementation of d3
+- ability to start a workspace with an assertion (to be interrogated, vetted etc.)
