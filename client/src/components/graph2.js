@@ -14,8 +14,8 @@ var width = 800;
 var height = 600;
 var simulation = d3.forceSimulation()
   .force('collide', d3.forceCollide(d => 2 * d.size))
-  .force('charge', d3.forceManyBody(-100))
-  // .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('charge', d3.forceManyBody(-650))
+  .force('center', d3.forceCenter(width / 2, height / 2))
   .stop();
 
 class Graph extends React.Component {
@@ -60,7 +60,7 @@ class Graph extends React.Component {
     // they are given all the extra stuff that d3 needs to render them
     var {nodes, links} = this.props;
     simulation.nodes(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(200));
+      .force('link', d3.forceLink(links).id(d => d.id).distance(50));
 
     times(2000, () => simulation.tick());
 
@@ -87,14 +87,16 @@ class Graph extends React.Component {
   // }
 
   renderNodes() {
-    this.circles = this.container.selectAll('circle')
+    this.circles = this.container.selectAll('g')
       .data(this.nodes, d => d.id);
     // exit
     this.circles.exit().remove();
     // enter + update
-    this.circles = this.circles.enter().append('circle')
+    this.circles = this.circles.enter().append('g')
       .classed('node', true)
       .merge(this.circles)
+
+    this.circles.append('circle')
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', d => 10) // size - radius?
@@ -102,7 +104,10 @@ class Graph extends React.Component {
       // .attr('opacity', d =>
       //   !this.state.selected || this.highlightedNodes[d.key] ? 1 : 0.2)
       // .on('click', this.selectNode);
-    // debugger
+    this.circles.append('text')
+      .attr("dx", 12)
+      .attr("dy", "2em")
+      .text(d => d.label)
   }
 
   renderLinks() {
