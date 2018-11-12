@@ -100,6 +100,7 @@ class App extends React.Component {
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
+      .merge(link)
 
     // Updating nodes
     node = node.data(data.nodes)
@@ -124,7 +125,8 @@ class App extends React.Component {
         tooltip.style('opacity', 0)
           .style('left', '0px')
           .style('top', '0px');
-      });
+      })
+      .merge(node)
 
     //Starting simulation
     simulation.nodes(data.nodes)
