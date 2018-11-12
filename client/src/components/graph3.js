@@ -77,57 +77,23 @@ class App extends React.Component {
     link = chart.append('g')
       .attr('class', 'links')
       .selectAll('line')
-      .data(data.links).enter()
-      .append('line')
-      .attr('stroke-width', 2)
-      .attr('stroke', 'black')
-      .attr('opacity', 0.4)
 
     //Creating nodes
     node = chart.append('g')
       .attr('class', 'nodes')
       .selectAll('circle')
-      .data(data.nodes).enter()
-      .append('circle')
-      .attr('r', 10)
-      .attr('opacity', 1)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 2)
-      .attr('fill', 'red')
-      .on('click', d => { onClickNode(d.id) })
-      .call(d3.drag()
-         .on('start', this.dragStart)
-         .on('drag', this.drag)
-         .on('end', this.dragEnd)
-      ).on('mouseover',d => {
-        tooltip.html(d.country)
-          .style('left', d3.event.pageX + 5 +'px')
-          .style('top', d3.event.pageY + 5 + 'px')
-          .style('opacity', .9);
-      }).on('mouseout', () => {
-        tooltip.style('opacity', 0)
-          .style('left', '0px')
-          .style('top', '0px');
-      });
 
-    //Starting simulation
-    simulation.nodes(data.nodes)
-      .on('tick', this.ticked);
-
-    simulation.force('link', d3.forceLink(data.links).id(d => d.id).distance(60))
-
-    simulation.alpha(1).restart()
-
+    this.updateGraph()
   }
 
-  restartGraph = () => {
+  updateGraph = () => {
     const { nodes, links, onClickNode } = this.props
     const data = {
       nodes,
       links
     }
 
-    //Creating links
+    // Updating links
     link = link.data(data.links)
     link.exit().remove()
     link = link.enter().append('line')
@@ -135,7 +101,7 @@ class App extends React.Component {
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
 
-    //Creating nodes
+    // Updating nodes
     node = node.data(data.nodes)
     node.exit().remove()
     node = node.enter().append('circle')
@@ -179,7 +145,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate () {
-    this.restartGraph()
+    this.updateGraph()
   }
 
   render() {
