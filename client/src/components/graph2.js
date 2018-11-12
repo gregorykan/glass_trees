@@ -52,13 +52,13 @@ class Graph extends React.Component {
     this.renderNodes()
   }
 
-  componentDidUpdate () {
-    console.log('componentDidUpdate')
-    this.calculateData()
-    // this.calculateHighlights(this.state.selected)
-    this.renderLinks()
-    this.renderNodes()
-  }
+  // componentDidUpdate () {
+  //   console.log('componentDidUpdate')
+  //   this.calculateData()
+  //   // this.calculateHighlights(this.state.selected)
+  //   this.renderLinks()
+  //   this.renderNodes()
+  // }
 
   calculateData () {
     // nodes and links are mutated in this function
@@ -93,6 +93,7 @@ class Graph extends React.Component {
 
   renderNodes () {
     // svg elements set based on node properties
+    const { onClickNode } = this.props
     this.nodeElements = this.container.selectAll('g')
       .data(this.nodes, d => d.id)
     // exit
@@ -109,7 +110,7 @@ class Graph extends React.Component {
       .attr('opacity', d => 1)
       // .attr('opacity', d =>
       //   !this.state.selected || this.highlightedNodes[d.key] ? 1 : 0.2)
-      // .on('click', this.selectNode)
+      .on('click', d => { onClickNode(d.id) })
     this.nodeElements.append('text')
       .attr('dx', d => d.x - 10)
       .attr('dy', d => d.y + 20)
