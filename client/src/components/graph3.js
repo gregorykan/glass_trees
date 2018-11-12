@@ -12,6 +12,37 @@ class App extends React.Component {
     super(props);
   }
 
+  //Drag functions
+  dragStart = d => {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  };
+
+  drag = d => {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  };
+
+  dragEnd = d => {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
+  //Setting location when ticked
+  ticked = () => {
+    link
+      .attr("x1", d => { return d.source.x; })
+      .attr("y1", d => { return d.source.y; })
+      .attr("x2", d => { return d.target.x; })
+      .attr("y2", d => { return d.target.y; })
+
+    node
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y)
+    }
+
   startGraph = () => {
     const { nodes, links, onClickNode } = this.props
     const data = {
@@ -42,24 +73,6 @@ class App extends React.Component {
       // .force("y", d3.forceY(0))
       // .force("x", d3.forceX(0));
 
-    //Drag functions
-    const dragStart = d => {
-      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    };
-
-    const drag = d => {
-      d.fx = d3.event.x;
-      d.fy = d3.event.y;
-    };
-
-    const dragEnd = d => {
-      if (!d3.event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
-
     //Creating links
     link = chart.append('g')
       .attr('class', 'links')
@@ -83,9 +96,9 @@ class App extends React.Component {
       .attr('fill', 'red')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
-         .on('start', dragStart)
-         .on('drag', drag)
-         .on('end', dragEnd)
+         .on('start', this.dragStart)
+         .on('drag', this.drag)
+         .on('end', this.dragEnd)
       ).on('mouseover',d => {
         tooltip.html(d.country)
           .style('left', d3.event.pageX + 5 +'px')
@@ -97,22 +110,9 @@ class App extends React.Component {
           .style('top', '0px');
       });
 
-    //Setting location when ticked
-    const ticked = () => {
-      link
-        .attr("x1", d => { return d.source.x; })
-        .attr("y1", d => { return d.source.y; })
-        .attr("x2", d => { return d.target.x; })
-        .attr("y2", d => { return d.target.y; })
-
-      node
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
-      }
-
     //Starting simulation
     simulation.nodes(data.nodes)
-      .on('tick', ticked);
+      .on('tick', this.ticked);
 
     simulation.force('link', d3.forceLink(data.links).id(d => d.id).distance(60))
 
@@ -125,23 +125,6 @@ class App extends React.Component {
     const data = {
       nodes,
       links
-    }
-    //Drag functions
-    const dragStart = d => {
-      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    };
-
-    const drag = d => {
-      d.fx = d3.event.x;
-      d.fy = d3.event.y;
-    };
-
-    const dragEnd = d => {
-      if (!d3.event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
     }
 
     //Creating links
@@ -163,9 +146,9 @@ class App extends React.Component {
       .attr('fill', 'red')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
-         .on('start', dragStart)
-         .on('drag', drag)
-         .on('end', dragEnd)
+         .on('start', this.dragStart)
+         .on('drag', this.drag)
+         .on('end', this.dragEnd)
       ).on('mouseover',d => {
         tooltip.html(d.country)
           .style('left', d3.event.pageX + 5 +'px')
@@ -177,22 +160,9 @@ class App extends React.Component {
           .style('top', '0px');
       });
 
-    //Setting location when ticked
-    const ticked = () => {
-      link
-        .attr("x1", d => { return d.source.x; })
-        .attr("y1", d => { return d.source.y; })
-        .attr("x2", d => { return d.target.x; })
-        .attr("y2", d => { return d.target.y; })
-
-      node
-        .attr('cx', d => d.x)
-        .attr('cy', d => d.y)
-      }
-
     //Starting simulation
     simulation.nodes(data.nodes)
-      .on('tick', ticked);
+      .on('tick', this.ticked);
 
     simulation.force('link', d3.forceLink(data.links).id(d => d.id).distance(60))
 
