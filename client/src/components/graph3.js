@@ -6,6 +6,8 @@ var node = null
 var tooltip = null
 var chart = null
 var simulation = null
+var nodes = null
+var links = null
 
 class App extends React.Component {
   constructor(props) {
@@ -44,11 +46,8 @@ class App extends React.Component {
     }
 
   startGraph = () => {
-    const { nodes, links, onClickNode } = this.props
-    const data = {
-      nodes,
-      links
-    }
+    nodes = this.props.nodes
+    links = this.props.links
 
     const width = 640,
           height = 480;
@@ -65,7 +64,7 @@ class App extends React.Component {
       .html('Tooltip');
 
     //Initializing force simulation
-    simulation = d3.forceSimulation()
+    simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink())
       .force('charge', d3.forceManyBody(-1000))
       .force('collide', d3.forceCollide())
@@ -87,14 +86,9 @@ class App extends React.Component {
   }
 
   updateGraph = () => {
-    const { nodes, links, onClickNode } = this.props
-    const data = {
-      nodes,
-      links
-    }
-
+    const { onClickNode } = this.props
     // Updating links
-    link = link.data(data.links)
+    link = link.data(links)
     link.exit().remove()
     link = link.enter().append('line')
       .attr('stroke-width', 2)
@@ -103,7 +97,7 @@ class App extends React.Component {
       .merge(link)
 
     // Updating nodes
-    node = node.data(data.nodes)
+    node = node.data(nodes)
     node.exit().remove()
     node = node.enter().append('circle')
       .attr('r', 10)
@@ -129,10 +123,10 @@ class App extends React.Component {
       .merge(node)
 
     //Starting simulation
-    simulation.nodes(data.nodes)
+    simulation.nodes(nodes)
       .on('tick', this.ticked);
 
-    simulation.force('link', d3.forceLink(data.links).id(d => d.id).distance(60))
+    simulation.force('link', d3.forceLink(links).id(d => d.id).distance(60))
 
     simulation.alpha(1).restart()
   }
