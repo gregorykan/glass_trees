@@ -74,7 +74,7 @@ class Graph extends React.Component {
       onClickNode(nodeId)
     }
 
-    if (isNil(data) || isEmpty(data.nodes)) return null
+    if (isNil(data) || isEmpty(data.nodes) || isEmpty(data.links)) return null
 
     return (
       <Graph2 links={data.links} nodes={data.nodes} />

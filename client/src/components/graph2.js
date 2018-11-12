@@ -5,26 +5,30 @@ import { times } from 'lodash'
 const containerStyle = {
   width: 800,
   height: 600,
-  backgroundColor: 'skyblue',
   display: 'flex',
   alignItems: 'center'
 }
 
 var width = 800
 var height = 600
-var simulation = d3.forceSimulation()
-  // .force('collide', d3.forceCollide(d => 2 * d.size))
-  .force('charge', d3.forceManyBody(-650))
-  .force('center', d3.forceCenter(width / 2, height / 2))
-  .stop()
+// var simulation = d3.forceSimulation()
+//   // .force('collide', d3.forceCollide(d => 2 * d.size))
+//   .force('charge', d3.forceManyBody(-1000))
+//   .force('center', d3.forceCenter(width / 2, height / 2))
+//   .stop()
 
 class Graph extends React.Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {selected: null}
-  //
-  //   this.selectNode = this.selectNode.bind(this)
-  // }
+  constructor (props) {
+    super(props)
+    // this.state = {selected: null}
+    //
+    // this.selectNode = this.selectNode.bind(this)
+    this.simulation = d3.forceSimulation()
+      // .force('collide', d3.forceCollide(d => 2 * d.size))
+      .force('charge', d3.forceManyBody(-1000))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .stop()
+  }
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   if (nextProps.version === this.props.version) {
@@ -48,21 +52,22 @@ class Graph extends React.Component {
     this.renderNodes()
   }
 
-  // componentDidUpdate() {
-  //   this.calculateData()
-  //   // this.calculateHighlights(this.state.selected)
-  //   this.renderLinks()
-  //   this.renderNodes()
-  // }
+  componentDidUpdate () {
+    console.log('componentDidUpdate')
+    this.calculateData()
+    // this.calculateHighlights(this.state.selected)
+    this.renderLinks()
+    this.renderNodes()
+  }
 
   calculateData () {
     // nodes and links are mutated in this function
     // they are given all the extra stuff that d3 needs to render them
     var { nodes, links } = this.props
-    simulation.nodes(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(50))
+    this.simulation.nodes(nodes)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(60))
 
-    times(2000, () => simulation.tick())
+    times(2000, () => this.simulation.tick())
 
     this.nodes = nodes
     this.links = links
@@ -87,6 +92,7 @@ class Graph extends React.Component {
   // }
 
   renderNodes () {
+    // svg elements set based on node properties
     this.nodeElements = this.container.selectAll('g')
       .data(this.nodes, d => d.id)
     // exit
@@ -111,12 +117,15 @@ class Graph extends React.Component {
   }
 
   renderLinks () {
+    // svg elements set based on link properties
     this.linkElements = this.container.selectAll('line')
       .data(this.links, d => d.id)
     // exit
     this.linkElements.exit().remove()
     // enter + update
-    this.linkElements = this.linkElements.enter().insert('line', 'circle')
+    this.linkElements = this.linkElements.enter()
+      .append('line')
+    // .insert('line', 'circle')
       .classed('link', true)
       .merge(this.linkElements)
       .attr('stroke-width', d => 2) // size
@@ -125,7 +134,7 @@ class Graph extends React.Component {
       .attr('x2', d => d.target.x)
       .attr('y1', d => d.source.y)
       .attr('y2', d => d.target.y)
-      .attr('opacity', d => 1)
+      .attr('opacity', d => 0.4)
       // .attr('opacity', d =>
       //   !this.state.selected || this.highlightedLinks[d.key] ? 0.5 : 0.1)
   }
@@ -141,7 +150,7 @@ class Graph extends React.Component {
   render () {
     return (
       <div style={containerStyle}>
-        <svg style={{ backgroundColor: 'pink', height: 600, width: 800 }} ref='container' />
+        <svg style={{ height: 600, width: 800 }} ref='container' />
       </div>
     )
   }
