@@ -144,6 +144,16 @@ class App extends React.Component {
     this.updateGraph()
   }
 
+  componentWillUnmount () {
+    link = null
+    node = null
+    tooltip = null
+    chart = null
+    simulation = null
+    nodes = null
+    links = null
+  }
+
   render() {
     return (
       <div className='container'>
