@@ -52,13 +52,13 @@ class Graph extends React.Component {
     this.renderNodes()
   }
 
-  // componentDidUpdate () {
-  //   console.log('componentDidUpdate')
-  //   this.calculateData()
-  //   // this.calculateHighlights(this.state.selected)
-  //   this.renderLinks()
-  //   this.renderNodes()
-  // }
+  componentDidUpdate () {
+    console.log('componentDidUpdate')
+    this.calculateData()
+    // this.calculateHighlights(this.state.selected)
+    this.renderLinks()
+    this.renderNodes()
+  }
 
   calculateData () {
     // nodes and links are mutated in this function
@@ -94,7 +94,8 @@ class Graph extends React.Component {
   renderNodes () {
     // svg elements set based on node properties
     const { onClickNode } = this.props
-    this.nodeElements = this.container.selectAll('g')
+    // this.nodeElements = this.container.selectAll('g')
+    this.nodeElements = this.container.selectAll('circle')
       .data(this.nodes, d => d.id)
     // exit
     this.nodeElements.exit().remove()
