@@ -30,11 +30,11 @@ class App extends React.Component {
     //Initializing force simulation
     const simulation = d3.forceSimulation()
       .force('link', d3.forceLink())
-      .force('charge', d3.forceManyBody())
+      .force('charge', d3.forceManyBody(-1000))
       .force('collide', d3.forceCollide())
       .force('center', d3.forceCenter(width / 2, height / 2))
-      .force("y", d3.forceY(0))
-      .force("x", d3.forceX(0));
+      // .force("y", d3.forceY(0))
+      // .force("x", d3.forceX(0));
 
 
     //Drag functions
@@ -60,23 +60,22 @@ class App extends React.Component {
       .attr('class', 'links')
       .selectAll('line')
       .data(data.links).enter()
-      .append('line');
+      .append('line')
+      .attr('stroke-width', 2)
+      .attr('stroke', 'black')
+      .attr('opacity', 0.4)
 
     //Creating nodes
-    const node = d3.select('.chart')
+    const node = chart.append('g')
+      .attr('class', 'nodes')
       .selectAll('circle')
       .data(data.nodes).enter()
       .append('circle')
-      .attr('cx', d => d.x)
-      .attr('cy', d => d.y)
-      // .attr('r', d => 10) // size - radius?
-      // .attr('opacity', d => 1)
+      .attr('r', 10)
+      .attr('opacity', 1)
       .attr('stroke', 'black')
       .attr('stroke-width', 2)
       .attr('fill', 'red')
-      .attr('r', d => 10) // size - radius?
-      .attr('opacity', d => 1)
-      // .attr('class', d => {return 'flag flag-' + d.code;})
       .call(d3.drag()
          .on('start', dragStart)
          .on('drag', drag)
@@ -99,15 +98,11 @@ class App extends React.Component {
         .attr("y1", d => { return d.source.y; })
         .attr("x2", d => { return d.target.x; })
         .attr("y2", d => { return d.target.y; })
-        .attr('stroke-width', d => 2) // size
-        .attr('stroke', d => 'black')
 
-    node
-      .attr('cx', d => d.x)
-      .attr('cy', d => d.y)
-      .attr('r', d => 10) // size - radius?
-      .attr('opacity', d => 1)
-    };
+      node
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+      }
 
     //Starting simulation
     simulation.nodes(data.nodes)
@@ -123,11 +118,8 @@ class App extends React.Component {
   render() {
     return (
       <div className='container'>
-        <h1>National Contiguity</h1>
-        <div className='chartContainer'>
-          <svg className='chart'>
-          </svg>
-        </div>
+        <svg className='chart'>
+        </svg>
       </div>
     );
   }
