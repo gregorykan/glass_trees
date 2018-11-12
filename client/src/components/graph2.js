@@ -87,16 +87,16 @@ class Graph extends React.Component {
   // }
 
   renderNodes() {
-    this.circles = this.container.selectAll('g')
+    this.nodeElements = this.container.selectAll('g')
       .data(this.nodes, d => d.id);
     // exit
-    this.circles.exit().remove();
+    this.nodeElements.exit().remove();
     // enter + update
-    this.circles = this.circles.enter().append('g')
+    this.nodeElements = this.nodeElements.enter().append('g')
       .classed('node', true)
-      .merge(this.circles)
+      .merge(this.nodeElements)
 
-    this.circles.append('circle')
+    this.nodeElements.append('circle')
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', d => 10) // size - radius?
@@ -104,21 +104,21 @@ class Graph extends React.Component {
       // .attr('opacity', d =>
       //   !this.state.selected || this.highlightedNodes[d.key] ? 1 : 0.2)
       // .on('click', this.selectNode);
-    this.circles.append('text')
-      .attr("dx", 12)
-      .attr("dy", "2em")
+    this.nodeElements.append('text')
+      .attr('dx', d => d.x - 10)
+      .attr('dy', d => d.y + 20)
       .text(d => d.label)
   }
 
   renderLinks() {
-    this.lines = this.container.selectAll('line')
+    this.linkElements = this.container.selectAll('line')
       .data(this.links, d => d.id);
     // exit
-    this.lines.exit().remove();
+    this.linkElements.exit().remove();
     // enter + update
-    this.lines = this.lines.enter().insert('line', 'circle')
+    this.linkElements = this.linkElements.enter().insert('line', 'circle')
       .classed('link', true)
-      .merge(this.lines)
+      .merge(this.linkElements)
       .attr('stroke-width', d => 2) // size
       .attr('stroke', d => 'black')
       .attr('x1', d => d.source.x)
