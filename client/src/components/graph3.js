@@ -7,7 +7,7 @@ var tooltip = null
 var chart = null
 var simulation = null
 var nodes = null
-var links = null
+var links = []
 
 class App extends React.Component {
   constructor(props) {
