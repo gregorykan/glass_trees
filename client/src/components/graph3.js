@@ -41,8 +41,13 @@ class App extends React.Component {
       .attr("y2", d => { return d.target.y; })
 
     node
-      .attr('cx', d => d.x)
-      .attr('cy', d => d.y)
+      .selectAll('text')
+        .attr('dx', d => d.x - 10)
+        .attr('dy', d => d.y + 20)
+    node
+      .selectAll('circle')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
     }
 
   startGraph = () => {
@@ -61,7 +66,6 @@ class App extends React.Component {
     tooltip = d3.select('.container')
       .append('div')
       .attr('class', 'tooltip')
-      .html('Tooltip');
 
     //Initializing force simulation
     simulation = d3.forceSimulation(nodes)
@@ -80,7 +84,7 @@ class App extends React.Component {
     //Creating nodes
     node = chart.append('g')
       .attr('class', 'nodes')
-      .selectAll('circle')
+      .selectAll('g')
 
     this.updateGraph()
   }
@@ -99,7 +103,11 @@ class App extends React.Component {
     // Updating nodes
     node = node.data(nodes)
     node.exit().remove()
-    node = node.enter().append('circle')
+    node = node.enter()
+      .append('g')
+    node.append('text')
+      .text(d => d.label)
+    node.append('circle')
       .attr('r', 10)
       .attr('opacity', 1)
       .attr('stroke', 'black')
@@ -111,7 +119,7 @@ class App extends React.Component {
          .on('drag', this.drag)
          .on('end', this.dragEnd)
       ).on('mouseover',d => {
-        tooltip.html(d.country)
+        tooltip.html(d.label)
           .style('left', d3.event.pageX + 5 +'px')
           .style('top', d3.event.pageY + 5 + 'px')
           .style('opacity', .9);
