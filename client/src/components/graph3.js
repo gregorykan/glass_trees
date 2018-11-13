@@ -12,7 +12,7 @@ var links = []
 var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
 
-class App extends React.Component {
+class D3ForceGraph extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -172,4 +172,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default D3ForceGraph
