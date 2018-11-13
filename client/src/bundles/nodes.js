@@ -347,8 +347,9 @@ bundle.selectQuestionNodesForCurrentNode = createSelector(
 
 bundle.selectOptionNodesForCurrentNode = createSelector(
   'selectNodesByCurrentNode',
-  (nodes) => {
-    return filter(nodes, node => { return node.node_type === 'option' })
+  'selectCurrentNodeId',
+  (nodes, currentNodeId) => {
+    return filter(nodes, node => { return node.node_type === 'option' && node.id !== currentNodeId })
   }
 )
 //

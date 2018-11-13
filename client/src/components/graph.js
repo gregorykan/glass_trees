@@ -1,5 +1,7 @@
 import React from 'react'
 import { Graph as ReactD3Graph } from 'react-d3-graph'
+import Graph2 from './graph2'
+import Graph3 from './graph3'
 import { isNil, isEmpty, debounce, omit } from 'lodash'
 
 import Node from './node'
@@ -76,12 +78,7 @@ class Graph extends React.Component {
     if (isNil(data) || isEmpty(data.nodes)) return null
 
     return (
-      <ReactD3Graph
-        id='graph-id'
-        data={data}
-        config={this.state.config}
-        onClickNode={handleOnClickNode}
-      />
+      <Graph3 links={data.links} nodes={data.nodes} onClickNode={handleOnClickNode} />
     )
   }
 }
