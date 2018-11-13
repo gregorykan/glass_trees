@@ -9,6 +9,9 @@ var simulation = null
 var nodes = null
 var links = []
 
+var height = 500
+var width = 70 / 100 * Number(window.innerWidth)
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -53,9 +56,6 @@ class App extends React.Component {
   startGraph = () => {
     nodes = this.props.nodes
     links = this.props.links
-
-    const width = 640,
-          height = 480;
 
     //Initializing chart
     chart = d3.select('.chart')
