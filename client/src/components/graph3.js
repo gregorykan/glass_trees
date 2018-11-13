@@ -44,11 +44,11 @@ class D3ForceGraph extends React.Component {
       .attr("y2", d => { return d.target.y; })
 
     node
-      .selectAll('text')
+      .select('text')
         .attr('dx', d => d.x - 10)
         .attr('dy', d => d.y + 20)
     node
-      .selectAll('circle')
+      .select('circle')
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
     }
@@ -84,7 +84,7 @@ class D3ForceGraph extends React.Component {
     //Creating nodes
     node = chart.append('g')
       .attr('class', 'nodes')
-      .selectAll('g')
+      .selectAll('.node')
 
     this.updateGraph()
   }
@@ -103,11 +103,12 @@ class D3ForceGraph extends React.Component {
     // Updating nodes
     node = node.data(nodes)
     node.exit().remove()
-    node = node.enter()
+    var nodeEnter = node.enter()
       .append('g')
-    node.append('text')
+      .attr('class', 'node')
+    nodeEnter.append('text')
       .text(d => d.label)
-    node.append('circle')
+    nodeEnter.append('circle')
       .attr('r', 10)
       .attr('opacity', 1)
       .attr('stroke', 'black')
@@ -128,7 +129,8 @@ class D3ForceGraph extends React.Component {
           .style('left', '0px')
           .style('top', '0px');
       })
-      .merge(node)
+
+    node = node.merge(nodeEnter)
 
     //Starting simulation
     simulation.nodes(nodes)
@@ -149,6 +151,8 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidUpdate () {
+    nodes = this.props.nodes
+    links = this.props.links
     this.updateGraph()
   }
 
