@@ -46,7 +46,7 @@ class D3ForceGraph extends React.Component {
     node
       .select('text')
         .attr('dx', d => d.x - 10)
-        .attr('dy', d => d.y + 20)
+        .attr('dy', d => d.y + 30)
     node
       .select('circle')
         .attr('cx', d => d.x)
@@ -136,7 +136,7 @@ class D3ForceGraph extends React.Component {
     simulation.nodes(nodes)
       .on('tick', this.ticked);
 
-    simulation.force('link', d3.forceLink(links).id(d => d.id).distance(60))
+    simulation.force('link', d3.forceLink(links).id(d => d.id).distance(150))
 
     simulation.alpha(1).restart()
   }
