@@ -8,6 +8,7 @@ var chart = null
 var simulation = null
 var nodes = null
 var links = []
+var linksAndNodesContainer = null
 
 var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
@@ -53,6 +54,10 @@ class D3ForceGraph extends React.Component {
         .attr('cy', d => d.y)
     }
 
+  zoom = () => {
+    linksAndNodesContainer.attr("transform", d3.event.transform)
+  }
+
   startGraph = () => {
     nodes = this.props.nodes
     links = this.props.links
@@ -76,15 +81,21 @@ class D3ForceGraph extends React.Component {
       // .force("y", d3.forceY(0))
       // .force("x", d3.forceX(0));
 
+    linksAndNodesContainer = chart.append('g')
+
     //Creating links
-    link = chart.append('g')
+    link = linksAndNodesContainer.append('g')
       .attr('class', 'links')
       .selectAll('line')
 
     //Creating nodes
-    node = chart.append('g')
+    node = linksAndNodesContainer.append('g')
       .attr('class', 'nodes')
       .selectAll('.node')
+
+    chart.call(d3.zoom()
+      .scaleExtent([1 / 2, 8])
+      .on("zoom", this.zoom));
 
     this.updateGraph()
   }
