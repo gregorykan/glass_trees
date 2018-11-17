@@ -40,8 +40,6 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
 ## issues and limits
 
 - it looks kinda crappy
-- graph struggles to recompute nodes' positions
-- can be laggy because of the poor performance of the graph rendering
 - no proper way to field an outcome for each resolution
 
 ## TODOs and upcoming features
