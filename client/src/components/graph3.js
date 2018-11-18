@@ -14,35 +14,31 @@ var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
 
 class D3ForceGraph extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   //Drag functions
   dragStart = d => {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  };
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+    d.fx = d.x
+    d.fy = d.y
+  }
 
   drag = d => {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-  };
+    d.fx = d3.event.x
+    d.fy = d3.event.y
+  }
 
   dragEnd = d => {
-    if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
+    if (!d3.event.active) simulation.alphaTarget(0)
+    d.fx = null
+    d.fy = null
   }
 
   //Setting location when ticked
   ticked = () => {
     link
-      .attr("x1", d => { return d.source.x; })
-      .attr("y1", d => { return d.source.y; })
-      .attr("x2", d => { return d.target.x; })
-      .attr("y2", d => { return d.target.y; })
+      .attr("x1", d => { return d.source.x })
+      .attr("y1", d => { return d.source.y })
+      .attr("x2", d => { return d.target.x })
+      .attr("y2", d => { return d.target.y })
 
     node
       .select('text')
@@ -65,7 +61,7 @@ class D3ForceGraph extends React.Component {
     //Initializing chart
     chart = d3.select('.chart')
       .attr('width', width)
-      .attr('height', height);
+      .attr('height', height)
 
     //Creating tooltip
     tooltip = d3.select('.container')
@@ -79,8 +75,23 @@ class D3ForceGraph extends React.Component {
       .force('collide', d3.forceCollide())
       .force('center', d3.forceCenter(width / 2, height / 2))
       // .force("y", d3.forceY(0))
-      // .force("x", d3.forceX(0));
+      // .force("x", d3.forceX(0))
 
+    // build the arrow.
+    chart.append("svg:defs").selectAll("marker")
+        .data(["end"])      // Different link/path types can be defined here
+      .enter().append("svg:marker")    // This section adds in the arrows
+        .attr("id", String)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 15)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+      .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5")
+
+    // container for nodes and links
     linksAndNodesContainer = chart.append('g')
 
     //Creating links
@@ -95,7 +106,7 @@ class D3ForceGraph extends React.Component {
 
     chart.call(d3.zoom()
       .scaleExtent([1 / 2, 8])
-      .on("zoom", this.zoom));
+      .on("zoom", this.zoom))
 
     this.updateGraph()
   }
@@ -109,6 +120,7 @@ class D3ForceGraph extends React.Component {
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
+      .attr("marker-end", "url(#end)")
       .merge(link)
 
     // Updating nodes
@@ -134,18 +146,18 @@ class D3ForceGraph extends React.Component {
         tooltip.html(d.label)
           .style('left', d3.event.pageX + 5 +'px')
           .style('top', d3.event.pageY + 5 + 'px')
-          .style('opacity', .9);
+          .style('opacity', .9)
       }).on('mouseout', () => {
         tooltip.style('opacity', 0)
           .style('left', '0px')
-          .style('top', '0px');
+          .style('top', '0px')
       })
 
     node = node.merge(nodeEnter)
 
     //Starting simulation
     simulation.nodes(nodes)
-      .on('tick', this.ticked);
+      .on('tick', this.ticked)
 
     simulation.force('link', d3.forceLink(links).id(d => d.id).distance(150))
 
@@ -183,7 +195,7 @@ class D3ForceGraph extends React.Component {
         <svg className='chart'>
         </svg>
       </div>
-    );
+    )
   }
 }
 
