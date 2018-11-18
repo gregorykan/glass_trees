@@ -1,5 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
+import { map, filter, includes } from 'lodash'
 
 var link = null
 var node = null
@@ -174,8 +175,33 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidUpdate () {
-    nodes = this.props.nodes
-    links = this.props.links
+    // GK: NB: this is an intentional diff and mutation of the arrays of links and nodes
+    // the reason being that if you replace the entire array, the whole graph will re-render
+    // even if you are just adding a single node.
+    // however, if you mutate via pushing, that new node will be appended
+    // but the rest of the graph and its current arrangement stays intact.
+    const currentNodeIds = map(nodes, n => n.id)
+    const nextNodeIds = map(this.props.nodes, n => n.id)
+    const newNodeIds = filter(nextNodeIds, nextNodeId => {
+      return !includes(currentNodeIds, nextNodeId)
+    })
+    const newNodes = filter(this.props.nodes, nextNode => {
+      return includes(newNodeIds, nextNode.id)
+    })
+    const currentLinkIds = map(links, l => l.id)
+    const nextLinkIds = map(this.props.links, l => l.id)
+    const newLinkIds = filter(nextLinkIds, nextLinkId => {
+      return !includes(currentLinkIds, nextLinkId)
+    })
+    const newLinks = filter(this.props.links, nextLink => {
+      return includes(newLinkIds, nextLink.id)
+    })
+    newNodes.forEach(newNode => {
+      nodes.push(newNode)
+    })
+    newLinks.forEach(newLink => {
+      links.push(newLink)
+    })
     this.updateGraph()
   }
 
