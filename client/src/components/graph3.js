@@ -35,10 +35,17 @@ class D3ForceGraph extends React.Component {
   //Setting location when ticked
   ticked = () => {
     link
-      .attr("x1", d => { return d.source.x })
-      .attr("y1", d => { return d.source.y })
-      .attr("x2", d => { return d.target.x })
-      .attr("y2", d => { return d.target.y })
+      .attr("d", d => {
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy)
+        return "M" +
+            d.source.x + "," +
+            d.source.y + "A" +
+            dr + "," + dr + " 0 0,1 " +
+            d.target.x + "," +
+            d.target.y
+      })
 
     node
       .select('text')
@@ -97,7 +104,7 @@ class D3ForceGraph extends React.Component {
     //Creating links
     link = linksAndNodesContainer.append('g')
       .attr('class', 'links')
-      .selectAll('line')
+      .selectAll('path')
 
     //Creating nodes
     node = linksAndNodesContainer.append('g')
@@ -116,7 +123,8 @@ class D3ForceGraph extends React.Component {
     // Updating links
     link = link.data(links)
     link.exit().remove()
-    link = link.enter().append('line')
+    link = link.enter().append('path')
+      .attr('fill', 'none')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
