@@ -332,93 +332,105 @@ bundle.selectNodesByCurrentNode = createSelector(
       return concat(concat(sofar, relatedLink.target_id), relatedLink.source_id)
     }, []))
     return filter(nodes, (node) => {
-      return includes(relatedNodeIds, node.id)
+      return includes(omit(relatedNodeIds, (relatedNodeId) => { return relatedNodeId === currentNodeId }), node.id)
     })
   }
 )
 
-bundle.selectQuestionNodesForCurrentNode = createSelector(
-  'selectNodesByCurrentNode',
-  'selectCurrentNodeId',
-  (nodes, currentNodeId) => {
-    return filter(nodes, node => { return node.node_type === 'question' && node.id !== currentNodeId })
-  }
-)
-
-bundle.selectOptionNodesForCurrentNode = createSelector(
-  'selectNodesByCurrentNode',
-  'selectCurrentNodeId',
-  (nodes, currentNodeId) => {
-    return filter(nodes, node => { return node.node_type === 'option' && node.id !== currentNodeId })
-  }
-)
-//
-// bundle.selectSourceNodesForCurrentNode = createSelector(
-//   'selectNodes',
-//   'selectLinksByCurrentNodeId',
+// bundle.selectQuestionNodesForCurrentNode = createSelector(
+//   'selectNodesByCurrentNode',
 //   'selectCurrentNodeId',
-//   (nodes, relatedLinks, currentNodeId) => {
-//     if (isNil(currentNodeId)) return []
-//     const linksWhereCurrentNodeIsTarget = filter(relatedLinks, (link) => {
-//       return link.target_id === currentNodeId
-//     })
-//     const sourceNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsTarget, (link) => {
-//       return link.source_id
-//     })
-//     return filter(nodes, (node) => {
-//       return includes(sourceNodeIdsForCurrentNode, node.id)
-//     })
-//   }
-// )
-// bundle.selectClarifyingQuestionNodesForCurrentNode = createSelector(
-//   'selectSourceNodesForCurrentNode',
-//   (sourceNodesForCurrentNode) => {
-//     if (isNil(sourceNodesForCurrentNode)) return []
-//     const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
-//       return node.node_type !== 'option'
-//     })
-//     return sourceNodesThatAreQuestions
+//   (nodes, currentNodeId) => {
+//     return filter(nodes, node => { return node.node_type === 'question' })
 //   }
 // )
 //
 // bundle.selectOptionNodesForCurrentNode = createSelector(
-//   'selectSourceNodesForCurrentNode',
-//   (sourceNodesForCurrentNode) => {
-//     if (isNil(sourceNodesForCurrentNode)) return []
-//     const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
-//       return node.node_type === 'option'
-//     })
-//     return sourceNodesThatAreQuestions
-//   }
-// )
-// bundle.selectTargetNodesForCurrentNode = createSelector(
-//   'selectNodes',
-//   'selectLinksByCurrentNodeId',
+//   'selectNodesByCurrentNode',
 //   'selectCurrentNodeId',
-//   (nodes, relatedLinks, currentNodeId) => {
-//     if (isNil(currentNodeId)) return []
-//     const linksWhereCurrentNodeIsSource = filter(relatedLinks, (link) => {
-//       return link.source_id === currentNodeId
-//     })
-//     const targetNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsSource, (link) => {
-//       return link.target_id
-//     })
-//     return filter(nodes, (node) => {
-//       return includes(targetNodeIdsForCurrentNode, node.id)
-//     })
+//   (nodes, currentNodeId) => {
+//     return filter(nodes, node => { return node.node_type === 'option' })
 //   }
 // )
 //
-// bundle.selectFollowUpQuestionNodesForCurrentNode = createSelector(
-//   'selectTargetNodesForCurrentNode',
-//   (targetNodesForCurrentNode) => {
-//     if (isNil(targetNodesForCurrentNode)) return []
-//     const targetNodesThatAreQuestions = filter(targetNodesForCurrentNode, (node) => {
-//       return node.node_type !== 'option'
-//     })
-//     return targetNodesThatAreQuestions
-//   }
-// )
+bundle.selectSourceNodesForCurrentNode = createSelector(
+  'selectNodes',
+  'selectLinksByCurrentNodeId',
+  'selectCurrentNodeId',
+  (nodes, relatedLinks, currentNodeId) => {
+    if (isNil(currentNodeId)) return []
+    const linksWhereCurrentNodeIsTarget = filter(relatedLinks, (link) => {
+      return link.target_id === currentNodeId
+    })
+    const sourceNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsTarget, (link) => {
+      return link.source_id
+    })
+    return filter(nodes, (node) => {
+      return includes(sourceNodeIdsForCurrentNode, node.id)
+    })
+  }
+)
+bundle.selectParentQuestionsForCurrentNode = createSelector(
+  'selectSourceNodesForCurrentNode',
+  (sourceNodesForCurrentNode) => {
+    if (isNil(sourceNodesForCurrentNode)) return []
+    const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
+      return node.node_type !== 'option'
+    })
+    return sourceNodesThatAreQuestions
+  }
+)
+
+bundle.selectParentOptionsForCurrentNode = createSelector(
+  'selectSourceNodesForCurrentNode',
+  (sourceNodesForCurrentNode) => {
+    if (isNil(sourceNodesForCurrentNode)) return []
+    const sourceNodesThatAreQuestions = filter(sourceNodesForCurrentNode, (node) => {
+      return node.node_type === 'option'
+    })
+    return sourceNodesThatAreQuestions
+  }
+)
+
+bundle.selectTargetNodesForCurrentNode = createSelector(
+  'selectNodes',
+  'selectLinksByCurrentNodeId',
+  'selectCurrentNodeId',
+  (nodes, relatedLinks, currentNodeId) => {
+    if (isNil(currentNodeId)) return []
+    const linksWhereCurrentNodeIsSource = filter(relatedLinks, (link) => {
+      return link.source_id === currentNodeId
+    })
+    const targetNodeIdsForCurrentNode = map(linksWhereCurrentNodeIsSource, (link) => {
+      return link.target_id
+    })
+    return filter(nodes, (node) => {
+      return includes(targetNodeIdsForCurrentNode, node.id)
+    })
+  }
+)
+
+bundle.selectChildQuestionsForCurrentNode = createSelector(
+  'selectTargetNodesForCurrentNode',
+  (targetNodesForCurrentNode) => {
+    if (isNil(targetNodesForCurrentNode)) return []
+    const targetNodesThatAreQuestions = filter(targetNodesForCurrentNode, (node) => {
+      return node.node_type !== 'option'
+    })
+    return targetNodesThatAreQuestions
+  }
+)
+
+bundle.selectChildOptionsForCurrentNode = createSelector(
+  'selectTargetNodesForCurrentNode',
+  (targetNodesForCurrentNode) => {
+    if (isNil(targetNodesForCurrentNode)) return []
+    const targetNodesThatAreQuestions = filter(targetNodesForCurrentNode, (node) => {
+      return node.node_type !== 'question'
+    })
+    return targetNodesThatAreQuestions
+  }
+)
 
 bundle.selectNodeFormData = (state) => state.nodes.nodeFormData
 bundle.selectNodeTypeToBeCreated = (state) => state.nodes.nodeTypeToBeCreated

@@ -62,6 +62,7 @@ bundle.selectLinksForRendering = createSelector(
     const linksToRender = filter(rawLinks, (rawLink) => { return rawLink.workspace_id === workspaceId })
     return map(linksToRender, (rawLink) => {
       return {
+        id: rawLink.id,
         source: rawLink.source_id,
         target: rawLink.target_id
       }

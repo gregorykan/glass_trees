@@ -5,7 +5,7 @@ class Node < ApplicationRecord
   has_many :precedent_questions, -> { where node_type: 'question' }, through: :source_links, source: :source
   has_many :consequent_questions, -> { where node_type: 'question' }, through: :target_links, source: :target
 
-  has_many :options, -> { where node_type: 'option' }, through: :source_links, source: :source
+  has_many :options, -> { where node_type: 'option' }, through: :target_links, source: :target
 
   belongs_to :workspace
   belongs_to :user
