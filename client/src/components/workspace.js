@@ -72,10 +72,12 @@ class WorkspaceComponent extends React.Component {
       doUnresolveNode,
       currentUser,
       doVoteForNode,
-      questionNodesForCurrentNode,
-      optionNodesForCurrentNode,
       doSetNodeToHighlight,
-      nodeToHighlight
+      nodeToHighlight,
+      parentQuestionsForCurrentNode,
+      parentOptionsForCurrentNode,
+      childQuestionsForCurrentNode,
+      childOptionsForCurrentNode
     } = this.props
 
     const data = {
@@ -140,9 +142,11 @@ class WorkspaceComponent extends React.Component {
             nodeTypeToBeCreated={nodeTypeToBeCreated}
             cancelSingleNodeView={cancelSingleNodeView}
             doVoteForNode={doVoteForNode}
-            questionNodesForCurrentNode={questionNodesForCurrentNode}
-            optionNodesForCurrentNode={optionNodesForCurrentNode}
             doSelectNode={doSelectNode}
+            parentQuestionsForCurrentNode={parentQuestionsForCurrentNode}
+            parentOptionsForCurrentNode={parentOptionsForCurrentNode}
+            childQuestionsForCurrentNode={childQuestionsForCurrentNode}
+            childOptionsForCurrentNode={childOptionsForCurrentNode}
           />
         </div>
         <div style={{ float:"left", clear: "both" }}

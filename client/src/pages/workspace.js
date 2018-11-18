@@ -25,10 +25,12 @@ const Workspace = (props) => {
     doUnresolveNode,
     currentUser,
     doVoteForNode,
-    questionNodesForCurrentNode,
-    optionNodesForCurrentNode,
     doSetNodeToHighlight,
-    nodeToHighlight
+    nodeToHighlight,
+    parentQuestionsForCurrentNode,
+    parentOptionsForCurrentNode,
+    childQuestionsForCurrentNode,
+    childOptionsForCurrentNode
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -52,10 +54,12 @@ const Workspace = (props) => {
       doUnresolveNode={doUnresolveNode}
       currentUser={currentUser}
       doVoteForNode={doVoteForNode}
-      questionNodesForCurrentNode={questionNodesForCurrentNode}
-      optionNodesForCurrentNode={optionNodesForCurrentNode}
       doSetNodeToHighlight={doSetNodeToHighlight}
       nodeToHighlight={nodeToHighlight}
+      parentQuestionsForCurrentNode={parentQuestionsForCurrentNode}
+      parentOptionsForCurrentNode={parentOptionsForCurrentNode}
+      childQuestionsForCurrentNode={childQuestionsForCurrentNode}
+      childOptionsForCurrentNode={childOptionsForCurrentNode}
     />
   )
 }
@@ -80,9 +84,11 @@ export default connect(
   'doUnresolveNode',
   'selectCurrentUser',
   'doVoteForNode',
-  'selectQuestionNodesForCurrentNode',
-  'selectOptionNodesForCurrentNode',
   'doSetNodeToHighlight',
   'selectNodeToHighlight',
+  'selectParentQuestionsForCurrentNode',
+  'selectParentOptionsForCurrentNode',
+  'selectChildQuestionsForCurrentNode',
+  'selectChildOptionsForCurrentNode',
   Workspace
 )

@@ -112,9 +112,11 @@ const NodeDetails = (props) => {
     doUnresolveNode,
     cancelSingleNodeView,
     doVoteForNode,
-    questionNodesForCurrentNode,
-    optionNodesForCurrentNode,
-    doSelectNode
+    doSelectNode,
+    parentQuestionsForCurrentNode,
+    parentOptionsForCurrentNode,
+    childQuestionsForCurrentNode,
+    childOptionsForCurrentNode
   } = props
 
   if (isNil(currentNode)) return null
@@ -192,36 +194,72 @@ const NodeDetails = (props) => {
     doVoteForNode(formData)
   }
 
-  const renderOptions = () => {
-    if (isEmpty(optionNodesForCurrentNode)) return null
+  const renderChildOptions = () => {
+    if (isEmpty(childOptionsForCurrentNode)) return null
     return (
       <div style={optionsContainerStyle}>
-        <h4>Options</h4>
-        { renderOptionsList() }
+        <h4>Child Options</h4>
+        { renderChildOptionsList() }
       </div>
     )
   }
 
-  const renderOptionsList = () => {
-    return map(optionNodesForCurrentNode, (option) => {
+  const renderChildOptionsList = () => {
+    return map(childOptionsForCurrentNode, (option) => {
       return (
         <div key={option.id} onClick={() => { doSelectNode(option.id) }}>{option.label}</div>
       )
     })
   }
 
-  const renderQuestions = () => {
-    if (isEmpty(questionNodesForCurrentNode)) return null
+  const renderChildQuestions = () => {
+    if (isEmpty(childQuestionsForCurrentNode)) return null
     return (
       <div style={questionsContainerStyle}>
-        <h4>Questions</h4>
-        { renderQuestionsList() }
+        <h4>Child Questions</h4>
+        { renderChildQuestionsList() }
       </div>
     )
   }
 
-  const renderQuestionsList = () => {
-    return map(questionNodesForCurrentNode, (question) => {
+  const renderChildQuestionsList = () => {
+    return map(childQuestionsForCurrentNode, (question) => {
+      return (
+        <div key={question.id} onClick={() => { doSelectNode(question.id) }}>{question.label}</div>
+      )
+    })
+  }
+
+  const renderParentQuestions = () => {
+    if (isEmpty(parentQuestionsForCurrentNode)) return null
+    return (
+      <div style={questionsContainerStyle}>
+        <h4>Parent Questions</h4>
+        { renderParentQuestionsList() }
+      </div>
+    )
+  }
+
+  const renderParentQuestionsList = () => {
+    return map(parentQuestionsForCurrentNode, (question) => {
+      return (
+        <div key={question.id} onClick={() => { doSelectNode(question.id) }}>{question.label}</div>
+      )
+    })
+  }
+
+  const renderParentOptions = () => {
+    if (isEmpty(parentOptionsForCurrentNode)) return null
+    return (
+      <div style={questionsContainerStyle}>
+        <h4>Parent Options</h4>
+        { renderParentOptionsList() }
+      </div>
+    )
+  }
+
+  const renderParentOptionsList = () => {
+    return map(parentOptionsForCurrentNode, (question) => {
       return (
         <div key={question.id} onClick={() => { doSelectNode(question.id) }}>{question.label}</div>
       )
@@ -259,13 +297,15 @@ const NodeDetails = (props) => {
       </div>
       <div style={bodyContainerStyle}>
         <div style={actionsContainerStyle}>
-          {renderNodeCreationForm()}
-          {renderAdditionalActionsForQuestionNode()}
-          {renderActions()}
+          { renderNodeCreationForm() }
+          { renderAdditionalActionsForQuestionNode() }
+          { renderActions() }
         </div>
         <div style={nodeDetailsContainerStyle}>
-          { renderOptions() }
-          { renderQuestions() }
+          { renderParentOptions() }
+          { renderParentQuestions() }
+          { renderChildOptions() }
+          { renderChildQuestions() }
         </div>
       </div>
     </div>
