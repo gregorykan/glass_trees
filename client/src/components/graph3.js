@@ -70,13 +70,10 @@ class D3ForceGraph extends React.Component {
       .attr('class', 'tooltip')
 
     //Initializing force simulation
-    simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink())
+    simulation = d3.forceSimulation()
       .force('charge', d3.forceManyBody(-1000))
       .force('collide', d3.forceCollide())
       .force('center', d3.forceCenter(width / 2, height / 2))
-      // .force("y", d3.forceY(0))
-      // .force("x", d3.forceX(0))
 
     // build the arrow.
     chart.append("svg:defs").selectAll("marker")
@@ -106,7 +103,7 @@ class D3ForceGraph extends React.Component {
       .selectAll('.node')
 
     chart.call(d3.zoom()
-      .scaleExtent([1 / 2, 8])
+      .scaleExtent([0.1, 8])
       .on("zoom", this.zoom))
 
     this.updateGraph()
@@ -160,9 +157,10 @@ class D3ForceGraph extends React.Component {
     simulation.nodes(nodes)
       .on('tick', this.ticked)
 
-    simulation.force('link', d3.forceLink(links).id(d => d.id).distance(150))
+    simulation
+      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(1))
 
-    simulation.alpha(1).restart()
+    simulation.alphaTarget(1).restart()
   }
 
   componentDidMount() {
