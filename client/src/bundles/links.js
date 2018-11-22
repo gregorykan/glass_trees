@@ -75,8 +75,34 @@ bundle.selectLinksByCurrentNodeId = createSelector(
   (currentNodeId, links) => {
     if (isNil(currentNodeId)) return links
     return filter(links, (link) => {
+      return link.source_id === currentNodeId
+    })
+  }
+)
+
+bundle.selectAllLinksByCurrentNodeId = createSelector(
+  'selectCurrentNodeId',
+  'selectLinks',
+  (currentNodeId, links) => {
+    if (isNil(currentNodeId)) return links
+    return filter(links, (link) => {
       return link.source_id === currentNodeId || link.target_id === currentNodeId
     })
+  }
+)
+
+bundle.selectLinkIdsToHighlight = createSelector(
+  'selectLinksByCurrentNodeId',
+  (links) => {
+    return map(links, l => l.id)
+  }
+)
+
+bundle.selectNodeIdsToHighlight = createSelector(
+  'selectLinksByCurrentNodeId',
+  'selectCurrentNodeId',
+  (links, currentNodeId) => {
+    return concat(map(links, l => l.target_id), [currentNodeId])
   }
 )
 

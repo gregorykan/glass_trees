@@ -319,7 +319,7 @@ bundle.selectNodesByCurrentNode = createSelector(
 
 bundle.selectSourceNodesForCurrentNode = createSelector(
   'selectNodes',
-  'selectLinksByCurrentNodeId',
+  'selectAllLinksByCurrentNodeId',
   'selectCurrentNodeId',
   (nodes, relatedLinks, currentNodeId) => {
     if (isNil(currentNodeId)) return []
@@ -358,7 +358,7 @@ bundle.selectParentOptionsForCurrentNode = createSelector(
 
 bundle.selectTargetNodesForCurrentNode = createSelector(
   'selectNodes',
-  'selectLinksByCurrentNodeId',
+  'selectAllLinksByCurrentNodeId',
   'selectCurrentNodeId',
   (nodes, relatedLinks, currentNodeId) => {
     if (isNil(currentNodeId)) return []

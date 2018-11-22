@@ -7,7 +7,8 @@ class Graph extends React.Component {
     const {
       data,
       onClickNode,
-      nodesByCurrentNode
+      linkIdsToHighlight,
+      nodeIdsToHighlight
     } = this.props
 
     const handleOnClickNode = (nodeId) => {
@@ -17,7 +18,13 @@ class Graph extends React.Component {
     if (isNil(data) || isEmpty(data.nodes)) return null
 
     return (
-      <Graph3 links={data.links} nodes={data.nodes} nodesByCurrentNode={nodesByCurrentNode} onClickNode={handleOnClickNode} />
+      <Graph3
+        links={data.links}
+        nodes={data.nodes}
+        onClickNode={handleOnClickNode}
+        linkIdsToHighlight={linkIdsToHighlight}
+        nodeIdsToHighlight={nodeIdsToHighlight}
+      />
     )
   }
 }

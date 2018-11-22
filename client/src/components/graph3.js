@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes } from 'lodash'
+import { map, filter, includes, concat } from 'lodash'
 
 var link = null
 var node = null
@@ -117,7 +117,7 @@ class D3ForceGraph extends React.Component {
     link = link.enter().append('line')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
-      .attr('opacity', 0.4)
+      .attr('opacity', 0.6)
       .attr("marker-end", "url(#end)")
       .merge(link)
 
@@ -172,6 +172,13 @@ class D3ForceGraph extends React.Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.nodes.length !== this.props.nodes.length) return true
+    node
+      .select('circle')
+      .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke-width', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 4 : 2)
+    link
+      .attr('stroke', d => includes(nextProps.linkIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke-width', d => includes(nextProps.linkIdsToHighlight, d.id) ? 4 : 2)
     return false
   }
 
