@@ -42,7 +42,7 @@ class D3ForceGraph extends React.Component {
       .attr("y2", d => { return d.target.y })
 
     node
-      .select('text')
+      .select('.label')
         .attr('dx', d => d.x - 10)
         .attr('dy', d => d.y + 30)
     node
@@ -129,12 +129,15 @@ class D3ForceGraph extends React.Component {
       .attr('class', 'node')
     nodeEnter.append('text')
       .text(d => d.label)
-    nodeEnter.append('circle')
+      .attr('class', 'label')
+    nodeEnter
+      .append('circle')
       .attr('r', 10)
       .attr('opacity', 1)
       .attr('stroke', 'black')
       .attr('stroke-width', 2)
       .attr('fill', 'red')
+      .attr('fill', d => d.nodeType === 'question' ? 'red' : 'yellow')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
@@ -158,7 +161,7 @@ class D3ForceGraph extends React.Component {
       .on('tick', this.ticked)
 
     simulation
-      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(1))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(0.4))
 
     simulation.alphaTarget(1).restart()
   }
