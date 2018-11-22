@@ -72,12 +72,11 @@ class WorkspaceComponent extends React.Component {
       doUnresolveNode,
       currentUser,
       doVoteForNode,
-      doSetNodeToHighlight,
-      nodeToHighlight,
       parentQuestionsForCurrentNode,
       parentOptionsForCurrentNode,
       childQuestionsForCurrentNode,
-      childOptionsForCurrentNode
+      childOptionsForCurrentNode,
+      nodesByCurrentNode
     } = this.props
 
     const data = {
@@ -124,7 +123,7 @@ class WorkspaceComponent extends React.Component {
             doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
             currentUser={currentUser}
             workspace={workspace}
-            doSetNodeToHighlight={doSetNodeToHighlight}
+            nodesByCurrentNode={nodesByCurrentNode}
           />
         </div>
         <div style={nodeDetailsContainerStyle}>
