@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes } from 'lodash'
+import { map, filter, includes, concat } from 'lodash'
 
 var link = null
 var node = null
@@ -42,7 +42,7 @@ class D3ForceGraph extends React.Component {
       .attr("y2", d => { return d.target.y })
 
     node
-      .select('text')
+      .select('.label')
         .attr('dx', d => d.x - 10)
         .attr('dy', d => d.y + 30)
     node
@@ -117,7 +117,7 @@ class D3ForceGraph extends React.Component {
     link = link.enter().append('line')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
-      .attr('opacity', 0.4)
+      .attr('opacity', 0.6)
       .attr("marker-end", "url(#end)")
       .merge(link)
 
@@ -129,12 +129,15 @@ class D3ForceGraph extends React.Component {
       .attr('class', 'node')
     nodeEnter.append('text')
       .text(d => d.label)
-    nodeEnter.append('circle')
+      .attr('class', 'label')
+    nodeEnter
+      .append('circle')
       .attr('r', 10)
       .attr('opacity', 1)
       .attr('stroke', 'black')
       .attr('stroke-width', 2)
       .attr('fill', 'red')
+      .attr('fill', d => d.nodeType === 'question' ? 'red' : 'yellow')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
@@ -158,7 +161,7 @@ class D3ForceGraph extends React.Component {
       .on('tick', this.ticked)
 
     simulation
-      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(1))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(0.4))
 
     simulation.alphaTarget(1).restart()
   }
@@ -169,6 +172,13 @@ class D3ForceGraph extends React.Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.nodes.length !== this.props.nodes.length) return true
+    node
+      .select('circle')
+      .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke-width', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 4 : 2)
+    link
+      .attr('stroke', d => includes(nextProps.linkIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke-width', d => includes(nextProps.linkIdsToHighlight, d.id) ? 4 : 2)
     return false
   }
 
