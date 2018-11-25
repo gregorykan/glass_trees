@@ -132,12 +132,12 @@ class D3ForceGraph extends React.Component {
       .attr('class', 'label')
     nodeEnter
       .append('circle')
-      .attr('r', 10)
+      .attr('r', d => d.nodeType === 'question' ? 15 : 10)
       .attr('opacity', 1)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 2)
+      // .attr('stroke', 'black')
+      // .attr('stroke-width', 2)
       .attr('fill', 'red')
-      .attr('fill', d => d.nodeType === 'question' ? 'red' : 'yellow')
+      .attr('fill', d => d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
@@ -174,7 +174,7 @@ class D3ForceGraph extends React.Component {
     if (nextProps.nodes.length !== this.props.nodes.length) return true
     node
       .select('circle')
-      .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'none')
       .attr('stroke-width', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 4 : 2)
     link
       .attr('stroke', d => includes(nextProps.linkIdsToHighlight, d.id) ? 'blue' : 'black')
