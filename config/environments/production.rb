@@ -43,8 +43,8 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://glasstrees.herokuapp.com/cable/'
-  config.action_cable.allowed_request_origins = [ 'https://distracted-nightingale-a8cec1.netlify.com' ]
+  config.action_cable.url = ENV['ACTION_CABLE_URL']
+  config.action_cable.allowed_request_origins = [ ENV['CLIENT_URL'] ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -70,7 +70,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     :user_name => ENV['SENDGRID_USERNAME'],
     :password => ENV['SENDGRID_PASSWORD'],
-    :domain => 'glasstrees.herokuapp.com',
+    :domain =>ENV['HOST_URL'],
     :address => 'smtp.sendgrid.net',
     :port => 587,
     :authentication => :plain,
