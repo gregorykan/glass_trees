@@ -172,6 +172,7 @@ class D3ForceGraph extends React.Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.nodes.length !== this.props.nodes.length) return true
+    const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     node
       .select('circle')
       .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'none')
