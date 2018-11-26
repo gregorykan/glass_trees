@@ -108,6 +108,10 @@ GEM
     devise_token_auth (1.0.0)
       devise (> 3.5.2, < 4.6)
       rails (>= 4.2.0, < 6)
+    dotenv (2.5.0)
+    dotenv-rails (2.5.0)
+      dotenv (= 2.5.0)
+      railties (>= 3.2, < 6.0)
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
@@ -282,6 +286,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise_invitable (~> 1.7.0)
   devise_token_auth
+  dotenv-rails
   jbuilder (~> 2.5)
   letter_opener
   listen (>= 3.0.5, < 3.2)
