@@ -173,13 +173,14 @@ class D3ForceGraph extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.nodes.length !== this.props.nodes.length) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
+    const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
     node
       .select('circle')
-      .attr('stroke', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 'blue' : 'none')
-      .attr('stroke-width', d => includes(nextProps.nodeIdsToHighlight, d.id) ? 4 : 2)
+      .attr('stroke', d => includes(nodeIdsToHighlight, d.id) ? 'blue' : 'none')
+      .attr('stroke-width', d => includes(nodeIdsToHighlight, d.id) ? 4 : 2)
     link
-      .attr('stroke', d => includes(nextProps.linkIdsToHighlight, d.id) ? 'blue' : 'black')
-      .attr('stroke-width', d => includes(nextProps.linkIdsToHighlight, d.id) ? 4 : 2)
+      .attr('stroke', d => includes(linkIdsToHighlight, d.id) ? 'blue' : 'black')
+      .attr('stroke-width', d => includes(linkIdsToHighlight, d.id) ? 4 : 2)
     return false
   }
 
