@@ -117,7 +117,7 @@ class D3ForceGraph extends React.Component {
     link = link.enter().append('line')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
-      .attr('opacity', 0.6)
+      .attr('opacity', 0.4)
       .attr("marker-end", "url(#end)")
       .merge(link)
 
