@@ -72,7 +72,7 @@ class D3ForceGraph extends React.Component {
     //Initializing force simulation
     simulation = d3.forceSimulation()
       .force('charge', d3.forceManyBody(-1000))
-      .force('collide', d3.forceCollide())
+      // .force('collide', d3.forceCollide())
       .force('center', d3.forceCenter(width / 2, height / 2))
 
     // build the arrow.
