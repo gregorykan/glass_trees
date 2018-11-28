@@ -161,7 +161,7 @@ class D3ForceGraph extends React.Component {
       .on('tick', this.ticked)
 
     simulation
-      .force('link', d3.forceLink(links).id(d => d.id).distance(150).strength(1))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(80).strength(1))
 
     simulation.alphaTarget(1).restart()
   }
