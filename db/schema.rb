@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_29_020311) do
+ActiveRecord::Schema.define(version: 2018_11_29_044245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 2018_10_29_020311) do
     t.boolean "resolved"
     t.integer "workspace_id"
     t.integer "user_id"
+    t.string "resolution_label"
+    t.text "resolution_description"
     t.index ["user_id"], name: "index_nodes_on_user_id"
     t.index ["workspace_id"], name: "index_nodes_on_workspace_id"
   end
