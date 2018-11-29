@@ -52,6 +52,12 @@ bundle.reducer = (state = initialState, action) => {
       newLinkIds: concat(state.newLinkIds, map(newLinks, 'id'))
     }
   }
+  if (action.type === 'CLEAR_NEW_LINK_IDS') {
+    return {
+      ...state,
+      newLinkIds: []
+    }
+  }
   if (action.type === 'SIGN_OUT_SUCCESS') {
     return initialState
   }
@@ -59,6 +65,7 @@ bundle.reducer = (state = initialState, action) => {
 }
 
 bundle.selectLinks = (state) => state.links.data
+bundle.selectNewLinkIds = (state) => state.links.newLinkIds
 bundle.selectLinksForRendering = createSelector(
   'selectLinks',
   'selectThisWorkspaceId',
@@ -111,6 +118,10 @@ bundle.selectNodeIdsToHighlight = createSelector(
     return concat(map(links, l => l.target_id), [currentNodeId])
   }
 )
+
+bundle.doClearNewLinkIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_NEW_LINK_IDS' })
+}
 
 bundle.reactLinksFetch = createSelector(
   'selectLinksShouldUpdate',

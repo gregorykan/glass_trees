@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes, concat } from 'lodash'
+import { map, filter, includes, concat, isEmpty } from 'lodash'
 
 var link = null
 var node = null
@@ -134,9 +134,8 @@ class D3ForceGraph extends React.Component {
       .append('circle')
       .attr('r', d => d.nodeType === 'question' ? 15 : 10)
       .attr('opacity', 1)
-      // .attr('stroke', 'black')
-      // .attr('stroke-width', 2)
-      .attr('fill', 'red')
+      .attr('stroke', 'black')
+      .attr('stroke-width', 1)
       .attr('fill', d => d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
@@ -171,7 +170,7 @@ class D3ForceGraph extends React.Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.nodes.length !== this.props.nodes.length) return true
+    if (nextProps.newNodeIds.length > 0 && this.props.newNodeIds.length === 0) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
     node
@@ -185,23 +184,26 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidUpdate () {
-    // GK: NB: this is an intentional diff and mutation of the arrays of links and nodes
-    // the reason being that if you replace the entire array, the whole graph will re-render
-    // even if you are just adding a single node.
-    // however, if you mutate via pushing, that new node will be appended
-    // but the rest of the graph and its current arrangement stays intact.
-    const currentNodeIds = map(nodes, n => n.id)
-    const nextNodeIds = map(this.props.nodes, n => n.id)
-    const newNodeIds = filter(nextNodeIds, nextNodeId => {
-      return !includes(currentNodeIds, nextNodeId)
-    })
+    const {
+      newNodeIds,
+      doClearNewNodeIds,
+      doClearNewLinkIds
+    } = this.props
+    if (!isEmpty(newNodeIds)) {
+      this.pushNewNodesAndLinks()
+    }
+    this.updateGraph()
+    doClearNewNodeIds()
+    doClearNewLinkIds()
+  }
+
+  pushNewNodesAndLinks = () => {
+    const {
+      newNodeIds,
+      newLinkIds,
+    } = this.props
     const newNodes = filter(this.props.nodes, nextNode => {
       return includes(newNodeIds, nextNode.id)
-    })
-    const currentLinkIds = map(links, l => l.id)
-    const nextLinkIds = map(this.props.links, l => l.id)
-    const newLinkIds = filter(nextLinkIds, nextLinkId => {
-      return !includes(currentLinkIds, nextLinkId)
     })
     const newLinks = filter(this.props.links, nextLink => {
       return includes(newLinkIds, nextLink.id)
@@ -212,7 +214,6 @@ class D3ForceGraph extends React.Component {
     newLinks.forEach(newLink => {
       links.push(newLink)
     })
-    this.updateGraph()
   }
 
   componentWillUnmount () {

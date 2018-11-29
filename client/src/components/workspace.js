@@ -77,7 +77,13 @@ class WorkspaceComponent extends React.Component {
       childQuestionsForCurrentNode,
       childOptionsForCurrentNode,
       linkIdsToHighlight,
-      nodeIdsToHighlight
+      nodeIdsToHighlight,
+      newNodeIds,
+      updatedNodeIds,
+      newLinkIds,
+      doClearNewNodeIds,
+      doClearUpdatedNodeIds,
+      doClearNewLinkIds
     } = this.props
 
     const data = {
@@ -122,6 +128,12 @@ class WorkspaceComponent extends React.Component {
             currentNode={currentNode}
             linkIdsToHighlight={linkIdsToHighlight}
             nodeIdsToHighlight={nodeIdsToHighlight}
+            newNodeIds={newNodeIds}
+            updatedNodeIds={updatedNodeIds}
+            newLinkIds={newLinkIds}
+            doClearNewNodeIds={doClearNewNodeIds}
+            doClearUpdatedNodeIds={doClearUpdatedNodeIds}
+            doClearNewLinkIds={doClearNewLinkIds}
           />
         </div>
         <div style={nodeDetailsContainerStyle}>

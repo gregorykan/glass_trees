@@ -130,6 +130,18 @@ bundle.reducer = (state = initialState, action) => {
       data: concat(state.data, [action.payload.node])
     }
   }
+  if (action.type === 'CLEAR_NEW_NODE_IDS') {
+    return {
+      ...state,
+      newNodeIds: []
+    }
+  }
+  if (action.type === 'CLEAR_UPDATED_NODE_IDS') {
+    return {
+      ...state,
+      updatedNodeIds: []
+    }
+  }
   if (action.type === 'SIGN_OUT_SUCCESS') {
     return initialState
   }
@@ -150,6 +162,14 @@ bundle.doUpdateNodeFormDataDescription = (description) => ({ dispatch }) => {
 
 bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_NODE_TYPE_TO_BE_CREATED', payload: type })
+}
+
+bundle.doClearNewNodeIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_NEW_NODE_IDS' })
+}
+
+bundle.doClearUpdatedNodeIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_UPDATED_NODE_IDS' })
 }
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
@@ -284,6 +304,8 @@ bundle.doVoteForNodeSuccess = (node) => ({ dispatch }) => {
 }
 
 bundle.selectNodes = (state) => state.nodes.data
+bundle.selectNewNodeIds = (state) => state.nodes.newNodeIds
+bundle.selectUpdatedNodeIds = (state) => state.nodes.updatedNodeIds
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
   'selectThisWorkspaceId',
