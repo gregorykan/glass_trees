@@ -107,6 +107,7 @@ bundle.selectNodeIdsToHighlight = createSelector(
   'selectLinksByCurrentNodeId',
   'selectCurrentNodeId',
   (links, currentNodeId) => {
+    if (isNil(currentNodeId)) return null
     return concat(map(links, l => l.target_id), [currentNodeId])
   }
 )
