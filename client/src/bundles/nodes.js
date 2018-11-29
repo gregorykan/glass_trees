@@ -31,6 +31,9 @@ const initialState = {
   currentNodeId: null,
   nodeFormData: {},
   nodeTypeToBeCreated: '',
+  updatedNodeIds: [],
+  removedNodeIds: [],
+  newNodeIds: [],
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -74,7 +77,8 @@ bundle.reducer = (state = initialState, action) => {
       ...state,
       nodeFormData: {},
       data: concat(state.data, action.payload),
-      nodeTypeToBeCreated: null
+      nodeTypeToBeCreated: null,
+      newNodeIds: concat(state.newNodeIds, [ action.payload.id ])
     }
   }
   if (action.type === 'CREATE_FIRST_NODE_SUCCESS') {
@@ -98,7 +102,8 @@ bundle.reducer = (state = initialState, action) => {
     const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes),
+      updatedNodeIds: concat(state.updatedNodeIds, allUpdatedNodeIds)
     }
   }
   if (action.type === 'UNRESOLVE_NODE_SUCCESS') {
@@ -108,13 +113,15 @@ bundle.reducer = (state = initialState, action) => {
     const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes),
+      updatedNodeIds: concat(state.updatedNodeIds, allUpdatedNodeIds)
     }
   }
   if (action.type === 'VOTE_NODE_SUCCESS') {
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload)
+      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload),
+      updatedNodeIds: concat(state.updatedNodeIds, [ action.payload.id ])
     }
   }
   if (action.type === 'CREATE_WORKSPACE_SUCCESS') {

@@ -28,6 +28,9 @@ const bundle = createAsyncResourceBundle({
 })
 
 const initialState = {
+  updatedLinkIds: [],
+  removedLinkIds: [],
+  newLinkIds: [],
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -42,9 +45,11 @@ const initialState = {
 const baseReducer = bundle.reducer
 bundle.reducer = (state = initialState, action) => {
   if (action.type === 'CREATE_NODE_SUCCESS') {
+    const newLinks = concat(state.data, concat(action.payload.source_links, action.payload.target_links))
     return {
       ...state,
-      data: concat(state.data, concat(action.payload.source_links, action.payload.target_links))
+      data: newLinks,
+      newLinkIds: concat(state.newLinkIds, map(newLinks, 'id'))
     }
   }
   if (action.type === 'SIGN_OUT_SUCCESS') {
