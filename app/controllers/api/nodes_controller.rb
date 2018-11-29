@@ -70,8 +70,7 @@ class Api::NodesController < ApiController
       return
     end
     @node.resolved = true
-    @node.save!
-    # @node.options.update_all(resolved: true)
+    @node.update(resolve_node_params)
     if @node.errors.empty?
       # render json: @node, serializer: NodeWithOptionsSerializer
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
@@ -141,6 +140,10 @@ class Api::NodesController < ApiController
 
   private
 
+  def resolve_node_params
+    node_params.slice(:resolution_label, :resolution_description)
+  end
+
   def create_vote_params
     node_params.slice(:current_node_id, :user_id, :is_upvote)
   end
@@ -150,7 +153,7 @@ class Api::NodesController < ApiController
   end
 
   def node_params
-    params.permit(:node_type, :label, :description, :current_node_id, :node_type, :workspace_id, :user_id, :is_upvote)
+    params.permit(:node_type, :label, :description, :current_node_id, :node_type, :workspace_id, :user_id, :is_upvote, :resolution_label, :resolution_description)
   end
 
   def set_node
