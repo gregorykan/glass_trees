@@ -31,6 +31,9 @@ const initialState = {
   currentNodeId: null,
   nodeFormData: {},
   nodeTypeToBeCreated: '',
+  updatedNodeIds: [],
+  removedNodeIds: [],
+  newNodeIds: [],
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -74,7 +77,8 @@ bundle.reducer = (state = initialState, action) => {
       ...state,
       nodeFormData: {},
       data: concat(state.data, action.payload),
-      nodeTypeToBeCreated: null
+      nodeTypeToBeCreated: null,
+      newNodeIds: concat(state.newNodeIds, [ action.payload.id ])
     }
   }
   if (action.type === 'CREATE_FIRST_NODE_SUCCESS') {
@@ -93,34 +97,51 @@ bundle.reducer = (state = initialState, action) => {
   }
   if (action.type === 'RESOLVE_NODE_SUCCESS') {
     const updatedNode = action.payload
-    const updatedOptions = updatedNode.options
-    const allUpdatedNodes = concat([updatedNode], updatedOptions)
-    const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
+    // const updatedOptions = updatedNode.options
+    // const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    // const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+      data: concat(filter(state.data, (node) => { return node.id !== updatedNode.id }), [updatedNode]),
+      updatedNodeIds: concat(state.updatedNodeIds, [updatedNode.id]),
+      nodeFormData: null,
+      nodeTypeToBeCreated: null
     }
   }
   if (action.type === 'UNRESOLVE_NODE_SUCCESS') {
     const updatedNode = action.payload
-    const updatedOptions = updatedNode.options
-    const allUpdatedNodes = concat([updatedNode], updatedOptions)
-    const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
+    // const updatedOptions = updatedNode.options
+    // const allUpdatedNodes = concat([updatedNode], updatedOptions)
+    // const allUpdatedNodeIds = map(allUpdatedNodes, (node) => node.id)
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return !includes(allUpdatedNodeIds, node.id) }), allUpdatedNodes)
+      data: concat(filter(state.data, (node) => { return node.id !== updatedNode.id }), [updatedNode]),
+      updatedNodeIds: concat(state.updatedNodeIds, [updatedNode.id])
     }
   }
   if (action.type === 'VOTE_NODE_SUCCESS') {
     return {
       ...state,
-      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload)
+      data: concat(filter(state.data, (node) => { return node.id !== action.payload.id }), action.payload),
+      updatedNodeIds: concat(state.updatedNodeIds, [ action.payload.id ])
     }
   }
   if (action.type === 'CREATE_WORKSPACE_SUCCESS') {
     return {
       ...state,
       data: concat(state.data, [action.payload.node])
+    }
+  }
+  if (action.type === 'CLEAR_NEW_NODE_IDS') {
+    return {
+      ...state,
+      newNodeIds: []
+    }
+  }
+  if (action.type === 'CLEAR_UPDATED_NODE_IDS') {
+    return {
+      ...state,
+      updatedNodeIds: []
     }
   }
   if (action.type === 'SIGN_OUT_SUCCESS') {
@@ -143,6 +164,14 @@ bundle.doUpdateNodeFormDataDescription = (description) => ({ dispatch }) => {
 
 bundle.doUpdateNodeTypeToBeCreated = (type) => ({ dispatch }) => {
   dispatch({ type: 'UPDATE_NODE_TYPE_TO_BE_CREATED', payload: type })
+}
+
+bundle.doClearNewNodeIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_NEW_NODE_IDS' })
+}
+
+bundle.doClearUpdatedNodeIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_UPDATED_NODE_IDS' })
 }
 
 bundle.doCreateNode = (formData) => ({ dispatch, apiFetch, getState }) => {
@@ -179,7 +208,11 @@ bundle.doCreateNodeSuccess = (node) => ({ dispatch }) => {
   dispatch({ type: 'CREATE_NODE_SUCCESS', payload: node })
 }
 
-bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
+bundle.doResolveNode = (formData) => ({ dispatch, apiFetch, getState }) => {
+  const resolveNodeFormData = {
+    resolution_label: formData.label,
+    resolution_description: formData.description
+  }
   dispatch({ type: 'RESOLVE_NODE_START' })
   const credentials = getState().accounts.credentials
   const sanitizedCredentials = {
@@ -189,9 +222,10 @@ bundle.doResolveNode = (nodeId) => ({ dispatch, apiFetch, getState }) => {
     uid: credentials.uid,
     expiry: credentials.expiry
   }
-  apiFetch(`api/nodes/${nodeId}/resolve`, {
+  apiFetch(`api/nodes/${formData.current_node_id}/resolve`, {
     method: 'PATCH',
-    headers: sanitizedCredentials
+    headers: sanitizedCredentials,
+    body: JSON.stringify(resolveNodeFormData)
   })
     // .then(response => {
     //   if (!response.ok) {
@@ -277,6 +311,8 @@ bundle.doVoteForNodeSuccess = (node) => ({ dispatch }) => {
 }
 
 bundle.selectNodes = (state) => state.nodes.data
+bundle.selectNewNodeIds = (state) => state.nodes.newNodeIds
+bundle.selectUpdatedNodeIds = (state) => state.nodes.updatedNodeIds
 bundle.selectNodesForRendering = createSelector(
   'selectNodes',
   'selectThisWorkspaceId',
@@ -286,7 +322,7 @@ bundle.selectNodesForRendering = createSelector(
     return map(nodesToRender, (rawNode) => {
       return {
         id: rawNode.id,
-        label: rawNode.label,
+        label: rawNode.resolved ? rawNode.resolution_label : rawNode.label,
         nodeType: rawNode.node_type,
         resolved: rawNode.resolved
       }

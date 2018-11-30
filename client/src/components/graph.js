@@ -8,7 +8,13 @@ class Graph extends React.Component {
       data,
       onClickNode,
       linkIdsToHighlight,
-      nodeIdsToHighlight
+      nodeIdsToHighlight,
+      newNodeIds,
+      updatedNodeIds,
+      newLinkIds,
+      doClearNewNodeIds,
+      doClearUpdatedNodeIds,
+      doClearNewLinkIds
     } = this.props
 
     const handleOnClickNode = (nodeId) => {
@@ -24,6 +30,12 @@ class Graph extends React.Component {
         onClickNode={handleOnClickNode}
         linkIdsToHighlight={linkIdsToHighlight}
         nodeIdsToHighlight={nodeIdsToHighlight}
+        newNodeIds={newNodeIds}
+        updatedNodeIds={updatedNodeIds}
+        newLinkIds={newLinkIds}
+        doClearNewNodeIds={doClearNewNodeIds}
+        doClearUpdatedNodeIds={doClearUpdatedNodeIds}
+        doClearNewLinkIds={doClearNewLinkIds}
       />
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes, concat } from 'lodash'
+import { map, filter, includes, concat, isEmpty, remove, find, clone } from 'lodash'
 
 var link = null
 var node = null
@@ -134,10 +134,9 @@ class D3ForceGraph extends React.Component {
       .append('circle')
       .attr('r', d => d.nodeType === 'question' ? 15 : 10)
       .attr('opacity', 1)
-      // .attr('stroke', 'black')
-      // .attr('stroke-width', 2)
-      .attr('fill', 'red')
-      .attr('fill', d => d.nodeType === 'question' ? 'orange' : 'green')
+      .attr('stroke', 'black')
+      .attr('stroke-width', 1)
+      .attr('fill', d => d.resolved ? 'red' : d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
@@ -171,7 +170,8 @@ class D3ForceGraph extends React.Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.nodes.length !== this.props.nodes.length) return true
+    if (nextProps.newNodeIds.length > 0 && this.props.newNodeIds.length === 0) return true
+    if (nextProps.updatedNodeIds.length > 0 && this.props.updatedNodeIds.length === 0) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
     node
@@ -185,23 +185,75 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidUpdate () {
-    // GK: NB: this is an intentional diff and mutation of the arrays of links and nodes
-    // the reason being that if you replace the entire array, the whole graph will re-render
-    // even if you are just adding a single node.
-    // however, if you mutate via pushing, that new node will be appended
-    // but the rest of the graph and its current arrangement stays intact.
-    const currentNodeIds = map(nodes, n => n.id)
-    const nextNodeIds = map(this.props.nodes, n => n.id)
-    const newNodeIds = filter(nextNodeIds, nextNodeId => {
-      return !includes(currentNodeIds, nextNodeId)
-    })
+    const {
+      newNodeIds,
+      doClearNewNodeIds,
+      doClearNewLinkIds,
+      updatedNodeIds,
+      doClearUpdatedNodeIds
+    } = this.props
+    if (!isEmpty(newNodeIds)) {
+      this.pushNewNodesAndLinks()
+    }
+    if (!isEmpty(updatedNodeIds)) {
+      this.updateNodes()
+    }
+    this.updateGraph()
+    doClearNewNodeIds()
+    doClearNewLinkIds()
+    doClearUpdatedNodeIds()
+  }
+
+  // updateNodes = () => {
+  //   const { updatedNodeIds } = this.props
+  //   const allNextLinks = clone(this.props.links)
+  //   console.log('links', links)
+  //   console.log('allNextLinks', allNextLinks)
+  //   updatedNodeIds.forEach(updatedNodeId => {
+  //     // mutate the global nodes array, removing nodes to be updated`
+  //     remove(nodes, prevNode => {
+  //       return includes(updatedNodeIds, prevNode.id)
+  //     })
+  //     const prevLinks = remove(links, prevLink => {
+  //       return prevLink.target.id === updatedNodeId || prevLink.source.id === updatedNodeId
+  //     })
+  //     console.log('prevLinks', prevLinks)
+  //     // push the new nodes back on
+  //     const nextNode = find(this.props.nodes, { id: updatedNodeId })
+  //     const nextLinks = filter(allNextLinks, (nextLink) => {
+  //       return includes(map(prevLinks, prevLink => prevLink.id), nextLink.id)
+  //     })
+  //     console.log('nextLinks', nextLinks)
+  //     nextLinks.forEach(nextLink => {
+  //       links.push(nextLink)
+  //     })
+  //     console.log('links', links)
+  //     nodes.push(nextNode)
+  //   })
+  // }
+
+  updateNodes = () => {
+    const { updatedNodeIds } = this.props
+      updatedNodeIds.forEach(updatedNodeId => {
+        const nextNode = find(this.props.nodes, { id: updatedNodeId })
+        node
+          .filter((d, i) => { return d.id === nextNode.id })
+          .select('text')
+          .text(d => nextNode.label)
+        node
+          .filter((d, i) => { return d.id === nextNode.id })
+          .select('circle')
+          .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
+      })
+  }
+
+  pushNewNodesAndLinks = () => {
+    const {
+      newNodeIds,
+      newLinkIds,
+    } = this.props
     const newNodes = filter(this.props.nodes, nextNode => {
       return includes(newNodeIds, nextNode.id)
-    })
-    const currentLinkIds = map(links, l => l.id)
-    const nextLinkIds = map(this.props.links, l => l.id)
-    const newLinkIds = filter(nextLinkIds, nextLinkId => {
-      return !includes(currentLinkIds, nextLinkId)
     })
     const newLinks = filter(this.props.links, nextLink => {
       return includes(newLinkIds, nextLink.id)
@@ -212,7 +264,6 @@ class D3ForceGraph extends React.Component {
     newLinks.forEach(newLink => {
       links.push(newLink)
     })
-    this.updateGraph()
   }
 
   componentWillUnmount () {

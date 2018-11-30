@@ -30,7 +30,13 @@ const Workspace = (props) => {
     childQuestionsForCurrentNode,
     childOptionsForCurrentNode,
     linkIdsToHighlight,
-    nodeIdsToHighlight
+    nodeIdsToHighlight,
+    newNodeIds,
+    updatedNodeIds,
+    newLinkIds,
+    doClearNewNodeIds,
+    doClearUpdatedNodeIds,
+    doClearNewLinkIds
   } = props
   if (isNil(thisWorkspace)) return null
   return (
@@ -60,6 +66,12 @@ const Workspace = (props) => {
       childOptionsForCurrentNode={childOptionsForCurrentNode}
       linkIdsToHighlight={linkIdsToHighlight}
       nodeIdsToHighlight={nodeIdsToHighlight}
+      newNodeIds={newNodeIds}
+      updatedNodeIds={updatedNodeIds}
+      newLinkIds={newLinkIds}
+      doClearNewNodeIds={doClearNewNodeIds}
+      doClearUpdatedNodeIds={doClearUpdatedNodeIds}
+      doClearNewLinkIds={doClearNewLinkIds}
     />
   )
 }
@@ -91,5 +103,11 @@ export default connect(
   'selectLinksByCurrentNodeId',
   'selectLinkIdsToHighlight',
   'selectNodeIdsToHighlight',
+  'selectNewNodeIds',
+  'selectUpdatedNodeIds',
+  'selectNewLinkIds',
+  'doClearNewNodeIds',
+  'doClearUpdatedNodeIds',
+  'doClearNewLinkIds',
   Workspace
 )

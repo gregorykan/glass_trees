@@ -28,6 +28,9 @@ const bundle = createAsyncResourceBundle({
 })
 
 const initialState = {
+  updatedLinkIds: [],
+  removedLinkIds: [],
+  newLinkIds: [],
   // needed by createAsyncResourceBundle
   data: null,
   errorTimes: [],
@@ -42,9 +45,17 @@ const initialState = {
 const baseReducer = bundle.reducer
 bundle.reducer = (state = initialState, action) => {
   if (action.type === 'CREATE_NODE_SUCCESS') {
+    const newLinks = concat(state.data, concat(action.payload.source_links, action.payload.target_links))
     return {
       ...state,
-      data: concat(state.data, concat(action.payload.source_links, action.payload.target_links))
+      data: newLinks,
+      newLinkIds: concat(state.newLinkIds, map(newLinks, 'id'))
+    }
+  }
+  if (action.type === 'CLEAR_NEW_LINK_IDS') {
+    return {
+      ...state,
+      newLinkIds: []
     }
   }
   if (action.type === 'SIGN_OUT_SUCCESS') {
@@ -54,6 +65,7 @@ bundle.reducer = (state = initialState, action) => {
 }
 
 bundle.selectLinks = (state) => state.links.data
+bundle.selectNewLinkIds = (state) => state.links.newLinkIds
 bundle.selectLinksForRendering = createSelector(
   'selectLinks',
   'selectThisWorkspaceId',
@@ -73,7 +85,7 @@ bundle.selectLinksByCurrentNodeId = createSelector(
   'selectCurrentNodeId',
   'selectLinks',
   (currentNodeId, links) => {
-    if (isNil(currentNodeId)) return links
+    if (isNil(currentNodeId)) return []
     return filter(links, (link) => {
       return link.source_id === currentNodeId
     })
@@ -102,9 +114,14 @@ bundle.selectNodeIdsToHighlight = createSelector(
   'selectLinksByCurrentNodeId',
   'selectCurrentNodeId',
   (links, currentNodeId) => {
+    if (isNil(currentNodeId)) return null
     return concat(map(links, l => l.target_id), [currentNodeId])
   }
 )
+
+bundle.doClearNewLinkIds = () => ({ dispatch }) => {
+  dispatch({ type: 'CLEAR_NEW_LINK_IDS' })
+}
 
 bundle.reactLinksFetch = createSelector(
   'selectLinksShouldUpdate',
