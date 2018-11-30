@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes, concat, isEmpty } from 'lodash'
+import { map, filter, includes, concat, isEmpty, remove, find, clone } from 'lodash'
 
 var link = null
 var node = null
@@ -136,7 +136,7 @@ class D3ForceGraph extends React.Component {
       .attr('opacity', 1)
       .attr('stroke', 'black')
       .attr('stroke-width', 1)
-      .attr('fill', d => d.nodeType === 'question' ? 'orange' : 'green')
+      .attr('fill', d => d.resolved ? 'red' : d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
@@ -171,6 +171,7 @@ class D3ForceGraph extends React.Component {
 
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.newNodeIds.length > 0 && this.props.newNodeIds.length === 0) return true
+    if (nextProps.updatedNodeIds.length > 0 && this.props.updatedNodeIds.length === 0) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
     node
@@ -187,14 +188,63 @@ class D3ForceGraph extends React.Component {
     const {
       newNodeIds,
       doClearNewNodeIds,
-      doClearNewLinkIds
+      doClearNewLinkIds,
+      updatedNodeIds,
+      doClearUpdatedNodeIds
     } = this.props
     if (!isEmpty(newNodeIds)) {
       this.pushNewNodesAndLinks()
     }
+    if (!isEmpty(updatedNodeIds)) {
+      this.updateNodes()
+    }
     this.updateGraph()
     doClearNewNodeIds()
     doClearNewLinkIds()
+    doClearUpdatedNodeIds()
+  }
+
+  // updateNodes = () => {
+  //   const { updatedNodeIds } = this.props
+  //   const allNextLinks = clone(this.props.links)
+  //   console.log('links', links)
+  //   console.log('allNextLinks', allNextLinks)
+  //   updatedNodeIds.forEach(updatedNodeId => {
+  //     // mutate the global nodes array, removing nodes to be updated`
+  //     remove(nodes, prevNode => {
+  //       return includes(updatedNodeIds, prevNode.id)
+  //     })
+  //     const prevLinks = remove(links, prevLink => {
+  //       return prevLink.target.id === updatedNodeId || prevLink.source.id === updatedNodeId
+  //     })
+  //     console.log('prevLinks', prevLinks)
+  //     // push the new nodes back on
+  //     const nextNode = find(this.props.nodes, { id: updatedNodeId })
+  //     const nextLinks = filter(allNextLinks, (nextLink) => {
+  //       return includes(map(prevLinks, prevLink => prevLink.id), nextLink.id)
+  //     })
+  //     console.log('nextLinks', nextLinks)
+  //     nextLinks.forEach(nextLink => {
+  //       links.push(nextLink)
+  //     })
+  //     console.log('links', links)
+  //     nodes.push(nextNode)
+  //   })
+  // }
+
+  updateNodes = () => {
+    const { updatedNodeIds } = this.props
+      updatedNodeIds.forEach(updatedNodeId => {
+        const nextNode = find(this.props.nodes, { id: updatedNodeId })
+        node
+          .filter((d, i) => { return d.id === nextNode.id })
+          .select('text')
+          .text(d => nextNode.label)
+        node
+          .filter((d, i) => { return d.id === nextNode.id })
+          .select('circle')
+          .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
+      })
   }
 
   pushNewNodesAndLinks = () => {

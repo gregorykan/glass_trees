@@ -85,7 +85,7 @@ bundle.selectLinksByCurrentNodeId = createSelector(
   'selectCurrentNodeId',
   'selectLinks',
   (currentNodeId, links) => {
-    if (isNil(currentNodeId)) return links
+    if (isNil(currentNodeId)) return []
     return filter(links, (link) => {
       return link.source_id === currentNodeId
     })

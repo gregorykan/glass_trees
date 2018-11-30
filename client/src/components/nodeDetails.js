@@ -125,26 +125,48 @@ const NodeDetails = (props) => {
     if (isNil(nodeTypeToBeCreated)) return null
     const nodeTypeToBeCreatedToHeaderText = {
       'question': 'Ask a question',
-      'option': 'Add an option'
+      'option': 'Add an option',
+      'resolution': 'Resolve question'
     }
-    return (
-      <div style={containerStyle}>
-        <div style={createNodeContainerStyle}>
-          <h3 style={headerStyle}>{nodeTypeToBeCreatedToHeaderText[nodeTypeToBeCreated]}</h3>
-          <CreateNodeForm
-            currentNodeId={currentNode.id}
-            nodeFormData={nodeFormData}
-            doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
-            doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
-            doCreateNode={doCreateNode}
-            nodeType={nodeTypeToBeCreated}
-            doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
-            currentUser={currentUser}
-            workspace={workspace}
-          />
+    if (nodeTypeToBeCreated === 'resolution') {
+      return (
+        <div style={containerStyle}>
+          <div style={createNodeContainerStyle}>
+            <h3 style={headerStyle}>{nodeTypeToBeCreatedToHeaderText[nodeTypeToBeCreated]}</h3>
+            <CreateNodeForm
+              currentNodeId={currentNode.id}
+              nodeFormData={nodeFormData}
+              doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+              doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+              doCreateNode={doResolveNode}
+              nodeType={nodeTypeToBeCreated}
+              doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+              currentUser={currentUser}
+              workspace={workspace}
+            />
+          </div>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div style={containerStyle}>
+          <div style={createNodeContainerStyle}>
+            <h3 style={headerStyle}>{nodeTypeToBeCreatedToHeaderText[nodeTypeToBeCreated]}</h3>
+            <CreateNodeForm
+              currentNodeId={currentNode.id}
+              nodeFormData={nodeFormData}
+              doUpdateNodeFormDataLabel={doUpdateNodeFormDataLabel}
+              doUpdateNodeFormDataDescription={doUpdateNodeFormDataDescription}
+              doCreateNode={doCreateNode}
+              nodeType={nodeTypeToBeCreated}
+              doUpdateNodeTypeToBeCreated={doUpdateNodeTypeToBeCreated}
+              currentUser={currentUser}
+              workspace={workspace}
+            />
+          </div>
+        </div>
+      )
+    }
   }
 
   const renderResolveActions = () => {
@@ -154,7 +176,7 @@ const NodeDetails = (props) => {
       )
     } else if (currentUser.id === currentNode.user_id) {
       return (
-        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doResolveNode(currentNode.id) }}>RESOLVE</Button>
+        <Button style={buttonStyle} variant='outlined' type='button' onClick={() => { doUpdateNodeTypeToBeCreated('resolution') }}>RESOLVE</Button>
       )
     } else {
       return null
