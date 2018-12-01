@@ -182,7 +182,7 @@ class D3ForceGraph extends React.Component {
     node
       .select('circle')
       .attr('stroke', d => includes(nodeIdsToHighlight, d.id) ? 'blue' : 'none')
-      .attr('stroke-width', d => includes(nodeIdsToHighlight, d.id) ? 4 : 2)
+      .attr('stroke-width', d => includes(nodeIdsToHighlight, d.id) ? 4 : 0)
     link
       .attr('stroke', d => includes(linkIdsToHighlight, d.id) ? 'blue' : 'black')
       .attr('stroke-width', d => includes(linkIdsToHighlight, d.id) ? 4 : 2)
