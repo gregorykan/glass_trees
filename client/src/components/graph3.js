@@ -139,8 +139,6 @@ class D3ForceGraph extends React.Component {
       .append('circle')
       .attr('r', d => d.nodeType === 'question' ? 15 : 10)
       .attr('opacity', 1)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 1)
       .attr('fill', d => d.resolved ? 'red' : d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
       .on('dblclick', d => { this.collapse(d.id) })
