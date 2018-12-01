@@ -20,7 +20,7 @@ class D3ForceGraph extends React.Component {
     linkIdsToHide: {},
     nodeIdsToUnhide: {},
     linkIdsToUnhide: {},
-    hiddenNodesAndLinkByNodeId: {}
+    hiddenNodesAndLinksByNodeId: {}
   }
   //Drag functions
   dragStart = d => {
@@ -303,18 +303,29 @@ class D3ForceGraph extends React.Component {
   toggleCollapse = (rootNodeId) => {
     if (d3.event.defaultPrevented) return
     const {
-      hiddenNodesAndLinkByNodeId
+      hiddenNodesAndLinksByNodeId
     } = this.state
-    const hiddenNodeInfo = hiddenNodesAndLinkByNodeId[rootNodeId]
+    const hiddenNodeInfo = hiddenNodesAndLinksByNodeId[rootNodeId]
     console.log('hiddenNodeInfo', hiddenNodeInfo)
     if (!isEmpty(hiddenNodeInfo)) {
       console.log('toggle uncollapse')
+      const nodeIdsAlreadyHidden = keys(hiddenNodesAndLinksByNodeId)
+      forEach(nodeIdsAlreadyHidden, (nodeIdAlreadyHidden) => {
+        if (Boolean(hiddenNodeInfo.hiddenNodeIds[nodeIdAlreadyHidden])) {
+          this.setState({
+            ...this.state,
+            hiddenNodesAndLinksByNodeId: {
+              ...omit(this.state.hiddenNodesAndLinksByNodeId, nodeIdAlreadyHidden)
+            }
+          })
+        }
+      })
       this.setState({
         ...this.state,
         nodeIdsToUnhide: hiddenNodeInfo.hiddenNodeIds,
         linkIdsToUnhide: hiddenNodeInfo.hiddenLinkIds,
-        hiddenNodesAndLinkByNodeId: {
-          ...omit(this.state.hiddenNodesAndLinkByNodeId, rootNodeId)
+        hiddenNodesAndLinksByNodeId: {
+          ...omit(this.state.hiddenNodesAndLinksByNodeId, rootNodeId)
         }
       })
     } else {
@@ -329,8 +340,8 @@ class D3ForceGraph extends React.Component {
           ...this.state.linkIdsToHide,
           ...hiddenNodeAndLinkIds.hiddenLinkIds
         },
-        hiddenNodesAndLinkByNodeId: {
-          ...this.state.hiddenNodesAndLinkByNodeId,
+        hiddenNodesAndLinksByNodeId: {
+          ...this.state.hiddenNodesAndLinksByNodeId,
           [rootNodeId]: hiddenNodeAndLinkIds
         }
       })
