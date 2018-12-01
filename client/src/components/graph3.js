@@ -117,7 +117,7 @@ class D3ForceGraph extends React.Component {
   updateGraph = () => {
     const { onClickNode } = this.props
     // Updating links
-    link = link.data(links)
+    link = link.data(links, d => d.id)
     link.exit().remove()
     link = link.enter().append('line')
       .attr('stroke-width', 2)
@@ -127,7 +127,7 @@ class D3ForceGraph extends React.Component {
       .merge(link)
 
     // Updating nodes
-    node = node.data(nodes)
+    node = node.data(nodes, d => d.id)
     node.exit().remove()
     var nodeEnter = node.enter()
       .append('g')
@@ -188,6 +188,7 @@ class D3ForceGraph extends React.Component {
     link
       .attr('stroke', d => includes(linkIdsToHighlight, d.id) ? 'blue' : 'black')
       .attr('stroke-width', d => includes(linkIdsToHighlight, d.id) ? 4 : 2)
+    if (keys(nextState.hiddenNodeIds).length === keys(this.state.hiddenNodeIds).length) return false
     return false
   }
 
@@ -219,12 +220,36 @@ class D3ForceGraph extends React.Component {
 
   removeHiddenNodesAndLinks = () => {
     const { hiddenNodeIds, hiddenLinkIds } = this.state
-    nodes = filter(nodes, node => {
-      return !Boolean(hiddenNodeIds[node.id])
+    console.log('hiddenNodeIds', hiddenNodeIds)
+    console.log('hiddenLinkIds', hiddenLinkIds)
+    // console.log('before nodes', nodes)
+    // console.log('before links', links)
+    // debugger
+    remove(nodes, node => {
+      return Boolean(hiddenNodeIds[node.id])
     })
-    links = filter(links, link => {
-      return !Boolean(hiddenLinkIds[link.id])
+    remove(links, link => {
+      return Boolean(hiddenLinkIds[link.id])
     })
+    // nodes.forEach((node, i) => {
+    //   if (Boolean(hiddenNodeIds[node.id])) {
+    //     nodes.splice(i, 1)
+    //   }
+    // })
+    // links.forEach((link, i) => {
+    //   if (Boolean(hiddenLinkIds[link.id])) {
+    //     links.splice(i, 1)
+    //   }
+    // })
+    // debugger
+    // console.log('after nodes', nodes)
+    // console.log('after links', links)
+    // nodes = filter(nodes, node => {
+    //   return !Boolean(hiddenNodeIds[node.id])
+    // })
+    // links = filter(links, link => {
+    //   return !Boolean(hiddenLinkIds[link.id])
+    // })
   }
 
   getChildNodeAndLinkIds = (rootNodeId, links) => {
@@ -317,6 +342,7 @@ class D3ForceGraph extends React.Component {
   }
 
   componentWillUnmount () {
+    simulation.stop()
     link = null
     node = null
     tooltip = null
