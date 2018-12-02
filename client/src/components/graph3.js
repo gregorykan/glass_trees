@@ -173,7 +173,74 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidMount() {
+    // get all resolved node ids
+    const resolvedNodeIds = map(filter(this.props.nodes, node => {
+      return node.resolved
+    }), n => n.id)
+    // a hack to ensure that children go first
+    const orderedResolvedNodeIds = resolvedNodeIds.sort((a, b) => { return a - b })
+    forEach(orderedResolvedNodeIds, resolvedNodeId => {
+      this.setHiddenNodeAndLinkIdsForResolvedNode(resolvedNodeId, this.props.links)
+    })
     this.startGraph()
+  }
+
+  setHiddenNodeAndLinkIdsForResolvedNode = (resolvedNodeId, links) => {
+    const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIdsForRawNodesAndLinks(resolvedNodeId, links)
+    this.setState({
+      ...this.state,
+      nodeIdsToHide: {
+        ...this.state.nodeIdsToHide,
+        ...hiddenNodeAndLinkIds.hiddenNodeIds,
+      },
+      linkIdsToHide: {
+        ...this.state.linkIdsToHide,
+        ...hiddenNodeAndLinkIds.hiddenLinkIds
+      },
+      hiddenNodesAndLinksByNodeId: {
+        ...this.state.hiddenNodesAndLinksByNodeId,
+        [resolvedNodeId]: hiddenNodeAndLinkIds
+      }
+    })
+  }
+
+  getChildNodeAndLinkIdsForRawNodesAndLinks = (rootNodeId, links) => {
+    var hiddenNodeIds = {}
+    var hiddenLinkIds = {}
+
+    const recurse = (nodeId, links) => {
+      const childLinks = filter(links, link => {
+        return link.source === nodeId
+      })
+      if (!isEmpty(childLinks)) {
+        const childNodeIds = reduce(childLinks, (sofar, childLink) => {
+          return concat(sofar, [childLink.target])
+        }, [])
+        forEach(childNodeIds, childNodeId => {
+          recurse(childNodeId, links)
+        })
+      }
+      hiddenNodeIds = {
+        ...hiddenNodeIds,
+        [nodeId]: true
+      }
+      hiddenLinkIds = {
+        ...hiddenLinkIds,
+        ...reduce(childLinks, (sofar, childLink) => {
+          return {
+            ...sofar,
+            [childLink.id]: true
+          }
+        }, {})
+      }
+    }
+
+    recurse(rootNodeId, links)
+
+    return {
+      hiddenNodeIds: omit(hiddenNodeIds, [rootNodeId]),
+      hiddenLinkIds: hiddenLinkIds
+    }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
