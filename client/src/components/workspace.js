@@ -93,7 +93,7 @@ class WorkspaceComponent extends React.Component {
 
     const onClickNode = (nodeId) => {
       doSelectNode(nodeId)
-      setTimeout(this.scrollToBottom, 50)
+      // setTimeout(this.scrollToBottom, 50)
     }
 
     const handleNameChange = (e) => {

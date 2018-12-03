@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { map, filter, includes, concat, isEmpty, remove, find, clone } from 'lodash'
+import { map, filter, includes, concat, isEmpty, remove, find, clone, forEach, reduce, keys, omit, compact } from 'lodash'
 
 var link = null
 var node = null
@@ -15,6 +15,9 @@ var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
 
 class D3ForceGraph extends React.Component {
+  state = {
+    hiddenNodesAndLinksByNodeId: {}
+  }
   //Drag functions
   dragStart = d => {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart()
@@ -56,8 +59,8 @@ class D3ForceGraph extends React.Component {
   }
 
   startGraph = () => {
-    nodes = this.props.nodes
-    links = this.props.links
+    nodes = [...this.props.nodes]
+    links = [...this.props.links]
 
     //Initializing chart
     chart = d3.select('.chart')
@@ -105,24 +108,25 @@ class D3ForceGraph extends React.Component {
     chart.call(d3.zoom()
       .scaleExtent([0.1, 8])
       .on("zoom", this.zoom))
-
+      .on("dblclick.zoom", null)
     this.updateGraph()
   }
 
   updateGraph = () => {
     const { onClickNode } = this.props
     // Updating links
-    link = link.data(links)
+    link = link.data(links, d => d)
     link.exit().remove()
-    link = link.enter().append('line')
+    var linkEnter = link.enter().append('line')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
       .attr("marker-end", "url(#end)")
-      .merge(link)
+
+    link = link.merge(linkEnter)
 
     // Updating nodes
-    node = node.data(nodes)
+    node = node.data(nodes, d => d.id)
     node.exit().remove()
     var nodeEnter = node.enter()
       .append('g')
@@ -134,10 +138,9 @@ class D3ForceGraph extends React.Component {
       .append('circle')
       .attr('r', d => d.nodeType === 'question' ? 15 : 10)
       .attr('opacity', 1)
-      .attr('stroke', 'black')
-      .attr('stroke-width', 1)
       .attr('fill', d => d.resolved ? 'red' : d.nodeType === 'question' ? 'orange' : 'green')
       .on('click', d => { onClickNode(d.id) })
+      .on('dblclick', d => { this.toggleCollapse(d.id) })
       .call(d3.drag()
          .on('start', this.dragStart)
          .on('drag', this.drag)
@@ -166,7 +169,37 @@ class D3ForceGraph extends React.Component {
   }
 
   componentDidMount() {
+    // get all resolved node ids
+    const resolvedNodeIds = map(filter(this.props.nodes, node => {
+      return node.resolved
+    }), n => n.id)
+    // a hack to ensure that children go first
+    const orderedResolvedNodeIds = resolvedNodeIds.sort((a, b) => { return b - a })
     this.startGraph()
+    forEach(orderedResolvedNodeIds, resolvedNodeId => {
+      this.setHiddenNodeAndLinkIdsForResolvedNode(resolvedNodeId, links)
+    })
+    this.updateGraph()
+  }
+
+  setHiddenNodeAndLinkIdsForResolvedNode = (resolvedNodeId, currentLinks) => {
+    const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIds(resolvedNodeId, currentLinks)
+    const hiddenNodeIds = hiddenNodeAndLinkIds.hiddenNodeIds
+    const hiddenLinkIds = hiddenNodeAndLinkIds.hiddenLinkIds
+    remove(nodes, node => {
+      return Boolean(hiddenNodeIds[node.id])
+    })
+    remove(links, link => {
+      return Boolean(hiddenLinkIds[link.id])
+    })
+    // GK: TODO: yeah this doesn't work the way i expect lol
+    this.setState({
+      ...this.state,
+      hiddenNodesAndLinksByNodeId: {
+        ...this.state.hiddenNodesAndLinksByNodeId,
+        [resolvedNodeId]: hiddenNodeAndLinkIds
+      }
+    })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -177,7 +210,7 @@ class D3ForceGraph extends React.Component {
     node
       .select('circle')
       .attr('stroke', d => includes(nodeIdsToHighlight, d.id) ? 'blue' : 'none')
-      .attr('stroke-width', d => includes(nodeIdsToHighlight, d.id) ? 4 : 2)
+      .attr('stroke-width', d => includes(nodeIdsToHighlight, d.id) ? 4 : 0)
     link
       .attr('stroke', d => includes(linkIdsToHighlight, d.id) ? 'blue' : 'black')
       .attr('stroke-width', d => includes(linkIdsToHighlight, d.id) ? 4 : 2)
@@ -190,7 +223,7 @@ class D3ForceGraph extends React.Component {
       doClearNewNodeIds,
       doClearNewLinkIds,
       updatedNodeIds,
-      doClearUpdatedNodeIds
+      doClearUpdatedNodeIds,
     } = this.props
     if (!isEmpty(newNodeIds)) {
       this.pushNewNodesAndLinks()
@@ -204,47 +237,143 @@ class D3ForceGraph extends React.Component {
     doClearUpdatedNodeIds()
   }
 
-  // updateNodes = () => {
-  //   const { updatedNodeIds } = this.props
-  //   const allNextLinks = clone(this.props.links)
-  //   console.log('links', links)
-  //   console.log('allNextLinks', allNextLinks)
-  //   updatedNodeIds.forEach(updatedNodeId => {
-  //     // mutate the global nodes array, removing nodes to be updated`
-  //     remove(nodes, prevNode => {
-  //       return includes(updatedNodeIds, prevNode.id)
-  //     })
-  //     const prevLinks = remove(links, prevLink => {
-  //       return prevLink.target.id === updatedNodeId || prevLink.source.id === updatedNodeId
-  //     })
-  //     console.log('prevLinks', prevLinks)
-  //     // push the new nodes back on
-  //     const nextNode = find(this.props.nodes, { id: updatedNodeId })
-  //     const nextLinks = filter(allNextLinks, (nextLink) => {
-  //       return includes(map(prevLinks, prevLink => prevLink.id), nextLink.id)
-  //     })
-  //     console.log('nextLinks', nextLinks)
-  //     nextLinks.forEach(nextLink => {
-  //       links.push(nextLink)
-  //     })
-  //     console.log('links', links)
-  //     nodes.push(nextNode)
-  //   })
-  // }
+  addBackHiddenNodesAndLinks = (rootNodeId, nodeIdsToUnhide, linkIdsToUnhide) => {
+    const rootNode = find(nodes, node => {
+      return node.id === rootNodeId
+    })
+    const newNodes = filter(this.props.nodes, nextNode => {
+      return Boolean(nodeIdsToUnhide[nextNode.id])
+    })
+    const newLinks = filter(this.props.links, nextLink => {
+      return Boolean(linkIdsToUnhide[nextLink.id])
+    })
+    newNodes.forEach(newNode => {
+      nodes.push(newNode)
+    })
+    newLinks.forEach(newLink => {
+      const correspondingNewSourceNode = find(newNodes, newNode => {
+        // BUT one of these sources is still being rendered and is NOT in newNodes
+        return newNode.id === newLink.source.id
+      })
+      const correspondingNewTargetNode = find(newNodes, newNode => {
+        return newNode.id === newLink.target.id
+      })
+      newLink.source = correspondingNewSourceNode || rootNode
+      newLink.target = correspondingNewTargetNode
+      links.push(newLink)
+    })
+  }
+
+  getChildNodeAndLinkIds = (rootNodeId, links) => {
+    var hiddenNodeIds = {}
+    var hiddenLinkIds = {}
+
+    const recurse = (nodeId, links) => {
+      const childLinks = filter(links, link => {
+        return link.source.id === nodeId
+      })
+      if (!isEmpty(childLinks)) {
+        const childNodeIds = reduce(childLinks, (sofar, childLink) => {
+          return concat(sofar, [childLink.target.id])
+        }, [])
+        forEach(childNodeIds, childNodeId => {
+          recurse(childNodeId, links)
+        })
+      }
+      hiddenNodeIds = {
+        ...hiddenNodeIds,
+        [nodeId]: true
+      }
+      hiddenLinkIds = {
+        ...hiddenLinkIds,
+        ...reduce(childLinks, (sofar, childLink) => {
+          return {
+            ...sofar,
+            [childLink.id]: true
+          }
+        }, {})
+      }
+    }
+
+    recurse(rootNodeId, links)
+
+    return {
+      hiddenNodeIds: omit(hiddenNodeIds, [rootNodeId]),
+      hiddenLinkIds: hiddenLinkIds
+    }
+  }
+
+  toggleCollapse = (rootNodeId) => {
+    // if (d3.event.defaultPrevented) return
+    const {
+      hiddenNodesAndLinksByNodeId
+    } = this.state
+    console.log('toggleCollapse', this.state)
+    const hiddenNodeInfo = hiddenNodesAndLinksByNodeId[rootNodeId]
+    if (!isEmpty(hiddenNodeInfo)) {
+      console.log('uncollapsing node', rootNodeId)
+      const nodeIdsAlreadyHidden = keys(hiddenNodesAndLinksByNodeId)
+      forEach(nodeIdsAlreadyHidden, (nodeIdAlreadyHidden) => {
+        if (Boolean(hiddenNodeInfo.hiddenNodeIds[nodeIdAlreadyHidden])) {
+          this.setState({
+            ...this.state,
+            hiddenNodesAndLinksByNodeId: {
+              ...omit(this.state.hiddenNodesAndLinksByNodeId, nodeIdAlreadyHidden)
+            }
+          })
+        }
+      })
+      this.addBackHiddenNodesAndLinks(rootNodeId, hiddenNodeInfo.hiddenNodeIds, hiddenNodeInfo.hiddenLinkIds)
+      this.setState({
+        ...this.state,
+        hiddenNodesAndLinksByNodeId: {
+          ...omit(this.state.hiddenNodesAndLinksByNodeId, rootNodeId)
+        }
+      })
+    } else {
+      console.log('collapsing node', rootNodeId)
+      const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIds(rootNodeId, this.props.links)
+      const hiddenNodeIds = hiddenNodeAndLinkIds.hiddenNodeIds
+      const hiddenLinkIds = hiddenNodeAndLinkIds.hiddenLinkIds
+      remove(nodes, node => {
+        return Boolean(hiddenNodeIds[node.id])
+      })
+      remove(links, link => {
+        return Boolean(hiddenLinkIds[link.id])
+      })
+      this.setState({
+        ...this.state,
+        hiddenNodesAndLinksByNodeId: {
+          ...this.state.hiddenNodesAndLinksByNodeId,
+          [rootNodeId]: hiddenNodeAndLinkIds
+        }
+      })
+    }
+    this.updateGraph()
+  }
 
   updateNodes = () => {
     const { updatedNodeIds } = this.props
-      updatedNodeIds.forEach(updatedNodeId => {
-        const nextNode = find(this.props.nodes, { id: updatedNodeId })
-        node
-          .filter((d, i) => { return d.id === nextNode.id })
-          .select('text')
-          .text(d => nextNode.label)
-        node
-          .filter((d, i) => { return d.id === nextNode.id })
-          .select('circle')
-          .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
-      })
+    const { hiddenNodesAndLinksByNodeId } = this.state
+    updatedNodeIds.forEach(updatedNodeId => {
+      const nextNode = find(this.props.nodes, { id: updatedNodeId })
+      node
+        .filter((d, i) => { return d.id === nextNode.id })
+        .select('text')
+        .text(d => nextNode.label)
+      node
+        .filter((d, i) => { return d.id === nextNode.id })
+        .select('circle')
+        .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
+      // if node is NOW resolved AND is NOT already hidden, toggle collapse
+      if (nextNode.resolved && !Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+        this.toggleCollapse(updatedNodeId)
+      }
+      // if node is NOW un-resolved AND is already hidden, toggle collapse
+      if (!nextNode.resolved && Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+        this.toggleCollapse(updatedNodeId)
+      }
+    })
   }
 
   pushNewNodesAndLinks = () => {
@@ -267,6 +396,7 @@ class D3ForceGraph extends React.Component {
   }
 
   componentWillUnmount () {
+    simulation.stop()
     link = null
     node = null
     tooltip = null
