@@ -141,7 +141,7 @@ class D3ForceGraph extends React.Component {
   updateGraph = () => {
     const { onClickNode } = this.props
     // Updating links
-    link = link.data(links, d => d.id)
+    link = link.data(links, d => d)
     link.exit().remove()
     var linkEnter = link.enter().append('line')
       .attr('stroke-width', 2)
@@ -152,7 +152,7 @@ class D3ForceGraph extends React.Component {
     link = link.merge(linkEnter)
 
     // Updating nodes
-    node = node.data(nodes, d => d.id)
+    node = node.data(nodes, d => d)
     node.exit().remove()
     var nodeEnter = node.enter()
       .append('g')
@@ -439,14 +439,13 @@ class D3ForceGraph extends React.Component {
     const { updatedNodeIds } = this.props
       updatedNodeIds.forEach(updatedNodeId => {
         const nextNode = find(this.props.nodes, { id: updatedNodeId })
-        node
-          .filter((d, i) => { return d.id === nextNode.id })
-          .select('text')
-          .text(d => nextNode.label)
-        node
-          .filter((d, i) => { return d.id === nextNode.id })
-          .select('circle')
-          .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
+        forEach(nodes, node => {
+          if (node.id === nextNode.id) {
+            node.label = nextNode.label
+            node.description = nextNode.description
+            node.resolved = nextNode.resolved
+          }
+        })
       })
   }
 
