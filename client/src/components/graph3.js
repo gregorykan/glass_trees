@@ -21,11 +21,19 @@ var width = 70 / 100 * Number(window.innerWidth)
 // then collapse the parent question node
 // un-collapse the parent
 // shit flies everywhere
+
 // EVEN WEIRDER:
 // seems to happen whenever this.props.nodes has been updated
 // but the graph hasn't
 // and when you collapse and un-collapse the changed nodes,
 // shit goes nuts
+
+// i thought that if i removed the updated (resolved or unresolved) node
+// from nodes
+// and pushed it back in (the updated version from props)
+// and updated the graph
+// it might work
+// but that doesn't work either
 
 class D3ForceGraph extends React.Component {
   state = {
