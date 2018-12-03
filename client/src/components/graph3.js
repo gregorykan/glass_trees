@@ -14,12 +14,6 @@ var linksAndNodesContainer = null
 var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
 
-// GK: TODO: BUG:
-// if a question node has been updated (resolved or reopened)
-// and you collapse that node
-// when you un-collapse it, all the child nodes fly everywhere
-
-
 class D3ForceGraph extends React.Component {
   state = {
     nodeIdsToHide: {},
@@ -136,7 +130,7 @@ class D3ForceGraph extends React.Component {
     link = link.merge(linkEnter)
 
     // Updating nodes
-    node = node.data(nodes, d => d)
+    node = node.data(nodes, d => d.id)
     node.exit().remove()
     var nodeEnter = node.enter()
       .append('g')
@@ -184,7 +178,7 @@ class D3ForceGraph extends React.Component {
       return node.resolved
     }), n => n.id)
     // a hack to ensure that children go first
-    const orderedResolvedNodeIds = resolvedNodeIds.sort((a, b) => { return a - b })
+    const orderedResolvedNodeIds = resolvedNodeIds.sort((a, b) => { return b - a })
     this.startGraph()
     forEach(orderedResolvedNodeIds, resolvedNodeId => {
       this.setHiddenNodeAndLinkIdsForResolvedNode(resolvedNodeId, links)
@@ -202,6 +196,7 @@ class D3ForceGraph extends React.Component {
     remove(links, link => {
       return Boolean(hiddenLinkIds[link.id])
     })
+    // GK: TODO: yeah this doesn't work the way i expect lol
     this.setState({
       ...this.state,
       hiddenNodesAndLinksByNodeId: {
@@ -216,7 +211,6 @@ class D3ForceGraph extends React.Component {
     if (nextProps.updatedNodeIds.length > 0 && this.props.updatedNodeIds.length === 0) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
-    console.log('nodeIdsToHighlight', nodeIdsToHighlight)
     node
       .select('circle')
       .attr('stroke', d => includes(nodeIdsToHighlight, d.id) ? 'blue' : 'none')
@@ -252,7 +246,6 @@ class D3ForceGraph extends React.Component {
   }
 
   addBackHiddenNodesAndLinks = (rootNodeId, nodeIdsToUnhide, linkIdsToUnhide) => {
-    // const { nodeIdsToUnhide, linkIdsToUnhide } = this.state
     const rootNode = find(nodes, node => {
       return node.id === rootNodeId
     })
@@ -262,8 +255,6 @@ class D3ForceGraph extends React.Component {
     const newLinks = filter(this.props.links, nextLink => {
       return Boolean(linkIdsToUnhide[nextLink.id])
     })
-    console.log('newNodes', newNodes)
-    console.log('newLinks', newLinks)
     newNodes.forEach(newNode => {
       nodes.push(newNode)
     })
@@ -325,6 +316,7 @@ class D3ForceGraph extends React.Component {
     const {
       hiddenNodesAndLinksByNodeId
     } = this.state
+    console.log('toggleCollapse', this.state)
     const hiddenNodeInfo = hiddenNodesAndLinksByNodeId[rootNodeId]
     if (!isEmpty(hiddenNodeInfo)) {
       console.log('uncollapsing node', rootNodeId)
@@ -371,24 +363,24 @@ class D3ForceGraph extends React.Component {
   updateNodes = () => {
     const { updatedNodeIds } = this.props
     const { hiddenNodesAndLinksByNodeId } = this.state
-    console.log('updatedNodeIds', updatedNodeIds)
     updatedNodeIds.forEach(updatedNodeId => {
       const nextNode = find(this.props.nodes, { id: updatedNodeId })
-      forEach(compact(nodes), node => {
-        if (node.id === nextNode.id) {
-          node.label = nextNode.label
-          node.description = nextNode.description
-          node.resolved = nextNode.resolved
-          // if node is NOW resolved AND is NOT already hidden, toggle collapse
-          if (nextNode.resolved && !Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
-            this.toggleCollapse(updatedNodeId)
-          }
-          // if node is NOW un-resolved AND is already hidden, toggle collapse
-          if (!nextNode.resolved && Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
-            this.toggleCollapse(updatedNodeId)
-          }
-        }
-      })
+      node
+        .filter((d, i) => { return d.id === nextNode.id })
+        .select('text')
+        .text(d => nextNode.label)
+      node
+        .filter((d, i) => { return d.id === nextNode.id })
+        .select('circle')
+        .attr('fill', d => { return nextNode.resolved ? 'red' : nextNode.nodeType === 'question' ? 'orange' : 'green' })
+      // if node is NOW resolved AND is NOT already hidden, toggle collapse
+      if (nextNode.resolved && !Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+        this.toggleCollapse(updatedNodeId)
+      }
+      // if node is NOW un-resolved AND is already hidden, toggle collapse
+      if (!nextNode.resolved && Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+        this.toggleCollapse(updatedNodeId)
+      }
     })
   }
 
