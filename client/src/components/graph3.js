@@ -14,6 +14,19 @@ var linksAndNodesContainer = null
 var height = 500
 var width = 70 / 100 * Number(window.innerWidth)
 
+// GK: TODO: BUG:
+// find a question node to resolve that is more than one level deep
+// resolve that question node
+// collapse that question node
+// then collapse the parent question node
+// un-collapse the parent
+// shit flies everywhere
+// EVEN WEIRDER:
+// seems to happen whenever this.props.nodes has been updated
+// but the graph hasn't
+// and when you collapse and un-collapse the changed nodes,
+// shit goes nuts
+
 class D3ForceGraph extends React.Component {
   state = {
     nodeIdsToHide: {},
@@ -122,12 +135,13 @@ class D3ForceGraph extends React.Component {
     // Updating links
     link = link.data(links, d => d.id)
     link.exit().remove()
-    link = link.enter().append('line')
+    var linkEnter = link.enter().append('line')
       .attr('stroke-width', 2)
       .attr('stroke', 'black')
       .attr('opacity', 0.4)
       .attr("marker-end", "url(#end)")
-      .merge(link)
+
+    link = link.merge(linkEnter)
 
     // Updating nodes
     node = node.data(nodes, d => d.id)
@@ -307,7 +321,6 @@ class D3ForceGraph extends React.Component {
   }
 
   addBackHiddenNodesAndLinks = () => {
-    console.log('addBackHiddenNodesAndLinks', this.state)
     const { nodeIdsToUnhide, linkIdsToUnhide } = this.state
     const newNodes = filter(this.props.nodes, nextNode => {
       return Boolean(nodeIdsToUnhide[nextNode.id])
@@ -315,7 +328,6 @@ class D3ForceGraph extends React.Component {
     const newLinks = filter(this.props.links, nextLink => {
       return Boolean(linkIdsToUnhide[nextLink.id])
     })
-    console.log('newNodes', newNodes)
     newNodes.forEach(newNode => {
       nodes.push(newNode)
     })
@@ -373,10 +385,9 @@ class D3ForceGraph extends React.Component {
       hiddenNodesAndLinksByNodeId
     } = this.state
     const hiddenNodeInfo = hiddenNodesAndLinksByNodeId[rootNodeId]
-    console.log('hiddenNodeInfo', hiddenNodeInfo)
     if (!isEmpty(hiddenNodeInfo)) {
-      console.log('toggle uncollapse')
-      const nodeIdsAlreadyHidden = keys(hiddenNodesAndLinksByNodeId)
+      console.log('uncollapsing node', rootNodeId)
+      const nodeIdsAlreadyHidden = keys(hiddenNodesAndLinksByNodeId) // [267]
       forEach(nodeIdsAlreadyHidden, (nodeIdAlreadyHidden) => {
         if (Boolean(hiddenNodeInfo.hiddenNodeIds[nodeIdAlreadyHidden])) {
           this.setState({
@@ -396,6 +407,7 @@ class D3ForceGraph extends React.Component {
         }
       })
     } else {
+      console.log('collapsing node', rootNodeId)
       const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIds(rootNodeId, this.props.links)
       this.setState({
         ...this.state,
