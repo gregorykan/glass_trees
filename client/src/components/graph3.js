@@ -16,10 +16,6 @@ var width = 70 / 100 * Number(window.innerWidth)
 
 class D3ForceGraph extends React.Component {
   state = {
-    nodeIdsToHide: {},
-    linkIdsToHide: {},
-    nodeIdsToUnhide: {},
-    linkIdsToUnhide: {},
     hiddenNodesAndLinksByNodeId: {}
   }
   //Drag functions
@@ -229,10 +225,6 @@ class D3ForceGraph extends React.Component {
       updatedNodeIds,
       doClearUpdatedNodeIds,
     } = this.props
-    const {
-      nodeIdsToHide,
-      nodeIdsToUnhide
-    } = this.state
     if (!isEmpty(newNodeIds)) {
       this.pushNewNodesAndLinks()
     }
