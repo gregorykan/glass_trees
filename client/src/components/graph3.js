@@ -216,6 +216,7 @@ class D3ForceGraph extends React.Component {
     if (nextProps.updatedNodeIds.length > 0 && this.props.updatedNodeIds.length === 0) return true
     const nodeIdsToHighlight = nextProps.nodeIdsToHighlight || []
     const linkIdsToHighlight = nextProps.linkIdsToHighlight || []
+    console.log('nodeIdsToHighlight', nodeIdsToHighlight)
     node
       .select('circle')
       .attr('stroke', d => includes(nodeIdsToHighlight, d.id) ? 'blue' : 'none')
@@ -369,16 +370,23 @@ class D3ForceGraph extends React.Component {
 
   updateNodes = () => {
     const { updatedNodeIds } = this.props
+    const { hiddenNodesAndLinksByNodeId } = this.state
     console.log('updatedNodeIds', updatedNodeIds)
     updatedNodeIds.forEach(updatedNodeId => {
       const nextNode = find(this.props.nodes, { id: updatedNodeId })
       forEach(compact(nodes), node => {
-        debugger
         if (node.id === nextNode.id) {
           node.label = nextNode.label
           node.description = nextNode.description
           node.resolved = nextNode.resolved
-          this.toggleCollapse(updatedNodeId)
+          // if node is NOW resolved AND is NOT already hidden, toggle collapse
+          if (nextNode.resolved && !Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+            this.toggleCollapse(updatedNodeId)
+          }
+          // if node is NOW un-resolved AND is already hidden, toggle collapse
+          if (!nextNode.resolved && Boolean(hiddenNodesAndLinksByNodeId[updatedNodeId])) {
+            this.toggleCollapse(updatedNodeId)
+          }
         }
       })
     })
