@@ -176,30 +176,33 @@ class D3ForceGraph extends React.Component {
     // a hack to ensure that children go first
     const orderedResolvedNodeIds = resolvedNodeIds.sort((a, b) => { return b - a })
     this.startGraph()
-    forEach(orderedResolvedNodeIds, resolvedNodeId => {
-      this.setHiddenNodeAndLinkIdsForResolvedNode(resolvedNodeId, links)
+    const hiddenNodesAndLinksByNodeId = this.getHiddenNodeAndLinkIdsBasedOnResolvedNodes(orderedResolvedNodeIds, links)
+    this.setState({
+      hiddenNodesAndLinksByNodeId
     })
     this.updateGraph()
   }
 
-  setHiddenNodeAndLinkIdsForResolvedNode = (resolvedNodeId, currentLinks) => {
-    const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIds(resolvedNodeId, currentLinks)
-    const hiddenNodeIds = hiddenNodeAndLinkIds.hiddenNodeIds
-    const hiddenLinkIds = hiddenNodeAndLinkIds.hiddenLinkIds
-    remove(nodes, node => {
-      return Boolean(hiddenNodeIds[node.id])
-    })
-    remove(links, link => {
-      return Boolean(hiddenLinkIds[link.id])
-    })
-    // GK: TODO: yeah this doesn't work the way i expect lol
-    this.setState({
-      ...this.state,
-      hiddenNodesAndLinksByNodeId: {
-        ...this.state.hiddenNodesAndLinksByNodeId,
+  getHiddenNodeAndLinkIdsBasedOnResolvedNodes = (orderedResolvedNodeIds, currentLinks) => {
+    var hiddenNodesAndLinksByNodeId = {}
+
+    forEach(orderedResolvedNodeIds, resolvedNodeId => {
+      const hiddenNodeAndLinkIds = this.getChildNodeAndLinkIds(resolvedNodeId, currentLinks)
+      const hiddenNodeIds = hiddenNodeAndLinkIds.hiddenNodeIds
+      const hiddenLinkIds = hiddenNodeAndLinkIds.hiddenLinkIds
+      // take them off the board
+      remove(nodes, node => {
+        return Boolean(hiddenNodeIds[node.id])
+      })
+      remove(links, link => {
+        return Boolean(hiddenLinkIds[link.id])
+      })
+      hiddenNodesAndLinksByNodeId = {
+        ...hiddenNodesAndLinksByNodeId,
         [resolvedNodeId]: hiddenNodeAndLinkIds
       }
     })
+    return hiddenNodesAndLinksByNodeId
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -269,29 +272,36 @@ class D3ForceGraph extends React.Component {
     var hiddenLinkIds = {}
 
     const recurse = (nodeId, links) => {
-      const childLinks = filter(links, link => {
-        return link.source.id === nodeId
-      })
-      if (!isEmpty(childLinks)) {
-        const childNodeIds = reduce(childLinks, (sofar, childLink) => {
-          return concat(sofar, [childLink.target.id])
-        }, [])
-        forEach(childNodeIds, childNodeId => {
-          recurse(childNodeId, links)
+      if (this.state.hiddenNodesAndLinksByNodeId[nodeId]) {
+        hiddenNodeIds = {
+          ...hiddenNodeIds,
+          [nodeId]: true
+        }
+      } else {
+        const childLinks = filter(links, link => {
+          return link.source.id === nodeId
         })
-      }
-      hiddenNodeIds = {
-        ...hiddenNodeIds,
-        [nodeId]: true
-      }
-      hiddenLinkIds = {
-        ...hiddenLinkIds,
-        ...reduce(childLinks, (sofar, childLink) => {
-          return {
-            ...sofar,
-            [childLink.id]: true
-          }
-        }, {})
+        if (!isEmpty(childLinks)) {
+          const childNodeIds = reduce(childLinks, (sofar, childLink) => {
+            return concat(sofar, [childLink.target.id])
+          }, [])
+          forEach(childNodeIds, childNodeId => {
+            recurse(childNodeId, links)
+          })
+        }
+        hiddenNodeIds = {
+          ...hiddenNodeIds,
+          [nodeId]: true
+        }
+        hiddenLinkIds = {
+          ...hiddenLinkIds,
+          ...reduce(childLinks, (sofar, childLink) => {
+            return {
+              ...sofar,
+              [childLink.id]: true
+            }
+          }, {})
+        }
       }
     }
 
@@ -312,17 +322,6 @@ class D3ForceGraph extends React.Component {
     const hiddenNodeInfo = hiddenNodesAndLinksByNodeId[rootNodeId]
     if (!isEmpty(hiddenNodeInfo)) {
       console.log('uncollapsing node', rootNodeId)
-      const nodeIdsAlreadyHidden = keys(hiddenNodesAndLinksByNodeId)
-      forEach(nodeIdsAlreadyHidden, (nodeIdAlreadyHidden) => {
-        if (Boolean(hiddenNodeInfo.hiddenNodeIds[nodeIdAlreadyHidden])) {
-          this.setState({
-            ...this.state,
-            hiddenNodesAndLinksByNodeId: {
-              ...omit(this.state.hiddenNodesAndLinksByNodeId, nodeIdAlreadyHidden)
-            }
-          })
-        }
-      })
       this.addBackHiddenNodesAndLinks(rootNodeId, hiddenNodeInfo.hiddenNodeIds, hiddenNodeInfo.hiddenLinkIds)
       this.setState({
         ...this.state,
