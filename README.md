@@ -43,6 +43,7 @@ a multi-agent, asynchronous, concurrent, realtime interaction game
 
 ## TODOs and upcoming features
 
+- refactor graph component code, which is a mess
 - each user can have many groups
 - usernames
 - nodes editable by respective author
