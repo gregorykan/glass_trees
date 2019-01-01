@@ -2,7 +2,7 @@
 
 realtime multiagent coordination game
 
-![](./docs/images/glass_trees_screenshot.png)
+![](./docs/images/glass_trees_screenshot_010119.png)
 
 ## theoretical premises and conflations (confabulations?)
 
@@ -36,7 +36,7 @@ realtime multiagent coordination game
 - there is NO AUTOMATION of resolution - this is entirely up to the author of the question, and can be vetoed by any other agent
   - for ludics fans, this means there is no `daimon` move: 'winning' means no one vetoes your resolution
   - upvoting and downvoting are simply there to provide additional information on the other agents' preferences
-  
+
 ## bugs
 
 - MAJOR: 401s due to tokens expiring should trigger a cache renewal of credentials
