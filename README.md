@@ -48,5 +48,6 @@ realtime multiagent coordination game
 - usernames
 - nodes editable by respective author
 - ability to start a workspace with an assertion (to be interrogated, vetted etc.)
+- UI should be more HUD-like
 - avatars
 - emojis
