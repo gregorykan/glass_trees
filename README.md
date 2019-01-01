@@ -1,6 +1,6 @@
 # glass.trees
 
-a multi-agent, asynchronous, concurrent, realtime interaction game
+realtime multiagent coordination game
 
 ![](./docs/images/glass_trees_screenshot.png)
 
