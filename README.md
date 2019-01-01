@@ -1,6 +1,6 @@
 # glass.trees
 
-realtime multiagent coordination game
+realtime multiagent coordination toy
 
 ![](./docs/images/glass_trees_screenshot_010119.png)
 
@@ -11,8 +11,8 @@ realtime multiagent coordination game
   - proofs and counterproofs
   - inherently dialogical
 - interaction as the decomposition and recomposition of possibilities
-  - decomposition as the generation of new questions and answers from those existing
-  - recomposition as resolution of questions (reduction, normalization, abstraction, compression?) and their corresponding answers
+  - fragmentation as the generation of new questions and answers from those existing
+  - integration as resolution of questions (reduction, normalization, abstraction, compression?) and their corresponding answers
 
 ## theoretical inspirations (poorly co-opted, half-digested spirits)
 
